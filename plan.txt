@@ -1,0 +1,6 @@
+- Introduction: expliquer d'où viennent les assistants de preuve, la théorie derrière, l'enjeu, les exemples et les usages
+- Introduction à Lean par le number game: Kevin Buzzard, démontrer des théorèmes élémentaires en partant des axiomes de Peano (!!)
+- Détail du Number Games: preuves difficiles, difficulté/puissance conceptuelle de l'induction,
+- Construction & formalisation des espaces métriques en Lean: déf d'une espace métrique, convergence dans un espace métrique
+
+- refl, rw, exact, intro, have, apply, (exfalso)
