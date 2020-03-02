@@ -1,0 +1,3 @@
+Théorème des 4 couleurs
+Compilateur C vérifié grâce à Lean
+COQ (+maths, puissant) ~= Lean

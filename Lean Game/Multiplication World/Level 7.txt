@@ -1,0 +1,13 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\l' !!!
+  -- On fait une induction sur t :
+  induction t with d hd,
+
+  -- Le cas de base :
+  repeat {rw mul_zero},
+  simp,
+
+  -- Le cas d'induction :  
+  repeat {rw mul_succ},
+  rw hd,
+  rw \l add_assoc,
+  simp,

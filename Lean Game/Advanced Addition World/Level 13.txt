@@ -1,0 +1,11 @@
+  -- On fait une induction sur n :
+  induction n with d hd,
+
+  -- Le cas de base :  
+  exact zero_ne_succ 0,
+
+  -- Le cas d'induction :
+  intro h,
+  apply hd,
+  apply succ_inj,
+  exact h,

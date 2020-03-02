@@ -1,0 +1,5 @@
+  --Une combinaison d'associativité et de commutativité :
+  rw add_assoc,
+  rw add_comm b c,
+  rw add_assoc,
+  refl,

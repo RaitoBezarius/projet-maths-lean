@@ -1,0 +1,7 @@
+  intro h,
+  cases h with p q, --Divise l'hypothèse en 2 :
+  split, --Divise le goal en 2 :
+
+  exact q,
+  
+  exact p,

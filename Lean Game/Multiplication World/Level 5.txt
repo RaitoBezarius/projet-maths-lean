@@ -1,0 +1,11 @@
+  -- On fait une induction sur c :
+  induction c with d hd,
+
+  -- Le cas de base :
+  repeat {rw mul_zero},
+
+  -- Le cas d'induction :
+  repeat {rw mul_succ},
+  rw mul_add,
+  rw hd,
+  refl,

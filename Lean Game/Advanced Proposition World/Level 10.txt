@@ -1,0 +1,6 @@
+  intro h,
+  --On change le goal en false : 
+  exfalso,
+  -- rw not_iff_imp_false at h, (pas nécessaire car les deux expressions sont égales par définition.)
+  apply h.2,
+  exact h.1,

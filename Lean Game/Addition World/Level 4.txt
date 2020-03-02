@@ -1,0 +1,13 @@
+  -- On fait une induction sur b :
+  induction b with n hn,
+
+  -- Le cas de base :
+  rw zero_add,
+  rw add_zero,
+  refl,
+
+  -- Le cas d'induction :
+  rw add_succ,
+  rw succ_add,
+  rw hn,
+  refl,

@@ -1,0 +1,4 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\or' et '\not' !!!
+  --On fait 2 distinctions des cas sur (P \or \not P) et  (Q \or \not Q) ce qui nous donne 4 cas possibles :
+  by_cases p : P; by_cases q : Q,
+  repeat {cc},

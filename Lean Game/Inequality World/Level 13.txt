@@ -1,0 +1,17 @@
+  intro h,
+  cases h with c hc,
+  rw succ_add at hc,
+
+  -- On fait une induction sur a :
+  induction a with n hn,
+
+  -- Le cas de base :
+  rw zero_add at hc,
+  apply zero_ne_succ c,
+  exact hc,
+
+  -- Le cas d'induction :
+  apply hn,
+  apply succ_inj,
+  rw succ_add at hc,
+  exact hc,

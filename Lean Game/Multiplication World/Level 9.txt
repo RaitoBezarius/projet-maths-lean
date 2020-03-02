@@ -1,0 +1,6 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\l' !!!
+  -- On met tout dans le bon ordre
+  rw \l mul_assoc,
+  rw mul_comm a b,
+  rw mul_assoc,
+  refl,

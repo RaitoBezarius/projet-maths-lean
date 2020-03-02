@@ -1,0 +1,6 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\l' et '\n' !!!
+  repeat {rw not_iff_imp_false}, --Change les \n P en P \l false
+  intros hpq hqf hp,
+  apply hqf,
+  apply hpq,
+  exact hp,

@@ -1,0 +1,11 @@
+  -- On fait une induction sur n :
+  induction n with d hd,
+
+  -- Le cas de base :
+  repeat {rw pow_zero},
+  simp,
+
+  -- Le cas d'induction : 
+  repeat {rw pow_succ},
+  rw hd,
+  simp,

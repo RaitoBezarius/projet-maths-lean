@@ -1,0 +1,14 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\r' et '\l'!!!
+  --On divise le goal en 2 implications :
+  split,
+
+  --Sens \r
+  exact eq_zero_or_eq_zero_of_mul_eq_zero a b,
+
+  --Sens \l
+  intro h,
+  cases h with g h,
+  rw g,
+  simp,
+  rw h,
+  simp,

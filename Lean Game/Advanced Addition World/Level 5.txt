@@ -1,0 +1,14 @@
+  intro h,
+
+  -- On fait une induction sur t :
+  induction t with n hn,
+
+  -- Le cas de base :
+  repeat {rw add_zero at h},
+  exact h,
+
+  -- Le cas d'induction :
+  apply hn,
+  repeat {rw add_succ at h},
+  apply succ_inj,
+  exact h,

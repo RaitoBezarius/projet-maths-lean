@@ -1,0 +1,12 @@
+  --On introduit des valeurs d'écart entre a et b :
+  cases hab with n hn,
+  cases hba with m hm,
+  rw hn at hm,
+  rw hn,
+  symmetry at hm,
+  rw add_assoc at hm,
+  --On utilise le fait que les écarts sont opposés :
+  have h := eq_zero_of_add_right_eq_self _ _ hm,
+  --Et qu'ils sont positifs :
+  rw add_right_eq_zero n _ h,
+  cc,

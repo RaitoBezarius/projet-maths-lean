@@ -1,0 +1,10 @@
+  --On développe puis simplifie les 1 :
+  intro h,
+  cases h with c hc,
+  use c,
+
+  rw succ_eq_add_one at hc,
+  rw succ_eq_add_one at hc,
+  rw add_right_comm at hc,
+  rw add_right_cancel_iff at hc,
+  exact hc,

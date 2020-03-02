@@ -1,0 +1,16 @@
+  intros ha hb hab,
+  apply ha,
+
+  --On divise le goal en 2 cas :
+  cases b with n,
+  
+  --Le cas 'b = 0' :
+  exfalso,
+  apply hb,
+  refl,
+
+  --Le cas 'b = succ n' :
+  rw mul_succ at hab,
+  rw add_left_eq_zero (a*n) a hab,
+  refl,
+  

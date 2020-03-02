@@ -1,0 +1,6 @@
+  rw succ_eq_add_one,
+  rw succ_eq_add_one,
+  cases h with c hc,
+  rw hc,
+  use c,
+  cc,

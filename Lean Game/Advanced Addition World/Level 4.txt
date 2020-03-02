@@ -1,0 +1,8 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\l' et '\r'!!!
+  split,
+
+  -- \r
+  exact succ_inj,
+
+  -- \l
+  exact succ_eq_succ_of_eq,

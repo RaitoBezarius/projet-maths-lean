@@ -1,0 +1,5 @@
+  --On modifie le goal jusqu'à remonter à p :
+  apply l,
+  apply j,
+  apply h,
+  exact p,

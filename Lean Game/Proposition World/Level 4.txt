@@ -1,0 +1,5 @@
+  --On change le goal grâce aux implications :
+  apply l,
+  apply j,
+  apply h,
+  exact p,

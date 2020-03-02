@@ -1,0 +1,20 @@
+  intro h,
+  split,
+
+  cases h with c hc,
+  use c+1,
+  rw hc,
+  rw succ_eq_add_one,
+  cc,
+
+  intro g,
+  cases h with c hc,
+  cases g with e he,
+  apply not_succ_le_self a,
+  conv begin
+    to_rhs,
+    rw he,
+  end,
+  rw hc,
+  use c+e,
+  cc,

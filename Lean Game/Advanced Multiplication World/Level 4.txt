@@ -1,0 +1,42 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\or' et '\ne'!!!
+  revert b,
+  -- On fait une induction sur c :
+  induction c with n hn,
+
+  --Le cas de base :
+  rw mul_zero,
+  intros b h,
+  rw mul_eq_zero_iff a b at h,
+  --On casse le \or :
+  cases h with hha hhb,
+  --Si 'a = 0' :
+  exfalso,
+  apply ha,
+  exact hha,
+  --Si 'b = 0' :
+  exact hhb,
+
+  --Le cas d'induction :
+  intros b h,
+  --On fait une distinction de cas sur b :
+  cases b with c,
+
+  --Cas 'b = 0' :
+  rw mul_zero at h,
+  exfalso,
+  apply mul_pos a (succ n), --On a besoin de démontrer les hypothèses de mul_pos :
+  --Hypothèse 'a \ne 0' :
+  exact ha,
+  --Hypothèse 'succ n \ne 0' :
+  exact succ_ne_zero n,
+  --Retour à la preuve par l'absurde :
+  symmetry,
+  exact h,
+
+  --Cas 'b = succ c' :
+  repeat {rw succ_eq_add_one},
+  rw add_right_cancel_iff,
+  apply hn,
+  repeat {rw mul_succ at h},
+  rw add_right_cancel_iff at h,
+  exact h,

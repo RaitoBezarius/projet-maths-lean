@@ -1,0 +1,23 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\and' et '\or' !!!
+  split,
+
+  cc,
+
+  intro h,
+  split, --On casse le \and dans le goal :
+
+  cases h with peq per, --On casse le \or dans l'hypothèse :
+
+  exact peq.1, --Au lieu de faire un autre cases.
+
+  exact per.1,
+  
+  cases h with peq per, --On casse le \or dans l'hypothèse :
+
+  --On chosit le côté du goal à prouver :
+  left,
+  exact peq.2,
+
+  --On chosit le côté du goal à prouver :
+  right,
+  exact per.2,

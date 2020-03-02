@@ -1,0 +1,39 @@
+  intro h,
+  cases h with hab htba,
+  cases hab with c hc,
+
+  cases b,
+
+  --Cas 'b = 0' (impossible)
+  exfalso,
+  apply htba,
+  exact zero_le a,
+
+  --Cas 'b = succ b'
+  cases a,
+
+  --Cas 'a = 0' (trivial vu que 'b != 0')
+  apply succ_le_succ,
+  exact zero_le b,
+
+  --Cas 'a = succ a'
+  rw hc,
+  rw succ_add,
+  apply succ_le_succ,
+  
+  cases c,
+
+  --Cas 'c = 0'
+  rw add_zero at hc,
+  exfalso,
+  apply htba,
+  use 0,
+  rw add_zero,
+  symmetry,
+  exact hc,
+
+  --Cas 'c = succ c' (=> 'b > a') (donc les +1 se simplifient)
+  rw add_succ,
+  apply succ_le_succ,
+  use c,
+  refl,

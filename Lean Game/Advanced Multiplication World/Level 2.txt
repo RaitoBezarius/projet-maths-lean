@@ -1,0 +1,12 @@
+  --On fait une distintion de cas sur b :
+  cases b with n,
+
+  --Cas 'b = 0' :
+  right,
+  refl,
+
+  --Cas 'b = succ n' :
+  rw mul_succ at h,   --Pas strictement nécessaire car les notations sont égales par définition.
+  left,
+  apply add_left_eq_zero (a*n) a,
+  exact h,

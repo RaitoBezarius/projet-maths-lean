@@ -1,0 +1,10 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\r' !!!
+  intros f g h,
+  apply f, --Divise le goal en 2 :
+
+  -- P \r (Q \r R) :
+  exact h,
+
+  -- Q \r R :
+  apply g,
+  exact h, 

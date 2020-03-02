@@ -1,0 +1,6 @@
+  cases hab with n hn,
+  cases hbc with m hm,
+  rw hm,
+  rw hn,
+  use n + m,
+  cc,

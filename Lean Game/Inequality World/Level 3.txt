@@ -1,0 +1,5 @@
+  intro h,
+  cases h with c hc,
+  use c + 1,
+  rw hc,
+  ring,

@@ -1,0 +1,11 @@
+  --On fait une distinction de cas 'b = 0' ou 'b = succ(d)' :
+  cases b with d,
+
+  --Cas 'b = 0' :
+  refl,
+
+  --Cas 'b = succ(d)' :
+  rw add_succ at H,
+  exfalso,
+  exact succ_ne_zero (a+d) H,
+  

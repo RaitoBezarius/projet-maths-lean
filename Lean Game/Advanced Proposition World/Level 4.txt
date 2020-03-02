@@ -1,0 +1,18 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\iff', '\l' et '\r' !!!
+  intros h g,
+  --On écrit les \iff comme deux \r :
+  cases h with pq qp, 
+  cases g with qr rq,
+  split,
+
+  --Sens \r :
+  intro p,
+  apply qr,
+  apply pq,
+  exact p,
+
+  --Sens \l :
+  intro r,
+  apply qp,
+  apply rq,
+  exact r,

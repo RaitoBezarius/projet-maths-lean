@@ -1,0 +1,13 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\r' !!!
+  intros hpq hqr,
+  split,
+  
+  intro p,
+  apply hqr.1, --Correspond à 'Q \r R'
+  apply hpq.1, --Correspond à 'P \r Q'
+  exact p,
+
+  intro r,
+  apply hpq.2, --Correspond à 'Q \r P'
+  apply hqr.2, --Correspond à 'R \r Q'
+  exact r,

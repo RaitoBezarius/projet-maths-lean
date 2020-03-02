@@ -1,0 +1,10 @@
+  intro h,
+  cases h with p q, --Divise l'hypothèse en 2, ce qui divise le goal en 2 cas :
+
+  --On suppose la partie gauche de h, P :
+  right,
+  exact p,
+
+  --On suppose la partie droite de h, Q :
+  left,
+  exact q,

@@ -1,0 +1,14 @@
+  -- On fait une induction sur c :
+  induction c with d hd,
+
+  -- Le cas de base :
+  rw add_zero,
+  rw add_zero,
+  refl,
+
+  -- Le cas d'induction :
+  rw add_succ,
+  rw add_succ,
+  rw add_succ,
+  rw hd,
+  refl,

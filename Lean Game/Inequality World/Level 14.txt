@@ -1,0 +1,4 @@
+  cases h with c hc,
+  use c,
+  rw hc,
+  cc,

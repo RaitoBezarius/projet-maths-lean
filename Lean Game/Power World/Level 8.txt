@@ -1,0 +1,30 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\l' !!!
+  --On simplifie les puissances :
+  rw two_eq_succ_one,
+  rw one_eq_succ_zero,
+  repeat {rw pow_succ},
+
+  repeat {rw pow_zero},
+  simp,
+  repeat {rw mul_succ},
+  simp,
+
+  --On développe (a + b) * (a + b) :
+  rw mul_add,
+  --On développe (a + b) * a :
+  rw mul_comm,
+  rw mul_add,
+  --On développe (a + b) * b :
+  rw mul_comm (a + b) b,
+  rw mul_add,
+
+  --On met les termes de gauche dans le bon ordre :
+  simp,
+  rw \l add_assoc (a * b) (a * b) (b * b),
+  rw add_right_comm,
+  rw add_comm (a * b) (b * b),
+  rw add_assoc (b * b) (a * b) (a * b),
+
+  --On factorise par a :
+  rw \l mul_add a b b,
+  refl,

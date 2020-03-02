@@ -1,0 +1,5 @@
+  split, --Divise le goal en 2 :
+
+  exact p,
+  
+  exact q,

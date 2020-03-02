@@ -1,0 +1,4 @@
+  intro q,
+  --On choisit de démontrer la partie droite du goal :
+  right,
+  exact q,

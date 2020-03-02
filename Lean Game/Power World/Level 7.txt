@@ -1,0 +1,15 @@
+  -- On fait une induction sur n :
+  induction n with d hd,
+
+  -- Le cas de base :
+  rw pow_zero,
+  simp,
+  rw pow_zero,
+  refl,
+
+  -- Le cas d'induction : 
+  rw mul_succ,
+  rw pow_succ,
+  rw hd,
+  rw pow_add,
+  refl,

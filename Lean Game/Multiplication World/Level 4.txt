@@ -1,0 +1,16 @@
+-- Attention, ne pas oublier de taper 'espace' après les '\l' !!!
+  -- On fait une induction sur b :
+  induction b with d hd,
+
+  -- Le cas de base :
+  rw add_zero,
+  rw mul_zero,
+  refl,
+
+  -- Le cas d'induction :  
+  rw mul_succ,
+  rw \l add_assoc,
+  rw \l hd,
+  rw add_succ,
+  rw mul_succ,
+  refl,

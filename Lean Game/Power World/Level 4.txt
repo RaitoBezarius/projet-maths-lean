@@ -1,0 +1,12 @@
+  -- On fait une induction sur m :
+  induction m with d hd,
+
+  -- Le cas de base :
+  rw pow_zero,
+  refl,
+
+  -- Le cas d'induction : 
+  rw pow_succ,
+  rw mul_one,
+  rw hd,
+  refl,

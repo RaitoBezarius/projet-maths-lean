@@ -1,0 +1,8 @@
+  split,
+  intro h,
+  apply lt_aux_one,
+  exact h,
+
+  intro h,
+  apply lt_aux_two,
+  exact h,

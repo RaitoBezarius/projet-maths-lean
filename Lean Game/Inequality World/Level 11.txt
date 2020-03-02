@@ -1,0 +1,6 @@
+  intro h,
+  intro t,
+  cases h with c hc,
+  rw hc,
+  use c,
+  cc,

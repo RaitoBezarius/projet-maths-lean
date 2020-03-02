@@ -1,0 +1,6 @@
+  --On utilise l'axiome '1 = succ 0' puis on développe :
+  rw one_eq_succ_zero,
+  rw pow_succ,
+  rw pow_zero,
+  rw one_mul,
+  refl,

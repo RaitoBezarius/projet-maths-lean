@@ -1,0 +1,8 @@
+  intros h g,
+  cases h with p q, --On développe les hypothèses :
+  cases g with q2 r,
+  split,
+
+  exact p,
+  
+  exact r,
