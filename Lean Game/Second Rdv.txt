@@ -1,0 +1,3 @@
+Mettre les énoncés.
+Essayer de mettre en fichier lean.
+Mettre preuves difficiles dans le rapport en copier-coller avec explications ligne par ligne intriquées (pas capture d'écran).
