@@ -1,0 +1,36 @@
+\documentclass[french,frenchkw]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{tabto}
+\usepackage[T1]{fontenc}
+
+\graphicspath{{./Images/}}
+
+
+\title{Projet de Mathématiques : Assistant de Preuves}
+\author{Ivan Hasenohr (pour cette partie)}
+\date{Mars 2020}
+\begin{document}
+\maketitle
+
+\paragraph{IV : Function World}
+\\
+Le monde des fonctions nous introduit un outil fondamental de Lean, qui sont, quel hasard, les fonctions. \\
+Une fonction en Lean n'est rien d'autre qu'un objet abstrait qui pour un élément d'un ensemble A donné renvoie un élément d'un autre ensemble B donné. Dans ce monde, ces fonctions resteront abstraites au sens où elles n'auront pas de forme explicite. \\
+Plusieurs tactiques sont nécessaires pour savoir utiliser les fonctions en Lean : intro,apply,exact et have. Que l'on a en théorie déjà expliqué.\\
+
+\paragraph{V : Proposition World} 
+Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : comment modélise-t-on une preuve ? Qu'est-ce qu'une preuve ? Lean le modélise comme ceci : Si l'on prend une proposition P, vraie ou faux, peu importe. Alors cette proposition est modélisée par l'ensemble des preuves qui la prouve. Ainsi, par exemple, si la commutativité de la multiplication est un théorème que l'on note $M_C$ , alors $M_C$ est l'ensemble des preuves de cette commutativité.\\
+C'est ici que les fonctions prennent toute leur importance : pour montrer qu'une proposition A entraîne une autre proposition B, il suffit de montrer qu'à partir d'un élément de A on peut créer un élément de B, ce qui revient à créer une fonction de A vers B. En effet, si A entraîne B, alors une preuve de A suffit pour prouver B, et donc $a \in A \implies a \in B$. Une fonction $f : A \xrightarrow{} B$ en Lean appliquée (avec apply) à un but B revient donc à dire "Pour montrer B, il suffit de montrer A".\\
+\\
+Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. \\
+\textbf{Lemma} : if P is true and $P \implies Q$ is true, then Q is true. \\
+Soit en Lean : \textit{(P Q : Prop) (p : P) (h : $P \implies Q$) : Q} \\
+Donc, en français, on dispose d'un élément (d'une preuve) de P, et d'une fonction de P dans Q (i-e d'une preuve que si P est vrai alors Q aussi), trouvons un élément de Q (montrons que Q est vrai). \\
+Ce qui se résout tout aussi trivialement : \textit{exact h(p)}.
+
+\bibliographystyle{plain}
+\end{document}
