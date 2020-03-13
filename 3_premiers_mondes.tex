@@ -1,0 +1,73 @@
+\section{Addition world}
+Addition world est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initié dans tutorial world) et \textit{induction}.\\
+En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant Addition world, on peut utiliser les deux résultats suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.\\
+Addition world contient 6 niveaux: zero\_add, add\_assoc, succ\_add, add\_comm, succ\_eq\_add\_one et add_right_comm.\\
+
+Détaillons la démonstration de quelques théorèmes:\\
+
+\textbf{4${ème}$ niveau}: L'addition est commutative, c'est à dire pour tout entiers naturels a et b : $$a+b=b+a$$ 
+\textbf{induction b with n hn,} : Par induction sur b \\
+\textit{Cas de base, à démontrer $a + 0 = 0 + a$}\\
+\textbf{rw zero\_add,}\\
+ \textbf{rw add\_zero,}\\
+ \textbf{refl,}\\
+\textit{cas d'induction, Supposons hn: $a + n = n + a$ et montrons $a + succ (n) = succ (n) + a
+$}\\
+ \textbf{rw add\_succ,}\\
+ \textbf{rw succ\_add,}\\
+ \textbf{rw hn,}\\
+ \textbf{refl,}\\
+ 
+\textbf{5${ème}$ niveau}, qui correspond au résultat suivant: pour tout entier naturel n  $$succ(n)=n+1$$
+\textbf{rw one\_eq\_succ\_zero,} : On remplace 1 par succ(0), puisque c'est plus facile de manipuler le chiffre 0 que le chiffre 1. On obtient donc $succ(n)=n+succ(0)$\\
+ \textbf{rw add\_succ,} : Pour utiliser un des théorèmes qui manipulent le chiffre 0, il faut qu'on introduit la variable $n$ dans $succ()$. On obtient ainsi $succ(n)=succ(n+0)$ \\
+\textbf{rw add\_zero,} : utilisation de ce théorème pour réecrire $n+0$ en $n$ \\
+\textbf{refl,}
+
+\section{Multiplication world}
+Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité par rapport à l'addition dans les deux sens ( à gauche et à droite). Multiplication world contient 9 niveaux. Nous explicitons le démonstration du théorème suivant: \\
+
+\textbf{4$^{ème}$ niveau }: La multiplication est distributive, c'est à dire pour tout entiers naturels a, b et t: $$t*(a+b)=t*a+t*b$$
+\textbf{induction a with d hd,} : Par induction sur a\\
+\textit{Cas de base, à démontrer $t * (0 + b) = t * 0 + t * b$}\\
+\textbf{rw zero\_add,} : on remplce 0+b par b, on obtient $t * b = t * 0 + t * b$ \\
+\textbf{rw mul\_zero,} : on remplace $t*0$ par 0, on obtient $t * b = 0 + t * b$ \\
+\textbf{rw zero\_add,} : on obtient $t * b = t * b$ \\
+\textbf{refl,} \\
+\textit{Cas d'induction , supposons hd : $t * (d + b) = t * d + t * b$ et montrons $t * (succ d + b) = t * succ d + t * b$ }\\
+\textbf{rw succ\_add,} : on doit se ramener à une équation où l'un des deux cotés est égal à un coté de hd, donc on doit remplacer succ() par des opérations arithmétiques\\
+\textbf{rw mul\_succ,} : on utilise \textit{mul\_succ} (a b : mynat) : $a * succ(b) = a * b + a $\\
+\textbf{rw hd,} on remplace $t * (d + b) + t$ par $t * d + t * b+t$\\
+\textbf{rw add\_right\_comm,} : on applique la commutativité de la multiplication pour remplacer $t * b + t$ par $ t + t * b$\\
+\textbf{rw $\leftarrow$  mul\_succ, }: utilisation de rw \leftarrow pour remplacer $t * d + t$ (qui est à droite de l'équation du théorème mul\_succ) par $t * succ (d)$ \\
+\textbf{refl,} \\
+
+\section{Power world}
+Ce monde contient 8 niveaux. 
+Nous avons choisi de détailler la démonstration du niveau suivant: \\
+\textbf{7$^{ème}$ niveau}:
+pour tout entiers naturels a et b:$$ (a+b)^2=a^2+b^2+2*a*b $$
+ \textit{On simplifie les puissances, en réevrivant les puissances 2 en fonction de 0 }\\
+  \textbf{rw two\_eq\_succ\_one,} \\
+ \textbf{rw one\_eq\_succ\_zero,} : \textit{ On obtient $(a + b) ^ succ (succ 0) = a ^ succ (succ 0) + b ^ succ (succ 0) + succ (succ 0) * a * b$}\\
+  \textbf{repeat {rw pow\_succ},} \textit{repeat permet d'appliquer la tactique rw (rewrite) sur tous les termes $succ(0)$ de l'équation} \\
+  \textbf{repeat {rw pow\_zero},} \\
+  \textbf{simp,} \\
+  \textbf{repeat {rw mul\_succ},} \\
+  \textbf{simp,} \\
+  \textit{On développe (a + b) * (a + b) :} \\
+ \textbf{rw mul\_add,} \\
+ \textit{On développe (a + b) * a :}\\
+  \textbf{rw mul\_comm,} \\
+  \textbf{rw mul\_add,} \\
+  \textit{On développe (a + b) * b :} \\
+ \textbf{ rw mul\_comm (a + b) b,} \\
+  \textbf{rw mul\_add,} \\
+ \textbf{simp,}  \textit{On met les termes de gauche dans le bon ordre } \\
+  \textbf{rw $\leftarrow$ add\_assoc (a * b) (a * b) (b * b),}\\
+  \textbf{rw add\_right\_comm,} \\
+  \textbf{rw add\_comm (a * b) (b * b),} \\
+  \textbf{rw add\_assoc (b * b) (a * b) (a * b),}\\
+  \textit{On factorise par a :}\\
+  \textbf{rw $\leftarrow$ mul\_add a b b,}\\
+  \textbf{refl,}\\
