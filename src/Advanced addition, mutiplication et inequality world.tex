@@ -1,0 +1,101 @@
+\documentclass[french,frenchkw]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{tabto}
+\usepackage[T1]{fontenc}
+
+\graphicspath{{./Images/}}
+
+
+\title{Projet de Mathématiques : Assistant de Preuves}
+\author{Ivan Hasenohr (pour cette partie)}
+\date{Mars 2020}
+\begin{document}
+\maketitle
+\paragraph{Exact, Intro, Have, Apply}
+Ici nous allons présenter 4 techniques fondamentales pour l'utilisation de fonctions, une fonction f : $A\to B$ pour A et B deux types étant simplement un élément de type $A\to B$, qui à une preuve de A renvoie une preuve de B.\\
+\textbf{Exact}\\
+La première de ces tactiques est \textit{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est  $\exists  p \in P$, et que vous disposez de $p \in P$, alors \textit{exact p,} terminera la preuve. De même, si le but est  $\exists  q \in Q$ et que vous disposez d'un élément p de type P et d'une fonction f : $P \to Q$, alors \textit{exact f(p),} terminera la preuve.\\
+\textbf{Intro} \\
+Lorsque vous manipulez des fonctions, Lean peut vous demander de créer une fonction d'un type P vers un type Q. Une méthode est alors de d'émettre l'hypothèse qu'on dispose d'un $p\in P$ à partir duquel vous fabriquerez un élément de Q. \textit{intro p,} fait cela : vous disposerez alors d'une preuve p de P et votre but sera reformulé en Q. \\
+De façon similaire, lorsque de le but est de la forme $P_1 \to P_2 \to ... \to P_n \to Q$, \textit{intros $p_1 p_2 ... p_n$} change le but en Q.\\
+\textbf{Have} \\
+Cette technique permet de nommer de nouvelles variables : par exemple, si vous disposez de $p \in P$ et de f : $P \to Q$, alors \textit{have q : Q := f(p),} vous permet de créer un élément $q = f(p)$. Le principe du Démiurge nous permet en effet de renommer comme on veut ce que l'on veut, ce qui garantit la validité de la preuve dans le cas de l'utilisation de have. \\
+\textbf{Apply}\\
+Cette technique vous permet de modifier le but sans rajouter de variables : de fait, elle raisonne comme ceci : vous avez pour but un élément de Q. Or vous disposez d'une fonction f : $P \to Q$. De ce fait, pour disposer d'un élément de Q, il vous suffit de disposer d'un élément de P, car f(p) sera dans Q. \textit{apply f,} fait exactement ça, et donc changera le but de Q en P.\\
+
+
+\paragraph{IV : Function World}
+Ce monde nous introduit un outil fondamental de Lean : les fonctions. \\
+Un élément important à remarquer est qu'en Lean, toutes les fonctions sont curryfiées.\\
+
+Voici un exemple de niveau de ce monde, le niveau 6, qui demande de créer une fonction de fonctions assez fastidieuse, et qui utilise le fait que ces fonctions sont curryfiées. \\
+L'énoncé se formule comme ceci : \\
+$(P Q R : Type) : (P \to (Q \to R)) \to ((P \to Q) \to (P \to R))$\\
+La preuve est de fait assez simple : \\
+\textit{intros f g p,} -- On introduit les différents éléments/fonctions pour créer la fonction demandée \\
+\textit{apply f p,} -- On modifie le but à l'aide de la fonction curryfiée \\
+\textit{exact g p,} -- On trouve le résultat demandé \\
+Ce qui conclut la preuve.\\
+
+\paragraph{V : Proposition World} 
+Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : une preuve est composée d'implications, et c'est ici que les fonctions prennent toute leur importance : pour montrer que A implique B, il suffit de créer une fonction de A vers B, soit un élément de type $A \to B$.\\
+\\
+Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. \\ \\
+\textbf{Lemme} : if P is true and $P \to Q$ is true, then Q is true. \\ \\
+Soit en Lean : \textit{(P Q : Prop) (p : P) (h : $P  Q$) : Q} \\
+Donc, en français, on dispose d'une preuve de P, et d'une fonction de P dans Q (i-e d'un élément de type $P \to Q$), trouvons un élément de type Q (montrons que Q est vrai). \\
+Ce qui se résout tout aussi trivialement : \textit{exact h(p),}.\\
+\\
+Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant : \\
+\\
+\textbf{Lemme} : ($P \to Q) \to (\lnot Q \to \lnot Q)$. \\
+\\
+En Lean, on demande donc de créer une fonction qui prend une preuve que $P \to Q$ et renvoie une preuve de $\lnot Q \to \lnot Q$.
+\\
+Pour cela, la première étape est de disposer d'une preuve de $P \to Q$ :\\
+\textit{intro f,}\\
+Lean nous demande alors de créer un élément de type $\lnot Q \to \lnot Q$, qui serait l'image de la fonction qu'il nous est demandé de créer.\\
+L'astuce est ensuite de revenir à la définition de $\lnot P$ : $\lnot P$ ssi $P \to false$. On retranscrit cette définition : \\
+\textit{repeat\{rw not\_iff\_imp\_false\},} \\
+Le but est alors réécrit en $(Q \to false) \to P \to false$, ce qui revient à créer une fonction curryfiée des éléments de type $(Q \to false) \times P$ vers les preuves de $false$\\
+On réapplique la même technique d'introduire un élément de chacun des ensembles de départ : \\
+\textit{intros h p,}\\
+On dispose alors d'un élément p de P, d'une fonction f de P dans Q et d'une fonction h de Q dans $false$, et il nous faut créer une preuve de $false$, qui est facilement trouvable avec : \\
+\textit{exact h(f(p)),}\\
+Ce qui conclut la preuve.
+
+
+\paragraph{VI : Advanced Proposition World}
+Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation de consjonctions et disjonctions logiques. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : \\
+\\
+\textbf{Lemme} : Soient P,Q et R trois propositions. \\
+ALors $P\land(Q\lor R) \Longleftrightarrow (P\land Q)\lor(P\land R)$.\\
+\\
+Ici on ne démontrera que l'implication directe, l'implication réciproque se faisant de façon similaire.\\
+Pour séparer les implications, une technique existe : \textit{split}, qui permet de montrer d'abord l'implication directe puis l'implication réciproque. A noter que cette technique permet aussi de séparer le but en plusieurs buts lorsqu'on a à montrer une conjonction de propositions.\\
+Pour gérer les disjonctions de propositions, la technique \textit{cases} existe et permet, par exemple, quand on sait que $P\lor Q$, dans un premier temps supposer P puis supposer Q. Cette technique permet aussi de séparer les conjonctions connues en plusieurs nouvelles données : si l'on a un élément pq de $P\land Q$, \textit{cases pq with p q} nous renvoie deux éléments p et q de P et Q respectivement.\\
+Finalement, lorsqu'on doit montrer une disjonction de propositions, il suffit d'en montrer une, et les techniques \textit{left} et \textit{right} nous permettent de choisir la proposition à démontrer.\\
+La preuve est donc la suivante : \\
+\textit{intro h,}     -- h \in $P\land (Q\lor R)$\\ 
+\textit{cases h with p qor,}     -- p \in P , qor \in $Q\lor R$\\
+\textit{cases qor with q r,}     -- On sépare en deux cas en fonction de la disjonction :\\ 
+
+-- Premier cas q \in Q\\
+\textit{left,}   - $On choisit de montrer P\land Q$\\
+\textit{split,}     -- On sépare en deux buts\\
+\textit{exact p,}\\
+\textit{exact q,}\\
+
+-- Deuxième cas : r \in R\\
+\textit{right,}     - $On choisit de montrer P\land R$\\
+\textit{split,}     -- On sépare en deux buts\\
+\textit{exact p,}\\
+\textit{exact r,}\\
+Ce qui conclut la preuve de l'implication directe.
+
+\bibliographystyle{plain}
+\end{document}
