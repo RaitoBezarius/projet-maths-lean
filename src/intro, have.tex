@@ -1,0 +1,13 @@
+\section{Tactics de base}
+
+\paragraph{intro}
+
+Parfois, le goal que nous cherchons à atteindre est une implication. Pour prouver que 'A -> B', on va prouver 'B sachant A vrai'. En Lean, cela revient à inclure A dans les hypothèses et à changer le goal en 'B'. C'est ce que fait la tactic 'intro'. On peut donner un nom à l'hypothèse qu'on introduit : 'intro h,' ou laisser Lean choisir un nom par défaut.
+On peut écrire 'intros h1 h2 ... hn,' pour déclarer plusieurs hypothèses en même temps.
+
+\paragraph{have}
+
+Pour déclarer une nouvelle hypothèse, on peut utiliser la tactic 'have'.
+'have p : P' va séparer le goal en 2 : montrer qu'on peut construire un élément de l'ensemble P avec les hypothèses actuelles puis montrer le goal initial avec l'hypothèse 'p : P' en plus.
+Lorsque la preuve de l'existence de l'objet qu'on crée est très simple, on peut contracter sa définition :
+'have p := f a' avec 'a : A' et 'f : A -> P' comme hypothèses déjà présentes ajoutera directement 'p : P' dans la liste d'hypothèses.  
