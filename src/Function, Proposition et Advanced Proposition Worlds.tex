@@ -15,11 +15,31 @@
 \date{Mars 2020}
 \begin{document}
 \maketitle
+\paragraph{Exact, Intro, Have, Apply}
+Ici nous allons présenter 4 techniques fondamentales pour l'utilisation de fonctions, une fonction en Lean étant exactement une fonction mathématique, donc un objet abstrait qui prend en argument un élément d'un ensemble A et renvoie un élément d'un ensemble B.\\
+\textbf{Exact}\\
+La première de ces tactiques est \textit{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est un élément de P, et que vous disposez de $p \in P$, alors \textit{exact p,} terminera la preuve. De même, si le but est un élément de Q, et que vous disposez d'un élément p de P et d'une fonction f de P dans Q, alors \textit{exact f(p),} terminera la preuve.\\
+\textbf{Intro} \\
+Lorsque vous manipulez des fonctions, Lean peut vous demander de créer une fonction d'un ensemble P dans un autre ensemble Q. Une méthode est alors de disposer d'un élément de P à partir duquel vous fabriquerez un élément de Q. \textit{intro p,} fait cela : vous disposerez alors d'un élément p de P et votre but changera de $P \implies Q$ à Q. \\
+De façon similaire, \textit{intros} permet d'introduire plusieurs variables/fonctions consécutives.\\
+\textbf{Have} \\
+Cette technique permet de nommer de nouvelles variables : par exemple, si vous disposez de $p \in P$ et de f : $P \implies Q$, alors \textit{have q : Q := f(p),} vous permet de créer un élément $q = f(p)$.\\
+\textbf{Apply}\\
+Cette technique vous permet de modifier le but sans rajouter de variables : de fait, elle raisonne comme ceci : vous avez pour but un élément de Q. Or vous disposez d'une fonction f : $P \implies Q$. De ce fait, pour disposer d'un élément de Q, il vous suffit de disposer d'un élément de P, car f(p) sera dans Q. \textit{apply f,} fait exactement ça, et donc changera le but de Q en P.\\
+
 
 \paragraph{IV : Function World}
-Le monde des fonctions nous introduit un outil fondamental de Lean, qui sont, quel hasard, les fonctions. \\
-Une fonction en Lean n'est rien d'autre qu'un objet abstrait qui pour un élément d'un ensemble A donné renvoie un élément d'un autre ensemble B donné. Dans ce monde, ces fonctions resteront abstraites au sens où elles n'auront pas de forme explicite. \\
-Plusieurs tactiques sont nécessaires pour savoir utiliser les fonctions en Lean : intro, apply, exact et have. Que l'on a en théorie déjà expliqué.\\
+Ce monde nous introduit un outil fondamental de Lean : les fonctions. \\
+Un élément important à remarquer est qu'en Lean, toutes les fonctions sont curryfiées.\\
+La manipulation des fonctions ne pose pas de difficultés particulières, une fois maîtrisées les techniques de base que sont exact, intro, have et apply.\\
+Voici un exemple de niveau de ce monde, le niveau 6, qui demande de créer une fonction de fonctions assez complexe, et qui utilise le fait que ces fonctions sont curryfiées. \\
+L'énoncé se formule comme ceci : \\
+$(P Q R : Type) : (P \implies (Q \implies R)) \implies ((P \implies Q) \implies (P \implies R))$\\
+La preuve est de fait assez simple : \\
+\textit{intros f g p,} -- On introduit les différents éléments/fonctions pour créer la fonction demandée \\
+\textit{apply f p,} -- On modifie le but à l'aide de la fonction curryfiée \\
+\textit{exact g(p),} -- On trouve le résultat demandé \\
+Ce qui conclut la preuve.\\
 
 \paragraph{V : Proposition World} 
 Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : comment modélise-t-on une preuve ? Qu'est-ce qu'une preuve ? Lean le modélise comme ceci : Si l'on prend une proposition P, vraie ou faux, peu importe. Alors cette proposition est modélisée par l'ensemble des preuves qui la prouve. Ainsi, par exemple, si la commutativité de la multiplication est un théorème que l'on note $M_C$ , alors $M_C$ est l'ensemble des preuves de cette commutativité.\\
@@ -49,6 +69,7 @@ On dispose alors d'un élément p de P, d'une fonction f de P dans Q et d'une fo
 \textit{exact h(f(p)),}\\
 Ce qui conclut la preuve.
 
+
 \paragraph{VI : Advanced Proposition World}
 Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation d'intersection et d'union de propositions. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : \\
 \\
@@ -76,7 +97,7 @@ La preuve est donc la suivante : \\
 \textit{split,}     -- On sépare en deux buts\\
 \textit{exact p,}\\
 \textit{exact r,}\\
-Ce qui termine la preuve.
+Ce qui conclut la preuve de l'implication directe.
 
 \bibliographystyle{plain}
 \end{document}
