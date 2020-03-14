@@ -1,0 +1,82 @@
+\documentclass[french,frenchkw]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{tabto}
+\usepackage[T1]{fontenc}
+
+\graphicspath{{./Images/}}
+
+
+\title{Projet de Mathématiques : Assistant de Preuves}
+\author{Ivan Hasenohr (pour cette partie)}
+\date{Mars 2020}
+\begin{document}
+\maketitle
+
+\paragraph{IV : Function World}
+Le monde des fonctions nous introduit un outil fondamental de Lean, qui sont, quel hasard, les fonctions. \\
+Une fonction en Lean n'est rien d'autre qu'un objet abstrait qui pour un élément d'un ensemble A donné renvoie un élément d'un autre ensemble B donné. Dans ce monde, ces fonctions resteront abstraites au sens où elles n'auront pas de forme explicite. \\
+Plusieurs tactiques sont nécessaires pour savoir utiliser les fonctions en Lean : intro, apply, exact et have. Que l'on a en théorie déjà expliqué.\\
+
+\paragraph{V : Proposition World} 
+Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : comment modélise-t-on une preuve ? Qu'est-ce qu'une preuve ? Lean le modélise comme ceci : Si l'on prend une proposition P, vraie ou faux, peu importe. Alors cette proposition est modélisée par l'ensemble des preuves qui la prouve. Ainsi, par exemple, si la commutativité de la multiplication est un théorème que l'on note $M_C$ , alors $M_C$ est l'ensemble des preuves de cette commutativité.\\
+C'est ici que les fonctions prennent toute leur importance : pour montrer qu'une proposition A entraîne une autre proposition B, il suffit de montrer qu'à partir d'un élément de A on peut créer un élément de B, ce qui revient à créer une fonction de A vers B. En effet, si A entraîne B, alors une preuve de A suffit pour prouver B, et donc $a \in A \implies a \in B$. Une fonction $f : A \xrightarrow{} B$ en Lean appliquée (avec apply) à un but B revient donc à dire "Pour montrer B, il suffit de montrer A".\\
+\\
+Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. \\ \\
+\textbf{Lemme} : if P is true and $P \implies Q$ is true, then Q is true. \\ \\
+Soit en Lean : \textit{(P Q : Prop) (p : P) (h : $P \implies Q$) : Q} \\
+Donc, en français, on dispose d'un élément (d'une preuve) de P, et d'une fonction de P dans Q (i-e d'une preuve que si P est vrai alors Q aussi), trouvons un élément de Q (montrons que Q est vrai). \\
+Ce qui se résout tout aussi trivialement : \textit{exact h(p),}.\\
+\\
+Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant : \\
+\\
+\textbf{Lemme} : ($P \implies Q) \implies (\lnot Q \implies \lnot Q)$. \\
+\\
+En Lean, on demande donc de créer un élément de l'ensemble des preuves du Lemme, soit créer une fonction qui va de l'ensemble des preuves que $P \implies Q$ vers l'ensemble des preuves que $\lnot Q \implies \lnot Q$.
+\\
+Pour cela, la première étape est de disposer d'une preuve de $P \implies Q$ :\\
+\textit{intro f,}\\
+Lean nous demande alors de créer un élément de $\lnot Q \implies \lnot Q$, qui serait l'image de la fonction qu'il nous est demandé de créer.\\
+L'astuce est ensuite de revenir à la définition de $\lnot P$ : $\lnot P$ ssi $P \implies false$. On retranscrit cette définition : \\
+\textit{repeat\{rw not\_iff\_imp\_false\},} \\
+Le but est alors réécrit en $(Q \implies false) \implies P \implies false$, ce qui revient à créer une fonction curryfiée des éléments de $(Q \implies false) \times P$ vers les preuves de $false$\\
+On réapplique la même technique d'introduire un élément de chacun des ensembles de départ : \\
+\textit{intros h p,}\\
+On dispose alors d'un élément p de P, d'une fonction f de P dans Q et d'une fonction h de Q dans $false$, et il nous faut créer une preuve de $false$, qui est facilement trouvable avec : \\
+\textit{exact h(f(p)),}\\
+Ce qui conclut la preuve.
+
+\paragraph{VI : Advanced Proposition World}
+Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation d'intersection et d'union de propositions. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : \\
+\\
+\textbf{Lemme} : Soient P,Q et R trois propositions. \\
+ALors $P\land(Q\lor R) \longleftrightarrow (P\land Q)\lor(P\land R)$.\\
+\\
+Ici on ne démontrera que l'implication directe, l'implication réciproque se faisant de façon similaire.\\
+Pour séparer les implications, une technique existe : \textit{split}, qui permet de montrer d'abord l'implication directe puis l'implication réciproque. A noter que cette technique permet aussi de séparer le but en plusieurs buts lorsqu'on a à montrer une intersection de propositions.\\
+Pour gérer les unions de propositions, la technique \textit{cases} existe et permet, par exemple, quand on sait que $P\lor Q$, dans un premier temps supposer P puis supposer Q. Cette technique permet aussi de séparer les intersections connues en plusieurs nouvelles données : si l'on a un élément pq de $P\land Q$, \textit{cases pq with p q} nous renvoie deux éléments p et q de P et Q respectivement.\\
+Finalement, lorsqu'on doit montrer une union de propositions, il suffit d'en montrer une, et les techniques \textit{left} et \textit{right} nous permettent de choisir la proposition à démontrer.\\
+La preuve est donc la suivante : \\
+
+\textit{intro h,}     -- h \in $P\land (Q\lor R)$\\ 
+\textit{cases h with p qor,}     -- p \in P , qor \in $Q\lor R$\\
+\textit{cases qor with q r,}     -- On sépare en deux cas en fonction de l'union :\\ 
+
+-- Premier cas q \in Q\\
+\textit{left,}   - $On choisit de montrer P\land Q$\\
+\textit{split,}     -- On sépare en deux buts\\
+\textit{exact p,}\\
+\textit{exact q,}\\
+
+-- Deuxième cas : r \in R\\
+\textit{right,}     - $On choisit de montrer P\land R$\\
+\textit{split,}     -- On sépare en deux buts\\
+\textit{exact p,}\\
+\textit{exact r,}\\
+Ce qui termine la preuve.
+
+\bibliographystyle{plain}
+\end{document}
