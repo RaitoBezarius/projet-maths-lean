@@ -1,8 +1,12 @@
 \paragraph{Advanced Addition World : Level 10}
 
-Ce
-Ce premier lemme paraît tout à fait naturel, on ne peut pas obtenir 0 en additionnant des entiers naturels strictements positifs, mais il demande tout de même une disjonction de cas et une preuve par l'absurde. 
-Ce lemme n'est vrai que dans les naturels.
+Ce lemme ressemble à la régularité à gauche du monoïde (mynat, +) qu'on a prouvé au niveau 6 de ce monde.
+On a démontré que :
+\begin{verbatim}
+(a b c : mynat) : a + b = a + c → b = c
+\end{verbatim}
+Donc pour 'a = 0' et 'c = 0' et 'a + b = a + c' impliquent 'b = 0'.
+Dans ce lemme, nous allons montrer qu'il suffit d'avoir les hypothèses 'a+c = 0' et 'c = 0' et 'a + b = a + c' pour prouver 'b = 0'.
 
 \begin{verbatim}
 lemma add_left_eq_zero {{a b : mynat}} : a + b = 0 → b = 0 :=
@@ -28,7 +32,7 @@ end
 
 \paragraph{Advanced Multiplication World : Level 4}
 
-Ce théorème consiste à prouver l'injectivité de la multiplication dans les naturels.
+Ce théorème consiste à prouver la régularité à gauche du monoïde (mynat, *).
 L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactic, 'revert'.
 \begin{verbatim}
 theorem mul_left_cancel (a b c : mynat) (ha : a ≠ 0) : a * b = a * c → b = c :=
