@@ -4,14 +4,14 @@
 
 \paragraph{intro}
 
-Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que $A -> B$, on va prouver $B sachant A vrai$. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en 'B'. C'est ce que fait la tactic 'intro'. On peut donner un nom à l'hypothèse qu'on introduit : \textit{intro h,} ou laisser Lean choisir un nom par défaut.
+Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que |$A \to B$|, on va prouver $B sachant A vrai$. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en 'B'. C'est ce que fait la tactique 'intro'. On peut donner un nom à l'hypothèse qu'on introduit : \textit{intro h,} ou laisser Lean choisir un nom par défaut.
 On peut écrire \textit{intros h1 h2 ... hn,} pour introduire plusieurs hypothèses en même temps.
 On entrera plus en détails dans la structure des implications dans le Function World.
 
 \paragraph{have}
 
-Pour déclarer une nouvelle hypothèse, on peut utiliser la tactic $have$.
-\textit{have p : P} diviser le but en 2 sous-but : montrer qu'on peut construire un élément de type P avec les hypothèses actuelles puis montrer le but initial avec l'hypothèse $p : P$ en plus.
+Pour déclarer une nouvelle hypothèse, on peut utiliser la tactique $have$.
+\textit{have p : P} diviser le but en 2 sous-buts : montrer qu'on peut construire un élément de type P avec les hypothèses actuelles puis montrer le but initial avec l'hypothèse $p : P$ en plus.
 Lorsque la preuve de l'existence de l'objet qu'on crée est brève, on peut contracter sa définition :
 \textit{have p := f a} avec $a : A$ et $f : A \to P$ comme hypothèses déjà présentes ajoutera directement $p : P$ dans la liste d'hypothèses.  
 
