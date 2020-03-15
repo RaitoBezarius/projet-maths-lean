@@ -25,13 +25,13 @@ Avant d'expliquer en quoi consiste un assistant de preuve, donnons quelques él�
 
 En août 1900, David Hilbert présente ses 23 problèmes, dont le second est la cohérence de l'arithmétique, fracassé par le résultat d'incomplétude de Gödel (qui ne résoud pas tout à fait la question et dont on pourra retrouver une démonstration en profondeur dans \cite{girard2006le}) en 1931, et dont une réponse positive est obtenue par Gantzen à l'aide de la récurrence transfinie. C'est l'élan qui va lancer la théorie de la démonstration.
 
-En 1966, de Bruijn lance le projet Automath\cite{Automath} qui a pour visée de pouvoir exprimer des théories mathématiques complètes, c'est-à-dire des théories qui sont des ensembles maximaux cohérents de propositions, i.e. le théorème d'incomplétude de Gödel ne s'y applique pas notamment.
+En 1966, de Bruijn lance le projet Automath \cite{Automath} qui a pour visée de pouvoir exprimer des théories mathématiques complètes, c'est-à-dire des théories qui sont des ensembles maximaux cohérents de propositions, i.e. le théorème d'incomplétude de Gödel ne s'y applique pas notamment.
 
-Peu après, les projets Mizar\cite{Mizar}, HOL-Isabelle\cite{IsabelleHOL} et Coq \cite{Coq} naissent pour devenir les assistants de preuve mathématiques que l'on connaît.
+Peu après, les projets Mizar \cite{Mizar}, HOL-Isabelle \cite{IsabelleHOL} et Coq \cite{Coq} naissent pour devenir les assistants de preuve mathématiques que l'on connaît.
 
 ## Principe d'un assistant de preuves
 
-Ces projets mettent à disposition un ensemble d'outil afin d'aider le mathématicien à formaliser sa preuve dans une théorie mathématiques de son choix: ZFC\footnote{Théorie de Zermelo-Fraenkel avec l'axiome du choix.}, la théorie des types dépendants, la théorie des types homotopiques par exemple.
+Ces projets mettent à disposition un ensemble d'outil afin d'aider le mathématicien à formaliser sa preuve dans une théorie mathématiques de son choix: ZFC\footnote{Théorie de Zermelo-Fraenkel avec l'axiome du choix.}, la théorie des types dépendants \cite{bertot2013interactive}, la théorie des types homotopiques \cite{hottbook} par exemple.
 
 Certains assistants de preuve ne se contentent pas de vérifier la formalisation d'une preuve mais peuvent aussi effectuer de la décision (dans l'arithmétique de Presburger par exemple).
 
@@ -60,9 +60,10 @@ Au dessus de cela, on a besoin de se donner des théories axiomatiques dans lequ
 Ceci est pour la partie vérification et fondations théoriques du modèle.
 
 Pour la partie automatique, selon la logique, le problème passe d'indécidable à décidable, par exemple, pour le calcul des propositions, le problème est décidable mais de classe de complexité co-NP-complete (le complémentaire de la classe NP-complete), indiquant que les algorithmes de décisions prennent un temps exponentiel certainement.
-En somme, c'est un problème très difficile, mais sur lequel il a été possible d'avoir des résultats positifs, notamment un qui a résolu un problème de longue date sur lequel aucune bille n'était disponible: la conjecture de Robbins, 1933, résolue en 1996 avec un assistant de preuve à déduction automatique EQP.
 
-Dans une certaine mesure, Lean est capable d'assister à trouver des morceaux de preuve par lui-même à l'aide de tactiques qui peuvent être aussi écrite par les utilisateurs afin d'améliorer l'intelligence de Lean dans certains contextes (chasse aux diagrammes en catégories par exemple).
+En somme, c'est un problème très difficile, mais sur lequel il a été possible d'avoir des résultats positifs, notamment un qui a résolu un problème de longue date sur lequel aucune bille n'était disponible: la conjecture de Robbins, 1933, résolue en 1996 avec un assistant de preuve à déduction automatique EQP. \cite{wampler2010complete}
+
+Dans une certaine mesure, Lean \cite{avigad2014lean} est capable d'assister à trouver des morceaux de preuve par lui-même à l'aide de tactiques qui peuvent être aussi écrite par les utilisateurs afin d'améliorer l'intelligence de Lean dans certains contextes (chasse aux diagrammes en catégories par exemple).
 
 ## Objectifs de ce projet
 

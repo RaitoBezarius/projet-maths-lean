@@ -7,7 +7,6 @@ Les tactiques suivantes permettent la manipulation de fonction en Lean, une fonc
 
 Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que $A \to B$, on va prouver $B$ sachant $A$ vrai. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en $B$. C'est ce que fait la tactique \texttt{intro}. On peut donner un nom à l'hypothèse qu'on introduit : \texttt{intro h,} ou laisser Lean choisir un nom par défaut.
 On peut écrire \texttt{intros h1 h2 \ldots hn,} pour introduire plusieurs hypothèses en même temps.
-On entrera plus en détails dans la structure des implications dans le Function World.
 
 \subsubsection{\texttt{have}}
 
@@ -32,7 +31,7 @@ Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un n
 
 
 \subsubsection{\texttt{exact}}
-La première de ces tactiques est \texttt{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est P, ce qui revient à trouver $p:P$, et que vous disposez de p de type P dans les hypothèses, alors \texttt{exact p,} terminera la preuve. De même, si le but est Q, ce qui revient à trouver $q:Q$ et que vous disposez d'un élément $p$ de type $P$ et d'une fonction $f : P \to Q$, alors \texttt{exact f(p),} terminera la preuve.\\
+La tactique \texttt{exact} permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est P, ce qui revient à trouver $p:P$, et que vous disposez de p de type P dans les hypothèses, alors \texttt{exact p,} terminera la preuve. De même, si le but est Q, ce qui revient à trouver $q:Q$ et que vous disposez d'un élément $p$ de type $P$ et d'une fonction $f : P \to Q$, alors \texttt{exact f(p),} terminera la preuve.\\
 \subsubsection{\texttt{apply}}
 Cette technique vous permet de modifier le but sans rajouter de variables : de fait, elle raisonne comme ceci : vous avez pour but un élément de $Q$. Or vous disposez d'une fonction $f : P \to Q$. De ce fait, pour disposer d'un élément de $Q$, il vous suffit de disposer d'un élément de $P$, car $f(p)$ sera de type $Q$. \texttt{apply f,} fait exactement ça, et donc changera le but de $Q$ en $P$.\\
 
