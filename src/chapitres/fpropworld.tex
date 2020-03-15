@@ -53,9 +53,9 @@ Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les 
 \mint{lean}|lemma : (P,Q,R : Prop) : P ∧ (Q ∨ R) ⇔ (P ∧ Q) ∨ (P ∧ R)|
 
 Ici on ne démontrera que l'implication directe, l'implication réciproque se faisant de façon similaire.
-Pour séparer les implications, une technique existe : \textit{split}, qui permet de montrer d'abord l'implication directe puis l'implication réciproque. A noter que cette technique permet aussi de séparer le but en plusieurs buts lorsqu'on a à montrer une conjonction de propositions.
-Pour gérer les disjonctions de propositions, la technique \textit{cases} existe et permet, par exemple, quand on sait que $P\lor Q$, dans un premier temps supposer P puis supposer Q. Cette technique permet aussi de séparer les conjonctions connues en plusieurs nouvelles données : si l'on a un élément pq de $P\land Q$, \textit{cases pq with p q} nous renvoie deux éléments p et q de P et Q respectivement.
-Finalement, lorsqu'on doit montrer une disjonction de propositions, il suffit d'en montrer une, et les techniques \textit{left} et \textit{right} nous permettent de choisir la proposition à démontrer.
+Pour séparer les implications, une technique existe : \texttt{split}, qui permet de montrer d'abord l'implication directe puis l'implication réciproque. A noter que cette technique permet aussi de séparer le but en plusieurs buts lorsqu'on a à montrer une conjonction de propositions.
+Pour gérer les disjonctions de propositions, la technique \texttt{cases} existe et permet, par exemple, quand on sait que $P\lor Q$, dans un premier temps supposer P puis supposer Q. Cette technique permet aussi de séparer les conjonctions connues en plusieurs nouvelles données : si l'on a un élément pq de $P\land Q$, \texttt{cases pq with p q} nous renvoie deux éléments p et q de P et Q respectivement.
+Finalement, lorsqu'on doit montrer une disjonction de propositions, il suffit d'en montrer une, et les techniques \texttt{left} et \texttt{right} nous permettent de choisir la proposition à démontrer.
 La preuve est donc la suivante : 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines, escapeinside = ||]{lean}
 intro h,     -- h de type $P \land (Q \lor R)$
