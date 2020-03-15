@@ -4,7 +4,7 @@ Ce monde nous introduit un outil fondamental de Lean : les fonctions.
 Un élément important à remarquer est qu'en Lean, toutes les fonctions sont curryfiées.
 
 
-\paragraph{Function World : Level 6}
+\paragraph{Niveau 6}
 Voici un exemple de niveau de ce monde, le niveau 6, qui demande de créer une fonction de fonctions assez fastidieuse, et qui utilise le fait que ces fonctions sont curryfiées. 
 L'énoncé se formule comme ceci : 
 
@@ -22,7 +22,7 @@ Ce qui conclut la preuve.
 
 \subsection{Proposition World}
 Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : une preuve est composée d'implications, et c'est ici que les fonctions prennent toute leur importance : pour montrer que A implique B, il suffit de créer une fonction de A vers B, soit un élément de type $A \to B$.
-\paragraph{Proposition World : Level 1}
+\paragraph{Niveau 1}
 Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. 
 
 \mint{lean}|lemma : (P,Q : Prop) (p : P) (h : P → Q) : Q|
@@ -32,7 +32,7 @@ Ce qui se résout tout aussi succintement :
 
 \mint{lean}|exact h(p),| 
 
-\paragraph{Proposition World : Level 8}
+\paragraph{Niveau 8}
 Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant, une implication de l'équivalence entre une proposition et sa contraposée (si cela a du sens) : 
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines, escapeinside = ||]{lean}
@@ -50,7 +50,7 @@ exact h(f(p)), -- Ce qui conclut la preuve.
 
 
 \subsection{Advanced Proposition World}
-\paragraph{Advanced Proposition World : Level 8}
+\paragraph{Niveau 8}
 Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation de consjonctions et disjonctions logiques. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : 
 
 
