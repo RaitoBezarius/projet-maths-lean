@@ -18,7 +18,7 @@ end
 \end{minted}
 \subsection{Multiplication World}
 Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication World} contient 9 niveaux: \texttt{zero\_mul}, \texttt{mul\_one}, \texttt{one\_mul}, \texttt{mul\_add}, \texttt{mul\_assoc}, \texttt{succ\_mul}, \texttt{add\_mul}, \texttt{mul\_comm} et \texttt{mul\_left\_comm}.\\ Nous explicitons la démonstration du théorème suivant: \\
-\paragraph{Niveau 4} :  \texttt{mul\_add}  \begin{center} La multiplication est distributive, c'est à dire  $\forall a, b, t \in \mathbb{N},$  $t\times(a+b)=t\times a+t\times b $ \end{center}
+\paragraph{Niveau 4} :  \texttt{mul\_add}  \begin{center} La multiplication est distributive à gauche, c'est à dire  $\forall a, b, t \in \mathbb{N},$  $t\times(a+b)=t\times a+t\times b $ \end{center}
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma mul_add (t a b : mynat) : t*(a+b) = t*a+t*b :=
 begin [nat_num_game]
