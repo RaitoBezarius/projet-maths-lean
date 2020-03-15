@@ -17,25 +17,25 @@
     \item On suppose dans cette partie que:\\ - $\Sigma$ est un alphabet fini qui contient les lettres de l'alphabet latin, les parenthèses et les opérateurs arithmétiques.\\
     - $\Sigma^*$ est l'ensemble des mots possibles qu'on peut construire à partir de $\Sigma$.\\
     - $F$, $A$ et $B$ sont des mots de $\Sigma^*$.
-    \item {\large \textbf{refl}}: Cette tactique correspond à la reflexivité de l'égalité, d'où le nom \textbf{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
+    \item {\large \textbf{refl}}: Cette tactique correspond à la réflexivité de l'égalité, d'où le nom \textbf{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
     \textit{Exemple:} soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y*(z+w)=x+y*(z+w)$ en exécutant l'instruction \big\{\textbf{refl,}\big\}.
-    \item {\large\textbf{rw}}: le nom de cette tactique (rw) correspond au mot anglais \textit{rewrite}. Elle s'applique dans 2 cas distincts:
+    \item {\large\textbf{rw}}: Le nom de cette tactique (rw) correspond au mot anglais \textit{rewrite}. Elle s'applique dans 2 cas distincts:
     
      \hspace{1cm} Soit $H$ une hypothèse, sous la forme $A=B$. 
-    Supposons que l'équation à démontrer est le mot $F$. \\ L'instruction \big\{\textbf{rw $H$,}\big\} un mot $F'$ dérive du mot $F$, en effectuant un seul changement: tous les $As$ (présents dans $F$) sont réécrits en $Bs$. De même, si on utilise \big\{\textbf{rw $\leftarrow$ H,}\big\}, alors le seul changement sera: tous les $Bs$ (présents dans $F$) sont réécrits en $As$.
+    Supposons que l'équation à démontrer est le mot $F$. \\Si $F$ contient au moins un $A$, l'instruction \big\{\textbf{rw $H$,}\big\} dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (présents dans $F$) sont réécrits en $Bs$. De même, si $F$ contient au moins un $B$ et si on utilise \big\{\textbf{rw $\leftarrow$ H,}\big\}, alors le seul changement sera: tous les $Bs$ (présents dans $F$) sont réécrits en $As$.
     
-    \hspace{1cm} Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \big\{\textbf{rw T,}\big\} (respectivement \big\{\textbf{rw $\leftarrow$ T,}\big\}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (resp.$Bs$) sont remplacés par des $Bs$ (resp.$As$). 
-    \item {\large\textbf{simp}}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition world}. Son principe est le suivant: elle utilise la tactique \textbf{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont diponibles à partir du dernier niveau de \textit{multiplication world}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \textbf{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
+    \hspace{1cm} Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \big\{\textbf{rw T,}\big\} (respectivement \big\{\textbf{rw $\leftarrow$ T,}\big\}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (resp. $Bs$) sont remplacés par des $Bs$ (resp. $As$). 
+    \item {\large\textbf{simp}}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition World}. Son principe est le suivant: elle utilise la tactique \textbf{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont disponibles à partir du dernier niveau de \textit{Multiplication World}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \textbf{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
     \textit{Exemple:} Soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer que $x+y+z+w+u=y+(z+x+u)+w$ en utilisant \big\{\textbf{simp,} \big\}
     
     
 \end{itemize}
 
 
-\section{Addition world}
-Addition world est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initiée dans tutorial world) et \textit{induction}.\\
-En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant Addition world, on peut utiliser les deux résultats suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.\\
-Addition world contient 6 niveaux: zero\_add, add\_assoc, succ\_add, add\_comm, succ\_eq\_add\_one et add\_right\_comm.
+\section{Addition World}
+\textit{Addition World} est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initiée dans \textit{Tutorial}) et \textit{induction}.\\
+En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant \textit{Addition World}, on peut utiliser les deux théorèmes suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.\\
+\textit{Addition World} contient 6 niveaux: zero\_add, add\_assoc, succ\_add, add\_comm, succ\_eq\_add\_one et add\_right\_comm.
 
 Détaillons la démonstration du théorème suivant:\\
 \textbf{Le 5$^{ème}$ niveau} : succ\_eq\_add\_one \begin{center}  pour tout entier naturel $n$,  $succ(n)=n+1$ \end{center}\\
@@ -45,8 +45,8 @@ Détaillons la démonstration du théorème suivant:\\
 \textbf{rw add\_zero,} : utilisation de ce théorème pour réécrire $n+0$ en $n$\\
 \textbf{refl,}
 
-\section{Multiplication world}
-Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication world} contient 9 niveaux: zero\_mul, mul\_one, one\_mul, mul\_add, mul\_assoc, succ\_mul, add\_mul, mul\_comm et mul\_left\_comm.\\ Nous explicitons la démonstration du théorème suivant: \\
+\section{Multiplication World}
+Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication World} contient 9 niveaux: zero\_mul, mul\_one, one\_mul, mul\_add, mul\_assoc, succ\_mul, add\_mul, mul\_comm et mul\_left\_comm.\\ Nous explicitons la démonstration du théorème suivant: \\
 \textbf{Le 4$^{ème}$ niveau} : mul\_add  \begin{center} La multiplication est distributive, c'est à dire pour tous entiers naturels a, b et t : $$t*(a+b)=t*a+t*b$$ \end{center}\\
 {\large\underline{Preuve:}} \\
 \textbf{induction a with d hd,} : Dans l'induction, \textbf{$a$} est renommé en \textbf{$d$} qui varie inductivement et \textbf{$hd$} est l'hypothèse d'induction sur $d$ (cas de base: $d=0$, cas d'induction: on suppose $hd$, on démontre $h(succ(d))$)   \\
@@ -56,17 +56,17 @@ Dans ce monde, les théorèmes reposent principalement sur les propriétés basi
 \textbf{rw zero\_add,} : on obtient $t*b=t*b$ \\
 \textbf{refl,} \\
 \textit{\underline{Cas d'induction}: supposons $hd$ : $t*(d+b) = t * d + t * b$ et montrons $h(succ(d)):$ $t * (succ (d) + b) = t * succ (d) + t * b$ }\\
-\textbf{rw succ\_add,} :une solution serait de se ramener à une équation où l'un des deux membres est égal à un membre de hd. Pour faire cela, on utilise succ\_add qui s'applique uniquement sur une quantité de la forme $succ(d)+b$ ($d$ et $b$ étant deux entiers naturels quelconques), nous permettant ainsi de la remplacer par $succ(d+b)$\\
+\textbf{rw succ\_add,} :une solution serait de se ramener à une équation où l'un des deux membres est égal à un membre de $hd$. Pour faire cela, on utilise succ\_add qui s'applique uniquement sur une quantité de la forme $succ(d)+b$ ($d$ et $b$ étant deux entiers naturels quelconques), nous permettant ainsi de la remplacer par $succ(d+b)$\\
 \textbf{rw mul\_succ,} : on utilise \textit{mul\_succ} ($a$ $b$ : mynat) : $a * succ(b) = a * b + a $\\
-\textbf{rw hd,} on remplace $t * (d + b) + t$ par $t * d + t * b+t$\\
+\textbf{rw hd,} on remplace $t * (d + b) + t$ par $t * d + t * b+t$ en utilisant $hd$, on obtient $ t * d + t * b + t = t * succ(d) + t * b$\\
 \textbf{rw add\_right\_comm,} : on applique la commutativité de l'addition pour remplacer $t * b + t$ par $ t + t * b$\\
-\textbf{rw $\leftarrow$  mul\_succ, }: on utilise rw $\leftarrow$ pour remplacer $t * d + t$ (qui est le membre droit de l'égalité qui correspond au théorème mul\_succ) par $t * succ (d)$ \\
+\textbf{rw $\leftarrow$  mul\_succ, }: on utilise rw $\leftarrow$ pour remplacer $t * d + t$ (qui est le membre droit de l'égalité qui correspond au théorème mul\_succ) par $t * succ (d)$, on obtient $t * succ(d) + t * b = t * succ(d) + t * b$\\
 \textbf{refl,} \\
 
-\section{Power world}
+\section{Power World}
 Ce monde contient 8 niveaux: zero\_pow\_zero, zero\_pow\_succ, pow\_one, one\_pow, pow\_add, mul\_pow, pow\_pow et add\_squared.\\ 
-Nous avons choisi de détailler la démonstration du théorème suivant: \\
-\textbf{Le 7$^{ème}$ niveau}: add\_squared
+Nous explicitons la démonstration du théorème suivant: \\
+\textbf{Le 7$^{ème}$ niveau}: add\_squared (Cas particulier de la formule du binôme de Newton: $(a+b)^n=\sum_{k=0}^{n}{\frac{n!}{k!(n-k)!} a^nb^{n-k}}$, pour $n=2$)
 \begin{center} pour tous entiers naturels $a$ et $b$ : $(a+b)^2=a^2+b^2+2*a*b $\end{center}
 {\large\underline{Preuve:}}\\
  \textit{On simplifie les puissances, en réécrivant les puissances 2 en fonction de 0 }\\
@@ -86,7 +86,7 @@ $, donc simp, dans ce cas, applique le théorème one\_mul(m : mynat) : $m * 1 =
   \textit{On développe $(a + b) * b$ :} \\
  \textbf{ rw mul\_comm (a + b) b,} \\
   \textbf{rw mul\_add,} \\
- \textbf{simp,}  \textit{On met les termes à gauche dans le bon ordre } \\
+ \textbf{simp,}  \textit{On met les termes du membre de gauche dans le bon ordre } \\
   \textbf{rw $\leftarrow$ add\_assoc (a * b) (a * b) (b * b),} : on obtient $a * a + (a * b + a * b + b * b) = a * a + (b * b + a * (b + b))$\\
   \textbf{rw add\_right\_comm,} \\
   \textbf{rw add\_comm (a * b) (b * b),} \\
