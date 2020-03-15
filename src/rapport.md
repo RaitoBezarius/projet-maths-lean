@@ -6,6 +6,7 @@ advanced-cs: true
 toc: true
 minted: true
 lean-minted: true
+twocolumn-minted: true
 lang: fr
 classoption: 
 - twocolumn
@@ -28,7 +29,7 @@ Peu après, les projets Mizar\cite{Mizar}, HOL-Isabelle\cite{IsabelleHOL} et Coq
 
 ## Principe d'un assistant de preuves
 
-Ces projets mettent à disposition un ensemble d'outil afin d'aider le mathématicien à formaliser sa preuve dans une théorie mathématiques de son choix: ZFC, la théorie des types dépendants, la théorie des types homotopiques par exemple.
+Ces projets mettent à disposition un ensemble d'outil afin d'aider le mathématicien à formaliser sa preuve dans une théorie mathématiques de son choix: ZFC\footnote{Théorie de Zermelo-Fraenkel avec l'axiome du choix.}, la théorie des types dépendants, la théorie des types homotopiques par exemple.
 
 Certains assistants de preuve ne se contentent pas de vérifier la formalisation d'une preuve mais peuvent aussi effectuer de la décision (dans l'arithmétique de Presburger par exemple).
 
