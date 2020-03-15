@@ -59,6 +59,10 @@ Dans une certaine mesure, Lean est capable d'assister à trouver des morceaux de
 
 # Détail des exercices du « Number Games » de Kevin Buzzard
 
+On se donnera pendant cette section un alphabet $\Sigma$ qui pourra contenir selon le contexte, les opérateurs usuels en mathématiques $\{ +, -, \times, / \}$, les chiffres, l'alphabet grec et latin.
+
+Puis, on munit $(\Sigma^{*}, \cdot)$ d'une structure de monoïde usuelle où $\cdot$ est la concaténation des mots et $\Sigma^{*}$ est la fermeture par l'étoile de Kleene de $\Sigma$. \footnote{i.e. tous les mots sur $\Sigma$}
+
 <!-- Tactiques de bases -->
 \input{chapitres/basic_tactics.tex}
 <!-- Chapitre de Maryem (Premiers Mondes) -->
