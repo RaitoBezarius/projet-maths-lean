@@ -32,7 +32,7 @@ end
 
 \paragraph{Advanced Multiplication World : Level 4}
 
-Ce théorème consiste à prouver la régularité à gauche du monoïde (\mynat, *).
+Ce théorème consiste à prouver la régularité à gauche du monoïde $(\mynat, \times)$.
 L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactique, \textit{revert}.
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 theorem mul_left_cancel (a b c : mynat) (ha : a ≠ 0) : a * b = a * c → b = c :=
