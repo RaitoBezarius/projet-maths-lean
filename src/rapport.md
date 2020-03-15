@@ -44,7 +44,7 @@ D'autre part, leurs usages se généralisent afin de pouvoir faire de la certifi
 
 ## Éléments de théorie des assistants de preuves
 
-Nous nous n'attacherons pas à faire un état du fonctionnement des assistants de preuves, ceux là dépassent largement le cadre d'une licence, mais on peut donner quelques éléments d'explications.
+Nous ne nous attacherons pas à faire un état du fonctionnement des assistants de preuves, ceux là dépassent largement le cadre d'une licence, mais on peut donner quelques éléments d'explications.
 
 Distinguons deux opérations, celle de la vérification de preuve et celle de la déduction automatique.
 
