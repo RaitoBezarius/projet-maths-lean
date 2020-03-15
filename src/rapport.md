@@ -59,10 +59,14 @@ Dans une certaine mesure, Lean est capable d'assister à trouver des morceaux de
 
 # Détail des exercices du « Number Games » de Kevin Buzzard
 
+<!-- Tactiques de bases -->
+\input{chapitres/basic_tactics.tex}
 <!-- Chapitre de Maryem (Premiers Mondes) -->
 \input{chapitres/fundamentalsworld.tex}
 <!-- Chapitre de Ivan (Mondes Intermédiaires) -->
 \input{chapitres/fpropworld.tex}
+<!-- Chapitre de Léa (Mondes Finaux) -->
+\input{chapitres/finalworlds.tex}
 
 # Excursion dans le formalisme des espaces métriques
 
