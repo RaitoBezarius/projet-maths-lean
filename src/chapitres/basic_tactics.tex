@@ -7,7 +7,7 @@ Les tactiques suivantes permettent la manipulation de fonction en Lean, une fonc
 \paragraph{intro}
 
 Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que $A -> B$, on va prouver \textit{B sachant A vrai}. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en $B$. C'est ce que fait la tactic \textit{intro}. On peut donner un nom à l'hypothèse qu'on introduit : \textit{intro h,} ou laisser Lean choisir un nom par défaut.
-On peut écrire \textit{intros h_1 h_2 ... h_n,} pour introduire plusieurs hypothèses en même temps.
+On peut écrire \textit{intros $h_1 h_2 \ldots h_n$,} pour introduire plusieurs hypothèses en même temps.
 On entrera plus en détails dans la structure des implications dans le Function World.
 
 \paragraph{have}
