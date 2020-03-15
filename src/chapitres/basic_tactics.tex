@@ -4,21 +4,21 @@
 
 \paragraph{intro}
 
-Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que 'A -> B', on va prouver 'B sachant A vrai'. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en 'B'. C'est ce que fait la tactic 'intro'. On peut donner un nom à l'hypothèse qu'on introduit : 'intro h,' ou laisser Lean choisir un nom par défaut.
-On peut écrire 'intros h1 h2 ... hn,' pour introduire plusieurs hypothèses en même temps.
+Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que $A -> B$, on va prouver $B sachant A vrai$. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en 'B'. C'est ce que fait la tactic 'intro'. On peut donner un nom à l'hypothèse qu'on introduit : \textit{intro h,} ou laisser Lean choisir un nom par défaut.
+On peut écrire \textit{intros h1 h2 ... hn,} pour introduire plusieurs hypothèses en même temps.
 On entrera plus en détails dans la structure des implications dans le Function World.
 
 \paragraph{have}
 
-Pour déclarer une nouvelle hypothèse, on peut utiliser la tactic 'have'.
-'have p : P' diviser le but en 2 sous-but : montrer qu'on peut construire un élément de type P avec les hypothèses actuelles puis montrer le but initial avec l'hypothèse 'p : P' en plus.
+Pour déclarer une nouvelle hypothèse, on peut utiliser la tactic $have$.
+\textit{have p : P} diviser le but en 2 sous-but : montrer qu'on peut construire un élément de type P avec les hypothèses actuelles puis montrer le but initial avec l'hypothèse $p : P$ en plus.
 Lorsque la preuve de l'existence de l'objet qu'on crée est brève, on peut contracter sa définition :
-'have p := f a' avec 'a : A' et 'f : A -> P' comme hypothèses déjà présentes ajoutera directement 'p : P' dans la liste d'hypothèses.  
+\textit{have p := f a} avec $a : A$ et $f : A \to P$ comme hypothèses déjà présentes ajoutera directement $p : P$ dans la liste d'hypothèses.  
 
 % Tactiques de Maryem
 
 \paragraph {\large \textbf{refl}}: Cette tactique correspond à la réflexivité de l'égalité, d'où le nom \textbf{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
-\textit{Exemple}Ssoient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y \times (z+w)=x+y \times (z+w)$ en appliquant la tactique \big\{\textbf{refl,}\big\}.
+\textit{Exemple}Soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y \times (z+w)=x+y \times (z+w)$ en appliquant la tactique \big\{\textbf{refl,}\big\}.
 \paragraph {\large\textbf{rw}}: Le nom de cette tactique correspond au mot anglais \textit{rewrite}. Elle s'applique dans deux cas distincts.
 
 Soit $H : A = B$ une hypothèse d'égalité. \footnote{ou une preuve de $A = B$, c'est la même chose.}
@@ -33,7 +33,7 @@ Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un n
 \paragraph{Exact, Intro, Have, Apply}
 Ici nous allons présenter 4 techniques fondamentales pour l'utilisation de fonctions, une fonction f : $A\to B$ pour A et B deux types étant simplement un élément de type $A\to B$, qui à une preuve de A renvoie une preuve de B.\\
 \textbf{Exact}\\
-La première de ces tactiques est \textit{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est  $\exists  p$ de type P, et que vous disposez de p de type P, alors \textit{exact p,} terminera la preuve. De même, si le but est  $\exists  q$ de type Q et que vous disposez d'un élément p de type P et d'une fonction f : $P \to Q$, alors \textit{exact f(p),} terminera la preuve.\\
+La première de ces tactiques est \textit{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est  $\exists  p$ de type P, et que vous disposez de p de type P dans les hypothèses, alors \textit{exact p,} terminera la preuve. De même, si le but est  $\exists  q$ de type Q et que vous disposez d'un élément p de type P et d'une fonction f : $P \to Q$, alors \textit{exact f(p),} terminera la preuve.\\
 \textbf{Intro} \\
 Lorsque vous manipulez des fonctions, Lean peut vous demander de créer une fonction d'un type P vers un type Q. Une méthode est alors de d'émettre l'hypothèse qu'on dispose d'un p de type P à partir duquel vous fabriquerez un élément de Q. \textit{intro p,} fait cela : vous disposerez alors d'une preuve p de P et votre but sera reformulé en Q. \\
 De façon similaire, lorsque de le but est de la forme $P_1 \to P_2 \to ... \to P_n \to Q$, \textit{intros $p_1 p_2 ... p_n$} change le but en Q.\\
