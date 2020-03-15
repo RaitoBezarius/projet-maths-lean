@@ -19,6 +19,8 @@ numbersections: true
 
 # Introduction
 
+Ce travail ainsi que les codes sources sont disponibles à l'URL suivante: <https://github.com/RaitoBezarius/projet-maths-lean>.
+
 Avant d'expliquer en quoi consiste un assistant de preuve, donnons quelques éléments d'histoire autour de ces derniers.
 
 ## Courte histoire des assistants de preuve et du rêve d'Hilbert
