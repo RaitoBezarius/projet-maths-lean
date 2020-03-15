@@ -24,7 +24,7 @@ begin [nat_num_game]
   --On va donc faire une preuve par l'absurde :
   rw add_succ at H, --on fait rentrer a dans le succ donc $H : succ (a + d) = 0$
   exfalso, -- le but est impossible à prouver donc on le change en $faux$
-  --Et on a le théorème succ_ne_zero $(n : mynat) : succ n = 0 -> faux$, donc on sait que l'hypothèse H implique $faux$
+  --Et on a le théorème succ_ne_zero $(n : mynat) : succ n = 0 -> faux$, donc on sait que l'hypothèse $H$ implique $faux$
   exact succ_ne_zero H,
   --On a donc prouver que l'hypothèse $\exists d : mynat tel que b = succ(d)$ est est contradictoire avec nos axiome
 end
@@ -32,23 +32,23 @@ end
 
 \paragraph{Advanced Multiplication World : Level 4}
 
-Ce théorème consiste à prouver la régularité à gauche du monoïde (mynat, *).
-L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactic, \textit{revert}.
+Ce théorème consiste à prouver la régularité à gauche du monoïde (\mynat, *).
+L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactique, \textit{revert}.
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 theorem mul_left_cancel (a b c : mynat) (ha : a ≠ 0) : a * b = a * c → b = c :=
 begin
   revert b,
-  --On ne considère plus b comme une hypothèse,
+  --On ne considère plus $b$ comme une hypothèse,
   --à la place, on rajoute un $\forall (b : mynat)$ au but
   --Ce sera utile plus tard, dans l'hypothèse d'induction
   
-  -- On fait une induction sur c :
+  -- On fait une induction sur $c$ :
   induction c with n hn,
 
   --Le cas de base $\forall (b : mynat), a * b = a * 0 → b = 0$ :
   rw mul_zero, --On simplifie
-  intros b h, --On introduit un b et l'hypothèse $h : a * b = 0$
-  rw mul_eq_zero_iff a b at h, --h est équivalent à $a = 0 or b = 0$ donc on la réécrit
+  intros b h, --On introduit un $b$ et l'hypothèse $h : a * b = 0$
+  rw mul_eq_zero_iff a b at h, --$h$ est équivalent à $a = 0 or b = 0$ donc on la réécrit
   
   --On casse le $a = 0 or b = 0$ en deux cas:
   cases h with hha hhb,
@@ -64,14 +64,14 @@ begin
   exact hhb,
 
   --Le cas d'induction (but : $\forall (b : mynat), a * b = a * succ n → b = succ n$) :
-  intros b h, --On introduit un b et l'hypothèse $h : a * b = a * succ n$
+  intros b h, --On introduit un $b$ et l'hypothèse $h : a * b = a * succ n$
   --Le but est juste $b = succ n$ maintenant
-  --On fait une distinction de cas sur b :
+  --On fait une distinction de cas sur $b$ :
   cases b with c,
 
   --Cas $b = 0$ (but : $0 = succ n$) :
   --Cela contredit l'axiome de Peano $zero_ne_succ$, on va donc passer par l'absurde :
-  rw mul_zero at h, --On simplifie h pour obtenir $h : 0 = a * succ n$
+  rw mul_zero at h, --On simplifie $h$ pour obtenir $h : 0 = a * succ n$
   exfalso,
   apply mul_pos a (succ n), --On a besoin de démontrer les hypothèses de mul_pos :
   --Hypothèse $a \ne 0$ :
@@ -86,9 +86,9 @@ begin
   repeat {rw succ_eq_add_one},
   rw add_right_cancel_iff, --On simplifie le but pour lui appliquer l'hypothèse d'induction
   --C'est là que le $revert b$ prend tout son importance car le but est $c = n$
-  --On n'aurait pas pu appliquer l'HR si elle prenait un b particulier
+  --On n'aurait pas pu appliquer l'hypothèse d'induction si elle prenait un $b$ particulier
   apply hn,
-  --Il ne reste plus qu'a simplifier l'hypothèse h :
+  --Il ne reste plus qu'a simplifier l'hypothèse $h$ :
   repeat {rw mul_succ at h},
   rw add_right_cancel_iff at h,
   exact h,
@@ -118,11 +118,11 @@ begin
   --On commence par transformer $a \leq b \land \lnot (b \leq a)$ en 2 hypothèses :
   intro h,
   cases h with hab htba,
-  --On introduit $c tel que b = a + c$
+  --On introduit $c$ tel que $b = a + c$
   cases hab with c hc,
 
   --On ne peut rien faire à ce niveau car le cas $b = 0$ pose problème
-  --On fait donc une distinction de cas sur b :
+  --On fait donc une distinction de cas sur $b$ :
   cases b,
 
   --Cas $b = 0$ (impossible donc par l'absurde) :
