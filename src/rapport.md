@@ -59,5 +59,7 @@ Dans une certaine mesure, Lean est capable d'assister à trouver des morceaux de
 
 # Détail des exercices du « Number Games » de Kevin Buzzard
 
+\input{chapitres/fundamentalsworld.tex}
+
 # Excursion dans le formalisme des espaces métriques
 
