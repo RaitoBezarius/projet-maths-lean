@@ -6,6 +6,7 @@ advanced-cs: true
 toc: true
 minted: true
 lean-minted: true
+twocolumn-minted: true
 lang: fr
 classoption: 
 - twocolumn
