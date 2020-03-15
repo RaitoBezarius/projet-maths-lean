@@ -6,7 +6,7 @@ On a démontré que :
 (a b c : mynat) : a + b = a + c → b = c
 \end{minted}
 Donc pour $a = 0$ et $c = 0$ et $a + b = a + c$ impliquent $b = 0$.
-Dans ce lemme, nous allons montrer qu'il suffit d'avoir les hypothèses 'a+c = 0' et 'c = 0' et 'a + b = a + c' pour prouver 'b = 0'.
+Dans ce lemme, nous allons montrer qu'il suffit d'avoir les hypothèses $a+c = 0$ et $c = 0$ et $a + b = a + c$ pour prouver $b = 0$.
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 lemma add_left_eq_zero {{a b : mynat}} : a + b = 0 → b = 0 :=
