@@ -65,7 +65,7 @@ Dans une certaine mesure, Lean est capable d'assister à trouver des morceaux de
 
 ## Objectifs de ce projet
 
-Nous allons d'abord nous familiariser au langage de Lean \cite{avigad2014lean}, l'assistant de preuve de Microsoft Research qui sera utilisé pour ce projet, ses concepts à travers le « Number Games » de Kevin Buzzard qui consiste à redémontrer quelques théorèmes autour des entiers naturels en partant des axiomes de Peano.
+Nous allons d'abord nous familiariser au langage de Lean \cite{avigad2014lean}, l'assistant de preuve de Microsoft Research qui sera utilisé pour ce projet, ses concepts à travers le « Number Games » de Kevin Buzzard \cite{natgames2019} qui consiste à redémontrer quelques théorèmes autour des entiers naturels en partant des axiomes de Peano.
 
 Nous fournissons en XXX, des solutions détaillées et expliquées des théorèmes qu'on a jugé un peu subtil tout en introduisant le système de tactique, pièce fondamentale des assistants de preuve et de l'automatisation des démonstrations.
 
