@@ -23,7 +23,7 @@ La première de ces tactiques est \textit{exact}. Elle permet de dire à Lean qu
 Lorsque vous manipulez des fonctions, Lean peut vous demander de créer une fonction d'un type P vers un type Q. Une méthode est alors de d'émettre l'hypothèse qu'on dispose d'un p de type P à partir duquel vous fabriquerez un élément de Q. \textit{intro p,} fait cela : vous disposerez alors d'une preuve p de P et votre but sera reformulé en Q. \\
 De façon similaire, lorsque de le but est de la forme $P_1 \to P_2 \to ... \to P_n \to Q$, \textit{intros $p_1 p_2 ... p_n$} change le but en Q.\\
 \textbf{Have} \\
-Cette technique permet de nommer de nouvelles variables : par exemple, si vous disposez de p de type P et de f : $P \to Q$, alors \textit{have q : Q := f(p),} vous permet de créer un élément $q = f(p)$. Le principe du Démiurge nous permet en effet de renommer comme on veut ce que l'on veut, ce qui garantit la validité de la preuve dans le cas de l'utilisation de have. \\
+Cette technique permet de renommer des variables : par exemple, si vous disposez de p de type P et de f : $P \to Q$, alors \textit{have q : Q := f(p),} vous permet de renommer un élément $q = f(p)$. Le principe du Démiurge nous permet en effet de renommer comme on veut ce que l'on veut, ce qui garantit la validité de la preuve dans le cas de l'utilisation de have. \\
 \textbf{Apply}\\
 Cette technique vous permet de modifier le but sans rajouter de variables : de fait, elle raisonne comme ceci : vous avez pour but un élément de Q. Or vous disposez d'une fonction f : $P \to Q$. De ce fait, pour disposer d'un élément de Q, il vous suffit de disposer d'un élément de P, car f(p) sera dans Q. \textit{apply f,} fait exactement ça, et donc changera le but de Q en P.\\
 
@@ -48,18 +48,18 @@ Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Prop
 \textbf{Lemme} : if P is true and $P \to Q$ is true, then Q is true. \\ \\
 Soit en Lean : \textit{(P Q : Prop) (p : P) (h : $P \to Q$) : Q} \\
 Donc, en français, on dispose d'une preuve de P, et d'une fonction de P dans Q (i-e d'un élément de type $P \to Q$), trouvons un élément de type Q (montrons que Q est vrai). \\
-Ce qui se résout tout aussi trivialement : \textit{exact h(p),}.\\
+Ce qui se résout tout aussi succintement : \textit{exact h(p),}.\\
 \\
-Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant : \\
+Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant, une implication de l'équivalence entre une proposition et sa contraposée (si cela a du sens) : \\
 \\
-\textbf{Lemme} : ($P \to Q) \to (\lnot Q \to \lnot Q)$. \\
+\textbf{Lemme} : ($P \to Q) \to (\lnot Q \to \lnot P)$. \\
 \\
 En Lean, on demande donc de créer une fonction qui prend une preuve que $P \to Q$ et renvoie une preuve de $\lnot Q \to \lnot Q$.
 \\
 Pour cela, la première étape est de disposer d'une preuve de $P \to Q$ :\\
 \textit{intro f,}\\
 Lean nous demande alors de créer un élément de type $\lnot Q \to \lnot Q$, qui serait l'image de la fonction qu'il nous est demandé de créer.\\
-L'astuce est ensuite de revenir à la définition de $\lnot P$ : $\lnot P$ ssi $P \to false$. On retranscrit cette définition : \\
+L'astuce est ensuite de revenir à la définition de $\lnot P$ :  $\lnot P \equiv P \to false$. On retranscrit cette définition : \\
 \textit{repeat\{rw not\_iff\_imp\_false\},} \\
 Le but est alors réécrit en $(Q \to false) \to P \to false$, ce qui revient à créer une fonction curryfiée des éléments de type $(Q \to false) \times P$ vers les preuves de $false$\\
 On réapplique la même technique d'introduire un élément de chacun des ensembles de départ : \\
@@ -85,13 +85,13 @@ La preuve est donc la suivante : \\
 \textit{cases qor with q r,}     -- On sépare en deux cas en fonction de la disjonction :\\ 
 
 -- Premier cas q de type Q\\
-\textit{left,}   - $On choisit de montrer P\land Q$\\
+\textit{left, }   -- On choisit de montrer $P\land Q$\\
 \textit{split,}     -- On sépare en deux buts\\
 \textit{exact p,}\\
 \textit{exact q,}\\
 
 -- Deuxième cas : r de type R\\
-\textit{right,}     - $On choisit de montrer P\land R$\\
+\textit{right, }     -- On choisit de montrer $/P\land R$\\
 \textit{split,}     -- On sépare en deux buts\\
 \textit{exact p,}\\
 \textit{exact r,}\\
