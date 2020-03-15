@@ -1,20 +1,4 @@
-\section{Tactiques}
-\begin{itemize}
-    \item On suppose dans cette partie que:\\ - $\Sigma$ est un alphabet fini qui contient les lettres de l'alphabet latin, les parenthèses et les opérateurs arithmétiques.\\
-    - $\Sigma^*$ est l'ensemble des mots possibles qu'on peut construire à partir de $\Sigma$.\\
-    - $F$, $A$ et $B$ sont des mots de $\Sigma^*$.
-    \item {\large \textbf{refl}}: Cette tactique correspond à la réflexivité de l'égalité, d'où le nom \textbf{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
-    \textit{Exemple:} soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y*(z+w)=x+y*(z+w)$ en exécutant l'instruction \big\{\textbf{refl,}\big\}.
-    \item {\large\textbf{rw}}: Le nom de cette tactique (rw) correspond au mot anglais \textit{rewrite}. Elle s'applique dans 2 cas distincts:
-    
-     \hspace{1cm} Soit $H$ une hypothèse, sous la forme $A=B$. 
-    Supposons que l'équation à démontrer est le mot $F$. \\Si $F$ contient au moins un $A$, l'instruction \big\{\textbf{rw $H$,}\big\} dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (présents dans $F$) sont réécrits en $Bs$. De même, si $F$ contient au moins un $B$ et si on utilise \big\{\textbf{rw $\leftarrow$ H,}\big\}, alors le seul changement sera: tous les $Bs$ (présents dans $F$) sont réécrits en $As$.
-    
-    \hspace{1cm} Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \big\{\textbf{rw T,}\big\} (respectivement \big\{\textbf{rw $\leftarrow$ T,}\big\}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (resp. $Bs$) sont remplacés par des $Bs$ (resp. $As$). 
-    \item {\large\textbf{simp}}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition World}. Son principe est le suivant: elle utilise la tactique \textbf{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont disponibles à partir du dernier niveau de \textit{Multiplication World}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \textbf{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
-    \textit{Exemple:} Soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer que $x+y+z+w+u=y+(z+x+u)+w$ en utilisant \big\{\textbf{simp,} \big\}
-\end{itemize}
-\section{Addition World}
+\subsection{Addition World}
 \textit{Addition World} est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initiée dans \textit{Tutorial}) et \textit{induction}.\\
 En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant \textit{Addition World}, on peut utiliser les deux théorèmes suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.\\
 \textit{Addition World} contient 6 niveaux: zero\_add, add\_assoc, succ\_add, add\_comm, succ\_eq\_add\_one et add\_right\_comm.
@@ -25,7 +9,7 @@ Preuve
  \textbf{rw add\_succ,} : add\_succ fournit l'égalité $n+succ(0)=succ(n+0)$, on l'utilise alors pour réécrire $succ(n)=n+succ(0)$ en $succ(n)=succ(n+0)$. Ainsi, on pourra utiliser un des théorèmes qui manipulent le chiffre 0\\
 \textbf{rw add\_zero,} : utilisation de ce théorème pour réécrire $n+0$ en $n$\\
 \textbf{refl,}
-\section{Multiplication World}
+\subsection{Multiplication World}
 Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication World} contient 9 niveaux: zero\_mul, mul\_one, one\_mul, mul\_add, mul\_assoc, succ\_mul, add\_mul, mul\_comm et mul\_left\_comm.\\ Nous explicitons la démonstration du théorème suivant: \\
 \textbf{Le 4$^{ème}$ niveau} : mul\_add  \begin{center} La multiplication est distributive, c'est à dire pour tous entiers naturels a, b et t : $$t*(a+b)=t*a+t*b$$ \end{center}
 Preuve
@@ -42,7 +26,7 @@ Preuve
 \textbf{rw add\_right\_comm,} : on applique la commutativité de l'addition pour remplacer $t * b + t$ par $ t + t * b$\\
 \textbf{rw $\leftarrow$  mul\_succ, }: on utilise rw $\leftarrow$ pour remplacer $t * d + t$ (qui est le membre droit de l'égalité qui correspond au théorème mul\_succ) par $t * succ (d)$, on obtient $t * succ(d) + t * b = t * succ(d) + t * b$\\
 \textbf{refl,} \\
-\section{Power World}
+\subsection{Power World}
 Ce monde contient 8 niveaux: zero\_pow\_zero, zero\_pow\_succ, pow\_one, one\_pow, pow\_add, mul\_pow, pow\_pow et add\_squared.\\ 
 Nous explicitons la démonstration du théorème suivant: \\
 \textbf{Le 7$^{ème}$ niveau}: add\_squared (Cas particulier de la formule du binôme de Newton: $(a+b)^n=\sum_{k=0}^{n}{\frac{n!}{k!(n-k)!} a^nb^{n-k}}$, pour $n=2$)
