@@ -1,4 +1,4 @@
-\subsection{\textbf{IV : Function World}}
+\subsection{Function World}
 Ce monde nous introduit un outil fondamental de Lean : les fonctions. \\
 Un élément important à remarquer est qu'en Lean, toutes les fonctions sont curryfiées.\\
 
@@ -7,13 +7,13 @@ L'énoncé se formule comme ceci : \\
 $(P Q R : Type) : (P \to (Q \to R)) \to ((P \to Q) \to (P \to R))$\\
 La preuve est de fait assez simple : \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-intros f g p, -- On introduit les différents éléments/fonctions pour créer la fonction demandée \\
-apply f p, -- On modifie le but à l'aide de la fonction curryfiée \\
-exact g p, -- On trouve le résultat demandé \\
+intros f g p, -- On introduit les différents éléments/fonctions pour créer la fonction demandée 
+apply f p, -- On modifie le but à l'aide de la fonction curryfiée 
+exact g p, -- On trouve le résultat demandé 
 \end{minted}
 Ce qui conclut la preuve.\\
 
-\subsection{\textbf{V : Proposition World}} 
+\subsection{Proposition World}
 Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : une preuve est composée d'implications, et c'est ici que les fonctions prennent toute leur importance : pour montrer que A implique B, il suffit de créer une fonction de A vers B, soit un élément de type $A \to B$.\\
 \\
 Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. \\ \\
@@ -28,24 +28,24 @@ exact h(p),
 Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant, une implication de l'équivalence entre une proposition et sa contraposée (si cela a du sens) : \\
 \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-Lemme : ($P \to Q) \to (\lnot Q \to \lnot P)$. \\
-\\
+Lemme : ($P \to Q) \to (\lnot Q \to \lnot P)$. 
+
 -- En Lean, on demande donc de créer une fonction qui prend une preuve que $P \to Q$ et renvoie une preuve de $\lnot Q \to \lnot P$.\\
-intro f, -- On dispose d'une preuve de $P\to Q$ \\
--- Lean nous demande alors de créer un élément de type $\lnot Q \to \lnot P$, qui serait l'image de la fonction qu'il nous est demandé de créer.\\
+intro f, -- On dispose d'une preuve de $P\to Q$ 
+-- Lean nous demande alors de créer un élément de type $\lnot Q \to \lnot P$, qui serait l'image de la fonction qu'il nous est demandé de créer.
 repeat\{rw not\_iff\_imp\_false\}, -- On retranscrit la définition de $\lnot P$ :  $\lnot P \equiv P \to false$\\
--- Le but est alors réécrit en $(Q \to false) \to P \to false$, ce qui revient à créer une fonction curryfiée des éléments de type $(Q \to false) \times P$ vers les preuves de $false$. On réapplique la même technique d'introduire un élément de chacun des ensembles de départ : \\
-intros h p,\\
--- On dispose alors d'un élément p de P, d'une fonction f de P dans Q et d'une fonction h de Q dans $false$, et il nous faut créer une preuve de $false$, qui est facilement trouvable avec : \\
-exact h(f(p)), -- Ce qui conclut la preuve. \\
+-- Le but est alors réécrit en $(Q \to false) \to P \to false$, ce qui revient à créer une fonction curryfiée des éléments de type $(Q \to false) \times P$ vers les preuves de $false$. On réapplique la même technique d'introduire un élément de chacun des ensembles de départ : 
+intros h p,
+-- On dispose alors d'un élément p de P, d'une fonction f de P dans Q et d'une fonction h de Q dans $false$, et il nous faut créer une preuve de $false$, qui est facilement trouvable avec : 
+exact h(f(p)), -- Ce qui conclut la preuve. 
 \end{minted}
 
 
-\subsection{\textbf{VI : Advanced Proposition World}}
+\subsection{VI : Advanced Proposition World}
 Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation de consjonctions et disjonctions logiques. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : \\
 \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-Lemme : Soient P,Q et R trois propositions, alors $P\land(Q\lor R) \Longleftrightarrow (P\land Q)\lor(P\land R)$.\\
+Lemme : Soient P,Q et R trois propositions, alors $P\land(Q\lor R) \Longleftrightarrow (P\land Q)\lor(P\land R)$.
 \end{minted}
 \\
 Ici on ne démontrera que l'implication directe, l'implication réciproque se faisant de façon similaire.\\
@@ -54,19 +54,19 @@ Pour gérer les disjonctions de propositions, la technique \textit{cases} existe
 Finalement, lorsqu'on doit montrer une disjonction de propositions, il suffit d'en montrer une, et les techniques \textit{left} et \textit{right} nous permettent de choisir la proposition à démontrer.\\
 La preuve est donc la suivante : \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-intro h,     -- h de type $P\land (Q\lor R)$\\ 
-cases h with p qor,     -- p de type P , qor de type $Q\lor R$\\
-cases qor with q r,     -- On sépare en deux cas en fonction de la disjonction :\\ 
+intro h,     -- h de type $P\land (Q\lor R)$
+cases h with p qor,     -- p de type P , qor de type $Q\lor R$
+cases qor with q r,     -- On sépare en deux cas en fonction de la disjonction :
 
--- Premier cas q de type Q\\
-left,    -- On choisit de montrer $P\land Q$\\
+-- Premier cas q de type Q
+left,    -- On choisit de montrer $P\land Q$
 split,     -- On sépare en deux buts\\
-exact p,\\
-exact q,\\
+exact p,
+exact q,
 
--- Deuxième cas : r de type R\\
-right,      -- On choisit de montrer $/P\land R$\\
-split,     -- On sépare en deux buts\\
-exact p,\\
+-- Deuxième cas : r de type R
+right,      -- On choisit de montrer $/P\land R$
+split,     -- On sépare en deux buts
+exact p,
 exact r, -- Ce qui conclut la preuve de l'implication directe.
 \end{minted}
