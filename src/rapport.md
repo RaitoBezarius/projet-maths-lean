@@ -5,6 +5,9 @@ advanced-maths: true
 advanced-cs: true
 toc: true
 lang: fr
+classoption: 
+- twocolumn
+papersize: a4paper
 ---
 
 # Introduction
