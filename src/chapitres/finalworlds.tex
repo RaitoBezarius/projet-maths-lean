@@ -2,13 +2,13 @@
 
 Ce lemme ressemble à la régularité à gauche du monoïde (mynat, +) qu'on a prouvé au niveau 6 de ce monde.
 On a démontré que :
-\begin{verbatim}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 (a b c : mynat) : a + b = a + c → b = c
-\end{verbatim}
+\end{minted}
 Donc pour 'a = 0' et 'c = 0' et 'a + b = a + c' impliquent 'b = 0'.
 Dans ce lemme, nous allons montrer qu'il suffit d'avoir les hypothèses 'a+c = 0' et 'c = 0' et 'a + b = a + c' pour prouver 'b = 0'.
 
-\begin{verbatim}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 lemma add_left_eq_zero {{a b : mynat}} : a + b = 0 → b = 0 :=
 begin [nat_num_game]
   intro H,
@@ -28,13 +28,13 @@ begin [nat_num_game]
   exact succ_ne_zero H,
   --On a donc prouver que l'hypothèse '∃d : mynat tel que b = succ(d)' est est contradictoire avec nos axiome
 end
-\end{verbatim}
+\end{minted}
 
 \paragraph{Advanced Multiplication World : Level 4}
 
 Ce théorème consiste à prouver la régularité à gauche du monoïde (mynat, *).
 L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactic, 'revert'.
-\begin{verbatim}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 theorem mul_left_cancel (a b c : mynat) (ha : a ≠ 0) : a * b = a * c → b = c :=
 begin
   revert b,
@@ -93,26 +93,26 @@ begin
   rw add_right_cancel_iff at h,
   exact h,
 end
-\end{verbatim}
+\end{minted}
 
 \paragraph{Inequality World Level 15}
 
 Dans la suite, nous allons définir > tel que :
-\begin{verbatim}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
     a < b := a ≤ b ∧ ¬ (b ≤ a)
-\end{verbatim}
+\end{minted}
 Mais la définition :
-\begin{verbatim}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
     a < b := succ a ≤ b
-\end{verbatim}
+\end{minted}
 est plus pratique à utiliser et mathématiquement équivalente dans les entiers naturels.
 Nous allons donc prouver  que 
-\begin{verbatim}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 a ≤ b ∧ ¬ (b ≤ a) → succ a ≤ b
-\end{verbatim}
+\end{minted}
 dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
 
-\begin{verbatim}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 lemma lt_aux_one (a b : mynat) : a ≤ b ∧ ¬ (b ≤ a) → succ a ≤ b :=
 begin
   --On commence par transformer 'a ≤ b ∧ ¬ (b ≤ a)' en 2 hypothèses :
@@ -162,4 +162,4 @@ begin
   use c,
   refl,
 end
-\end{verbatim}
+\end{minted}
