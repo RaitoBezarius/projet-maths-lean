@@ -2,7 +2,8 @@
 
 % Tactiques de Léa
 
-\paragraph{intro}
+\paragraph{\texttt{intro}}
+Les tactiques suivantes permettent la manipulation de fonction en Lean, une fonction f : $A\to B$ pour A et B deux types étant simplement un élément de type $A\to B$, qui à une preuve de A renvoie une preuve de B.\\
 
 Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que $A \to B$, on va prouver $B$ sachant $A$ vrai. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en $B$. C'est ce que fait la tactique \texttt{intro}. On peut donner un nom à l'hypothèse qu'on introduit : \texttt{intro h,} ou laisser Lean choisir un nom par défaut.
 On peut écrire \texttt{intros h1 h2 \ldots hn,} pour introduire plusieurs hypothèses en même temps.
@@ -17,30 +18,22 @@ Lorsque la preuve de l'existence de l'objet qu'on crée est brève, on peut cont
 
 % Tactiques de Maryem
 
-\paragraph {refl}: Cette tactique correspond à la réflexivité de l'égalité, d'où le nom \textbf{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
-\textit{Exemple}Soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y \times (z+w)=x+y \times (z+w)$ en appliquant la tactique \big\{\textbf{refl,}\big\}.
-\paragraph {\large\textbf{rw}}: Le nom de cette tactique correspond au mot anglais \textit{rewrite}. Elle s'applique dans deux cas distincts.
+\paragraph { \texttt{refl}}: Cette tactique correspond à la réflexivité de l'égalité, d'où le nom \texttt{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
+\textit{Exemple:} soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y \times (z+w)=x+y \times (z+w)$ en exécutant l'instruction \texttt{refl,}.
+\paragraph {\texttt{rw}}: Soient $F$, $A$ et $B$ des mots de $\Sigma^*$.\\
+Le nom de cette tactique (rw) correspond au mot anglais \texttt{rewrite}. Elle s'applique dans 2 cas distincts:\\
+Soit $H$ une hypothèse, sous la forme $A=B$. Supposons que l'équation à démontrer est le mot $F$. \\Si $F$ contient au moins un $A$, l'instruction \texttt{rw $H$} dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (présents dans $F$) sont réécrits en $Bs$. De même, si $F$ contient au moins un $B$ et si on utilise \texttt{rw $\leftarrow$ H}, alors le seul changement sera: tous les $Bs$ (présents dans $F$) sont réécrits en $As$.\\
+Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \texttt{rw T} (respectivement \texttt{rw $\leftarrow$ T}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: la première occurrence de $A$ (resp. $B$) est remplacée par un $B$ (resp. $A$). 
 
-Soit $H : A = B$ une hypothèse d'égalité. \footnote{ou une preuve de $A = B$, c'est la même chose.}
-Supposons que l'équation à démontrer est le mot $F$. \\Si $F$ contient au moins un $A$, l'instruction \big\{\textbf{rw $H$,}\big\} dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $A$ (présents dans $F$) sont réécrits en $B$. De même, si $F$ contient au moins un $B$ et si on utilise \big\{\textbf{rw $\leftarrow$ H,}\big\}, alors le seul changement sera: tous les $B$ (présents dans $F$) sont réécrits en $As$.
-
-Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \big\{\textbf{rw T,}\big\} (respectivement \big\{\textbf{rw $\leftarrow$ T,}\big\}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (resp. $Bs$) sont remplacés par des $Bs$ (resp. $As$). 
-
-\paragraph {simp}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition World}. Son principe est le suivant: elle utilise la tactique \textbf{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont disponibles à partir du dernier niveau de \textit{Multiplication World}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \textbf{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
-\textit{Exemple} Soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer que $x+y+z+w+u=y+(z+x+u)+w$ en utilisant \big\{\textbf{simp,} \big\}
-
+\paragraph {\texttt{simp}}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition World}. Son principe est le suivant: elle utilise la tactique \texttt{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont disponibles à partir du dernier niveau de \textit{Multiplication World}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \texttt{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
+\textit{Exemple:} Soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer que $x+y+z+w+u=y+(z+x+u)+w$ en utilisant \big\{\texttt{simp,} \big\}
 
 % Tactiques de Ivan
-\paragraph{Exact, Intro, Have, Apply}
-Ici nous allons présenter 4 techniques fondamentales pour l'utilisation de fonctions, une fonction f : $A\to B$ pour A et B deux types étant simplement un élément de type $A\to B$, qui à une preuve de A renvoie une preuve de B.\\
-\textbf{Exact}\\
-La première de ces tactiques est \textit{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est  $\exists  p$ de type P, et que vous disposez de p de type P dans les hypothèses, alors \textit{exact p,} terminera la preuve. De même, si le but est  $\exists  q$ de type Q et que vous disposez d'un élément p de type P et d'une fonction f : $P \to Q$, alors \textit{exact f(p),} terminera la preuve.\\
-\textbf{Intro} \\
-Lorsque vous manipulez des fonctions, Lean peut vous demander de créer une fonction d'un type P vers un type Q. Une méthode est alors de d'émettre l'hypothèse qu'on dispose d'un p de type P à partir duquel vous fabriquerez un élément de Q. \textit{intro p,} fait cela : vous disposerez alors d'une preuve p de P et votre but sera reformulé en Q. \\
-De façon similaire, lorsque de le but est de la forme $P_1 \to P_2 \to ... \to P_n \to Q$, \textit{intros $p_1 p_2 ... p_n$} change le but en Q.\\
-\textbf{Have} \\
-Cette technique permet de renommer des variables : par exemple, si vous disposez de p de type P et de f : $P \to Q$, alors \textit{have q : Q := f(p),} vous permet de renommer un élément $q = f(p)$. Le principe du Démiurge nous permet en effet de renommer comme on veut ce que l'on veut, ce qui garantit la validité de la preuve dans le cas de l'utilisation de have. \\
-\textbf{Apply}\\
+
+
+\paragraph{\texttt{Exact}}
+La première de ces tactiques est \texttt{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est P, ce qui revientà trouver $p:P$, et que vous disposez de p de type P dans les hypothèses, alors \textit{exact p,} terminera la preuve. De même, si le but est Q, ce qui revient à trouver $q:Q$ et que vous disposez d'un élément p de type P et d'une fonction f : $P \to Q$, alors \textit{exact f(p),} terminera la preuve.\\
+\paragraph{\texttt{Apply}}
 Cette technique vous permet de modifier le but sans rajouter de variables : de fait, elle raisonne comme ceci : vous avez pour but un élément de Q. Or vous disposez d'une fonction f : $P \to Q$. De ce fait, pour disposer d'un élément de Q, il vous suffit de disposer d'un élément de P, car f(p) sera dans Q. \textit{apply f,} fait exactement ça, et donc changera le but de Q en P.\\
 
 \paragraph{Induction}
