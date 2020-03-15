@@ -5,56 +5,87 @@ En plus, chaque théorème, une fois démontré, sera utilisé comme un résulta
 Détaillons la démonstration du théorème suivant:\\
 \textbf{Le 5$^{ème}$ niveau} : succ\_eq\_add\_one \begin{center}  $\forall$ entier naturel $n$,  $succ(n)=n+1$ \end{center}
 Preuve
-\textbf{rw one\_eq\_succ\_zero,} : c'est plus facile de manipuler le chiffre 0 que le chiffre 1. On réécrit donc 1 en succ(0), puisque $1=succ(0)$ ( la preuve de cette égalité est one\_eq\_succ\_zero). On obtient $succ(n)=n+succ(0)$\\
- \textbf{rw add\_succ,} : add\_succ fournit l'égalité $n+succ(0)=succ(n+0)$, on l'utilise alors pour réécrire $succ(n)=n+succ(0)$ en $succ(n)=succ(n+0)$. Ainsi, on pourra utiliser un des théorèmes qui manipulent le chiffre 0\\
-\textbf{rw add\_zero,} : utilisation de ce théorème pour réécrire $n+0$ en $n$\\
-\textbf{refl,}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+theorem succ_eq_add_one (n : mynat) : succ n = n + 1 :=
+begin [nat_num_game]
+rw one_eq_succ_zero, -- c'est plus facile de manipuler le chiffre 0 que le chiffre 1. 
+--On réécrit donc 1 en succ(0), puisque 1=succ(0) ( la preuve de cette égalité est
+--one\_eq\_succ\_zero). On obtient succ(n)=n+succ(0)
+ rw add_succ, -- add_succ fournit l'égalité n+succ(0)=succ(n+0), on l'utilise alors pour réécrire succ(n)=n+succ(0) en succ(n)=succ(n+0). Ainsi, on pourra utiliser un des théorèmes qui manipulent le chiffre 0
+rw add_zero, -- utilisation de ce théorème pour réécrire n+0 en n\\
+refl,
+end
+\end{minted}
+
 \subsection{Multiplication World}
 Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication World} contient 9 niveaux: zero\_mul, mul\_one, one\_mul, mul\_add, mul\_assoc, succ\_mul, add\_mul, mul\_comm et mul\_left\_comm.\\ Nous explicitons la démonstration du théorème suivant: \\
 \textbf{Le 4$^{ème}$ niveau} : mul\_add  \begin{center} La multiplication est distributive, c'est à dire $\forall$ entiers naturels a, b et t : $$t\times(a+b)=t\times a+t\times b$$ \end{center}
-Preuve
-\textbf{induction a with d hd,} : Dans l'induction, \textbf{$a$} est renommé en \textbf{$d$} qui varie inductivement et \textbf{$hd$} est l'hypothèse d'induction sur $d$ (cas de base: $d=0$, cas d'induction: on suppose $hd$, on démontre $h(succ(d))$)  \\
-\textit{\underline{Cas de base}: montrons que $t \times (0 + b) = t \times 0 + t \times b$}\\
-\textbf{rw zero\_add,} : on remplace $0+b$ par $b$, on obtient $t\times b=t\times0+t\times b$ \\
-\textbf{rw mul\_zero,} : on remplace $t\times0$ par $0$, on obtient $t\times b=0+t\times b$ \\
-\textbf{rw zero\_add,} : on obtient $t\times b=t\times b$ \\
-\textbf{refl,} \\
-\textit{\underline{Cas d'induction}: supposons $hd$ : $t\times(d+b) = t \times d + t \times b$ et montrons $h(succ(d)):$ $t \times (succ (d) + b) = t \times succ (d) + t \times b$ }\\
-\textbf{rw succ\_add,} :une solution serait de se ramener à une équation où l'un des deux membres est égal à un membre de $hd$. Pour faire cela, on utilise succ\_add qui s'applique uniquement sur une quantité de la forme $succ(d)+b$ ($d$ et $b$ étant deux entiers naturels quelconques), nous permettant ainsi de la remplacer par $succ(d+b)$\\
-\textbf{rw mul\_succ,} : on utilise \textit{mul\_succ} ($a$ $b$ : mynat) : $a \times succ(b) = a \times b + a $\\
-\textbf{rw hd,} on remplace $t \times (d + b) + t$ par $t \times d + t \times b+t$ en utilisant $hd$, on obtient $ t \times d + t \times b + t = t \times succ(d) + t \times b$\\
-\textbf{rw add\_right\_comm,} : on applique la commutativité de l'addition pour remplacer $t \times b + t$ par $ t + t \times b$\\
-\textbf{rw $\leftarrow$  mul\_succ, }: on utilise rw $\leftarrow$ pour remplacer $t \times d + t$ (qui est le membre droit de l'égalité qui correspond au théorème mul\_succ) par $t \times succ (d)$, on obtient $t \times succ(d) + t \times b = t \times succ(d) + t \times b$\\
-\textbf{refl,} \\
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+lemma mul_add (t a b : mynat) : t*(a+b) = t*a+t*b :=
+begin [nat_num_game]
+induction a with d hd, -- Dans l'induction, a est renommé en d qui varie inductivement 
+--et hd est l'hypothèse d'induction sur d (cas de base: d=0, cas d'induction: on suppose hd, 
+-- on démontre h(succ(d)))   
+--Cas de base: montrons que t$\times$(0+b) = t$\times$0+t$\times$b
+rw zero_add, -- on remplace 0+b par b, on obtient t$\times$b = t$\times$0+t$\times$b 
+rw mul_zero, -- on remplace t$\times$0 par 0, on obtient t$\times$b = 0+t$\times$b 
+rw zero_add, -- on obtient t$\times$b = t$\times$b
+refl,
+--Cas d'induction: supposons hd : t$\times$(d+b) = t$\times$d + t $\times$ b
+--et montrons h(succ(d)): t$\times$(succ(d)+b) = t$\times$succ(d)+t$\times$b 
+rw succ_add, -- une solution serait de se ramener à une équation où l'un des deux membres 
+--est égal 
+--à un membre de hd. 
+--Pour faire cela, on utilise succ_add qui s'applique uniquement sur une quantité 
+--de la forme succ(d)+b (d et b étant deux entiers naturels quelconques), nous permettant ainsi 
+--de la remplacer par succ(d+b)
+rw mul_succ, -- on utilise mul_succ (a b : mynat) : a$\times$succ(b) = a$\times$b+a
+rw hd, -- on remplace t$\times$(d+b)+t par t$\times$d+t$\times$b+t en utilisant hd, 
+-- on obtient t$\times$d+t*b+t = t$\times$succ(d)+t$\times$b\\
+rw add_right_comm, -- on applique la commutativité de l'addition pour remplacer t$\times$b+t par t+t$\times$b
+rw |$\to$|  mul_succ, --on utilise rw $\leftarrow$ pour remplacer t$\times$d +t (qui est le membre droit
+-- de l'égalité qui correspond au théorème mul_succ) par t$\times$succ(d), 
+-- on obtient t$\times$succ(d)+t$\times$b = t$\times$succ(d)+t$\times$b
+refl
+end
+\end{minted}
+
 \subsection{Power World}
 Ce monde contient 8 niveaux: zero\_pow\_zero, zero\_pow\_succ, pow\_one, one\_pow, pow\_add, mul\_pow, pow\_pow et add\_squared.\\ 
 Nous explicitons la démonstration du théorème suivant: \\
 \textbf{Le 7$^{ème}$ niveau}: add\_squared (Cas particulier de la formule du binôme de Newton: $(a+b)^n=\sum_{k=0}^{n}{\frac{n!}{k!(n-k)!} a^nb^{n-k}}$, pour $n=2$)
 \begin{center} $\forall$ entiers naturels $a$ et $b$ : $(a+b)^2=a^2+b^2+2\times a\times b $\end{center}
-Preuve
- \textit{On simplifie les puissances, en réécrivant les puissances 2 en fonction de 0 }\\
-  \textbf{rw two\_eq\_succ\_one,} : on utilise la preuve de $succ(1)=2$ pour réécrire le chiffre $2$ en $succ(1)$ \\
- \textbf{rw one\_eq\_succ\_zero,} :  on réécrit $1$ en $succ(0)$, on obtient donc $(a + b) ^ {succ (succ (0))} = a ^ {succ (succ (0)) }+ b ^ {succ (succ (0)) }+ succ (succ (0)) \times a \times b$\\
-  \textbf{repeat {rw pow\_succ},} : on obtient $(a + b) ^ 0 \times (a + b) \times (a + b) = a ^ 0 \times a \times a + b ^ 0 \times b \times b + succ (succ (0)) \times a \times b$ \\
-  \textbf{repeat {rw pow\_zero},} : on obtient $1 \times (a + b) \times (a + b) = 1 \times a \times a + 1 \times b \times b + succ (succ (0)) \times a \times b$\\
-  \textbf{simp,} : on obtient $(a + b) \times (a + b) = a \times a + (b \times b + a \times (b \times succ (succ (0))))
-$, donc simp, dans ce cas, applique le théorème one\_mul(m : mynat) : $m \times 1 = m$\\ 
-  \textbf{repeat {rw mul\_succ},} : on obtient $(a + b) \times (a + b) = a \times a + (b \times b + a \times (b \times 0 + b + b))$\\
-  \textbf{simp,} : on obtient $(a + b) \times (a + b) = a \times a + (b \times b + a \times (b + b))$, donc simp, dans ce cas, applique les théorèmes mul\_zero(a : mynat):$a \times 0 = 0$  et zero\_add(n : mynat):$0 + n = n$\\
-  \textit{On développe (a + b) \times (a + b) :} \\
- \textbf{rw mul\_add,} \\
- \textit{On développe $(a + b) \times a$ :}\\
-  \textbf{rw mul\_comm,} \\
-  \textbf{rw mul\_add,} \\
-  \textit{On développe $(a + b) \times b$ :} \\
- \textbf{ rw mul\_comm (a + b) b,} \\
-  \textbf{rw mul\_add,} \\
- \textbf{simp,}  \textit{On met les termes du membre de gauche dans le bon ordre } \\
-  \textbf{rw $\leftarrow$ add\_assoc (a \times b) (a \times b) (b \times b),} : on obtient $a \times a + (a \times b + a \times b + b \times b) = a \times a + (b \times b + a \times (b + b))$\\
-  \textbf{rw add\_right\_comm,} \\
-  \textbf{rw add\_comm (a \times b) (b \times b),} \\
-  \textbf{rw add\_assoc (b \times b) (a \times b) (a \times b),} : on obtient $a \times a + (b \times b + (a \times b + a \times b)) = a \times a + (b \times b + a \times (b + b))$\\
-  \textit{On factorise par a :}\\
-  \textbf{rw $\leftarrow$ mul\_add a b b,} : on obtient $a \times a + (b \times b + a \times (b + b)) = a \times a + (b \times b + a \times (b + b))
-$\\
-  \textbf{refl,}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+lemma pow_pow (a m n : mynat) : (a^m)^n = a^(m*n) :=
+begin [nat_num_game]
+ -- on simplifie les puissances, en réécrivant les puissances 2 en fonction de 0 
+ rw two_eq_succ_one, -- on utilise la preuve de succ(1)=2 pour réécrire le chiffre 2 en succ(1)
+ rw one_eq_succ_zero, -- on réécrit 1 en succ(0), on obtient donc 
+ --$(a + b) ^ {succ (succ (0))} = a ^ {succ (succ (0)) }+ b ^ {succ (succ (0)) }+ succ (succ (0)) \times a \times b$
+ repeat {rw pow_succ}, -- on obtient $(a + b) ^ 0 \times (a + b) \times (a + b) = a ^ 0 \times a \times a + b ^ 0 \times b \times b + succ (succ (0)) \times a \times b$ 
+ repeat {rw pow_zero}, -- on obtient $1 \times (a + b) \times (a + b) = 1 \times a \times a + 1 \times b \times b + succ (succ (0)) \times a \times b$
+ simp, -- on obtient $(a + b) \times (a + b) = a \times a + (b \times b + a \times (b \times succ (succ (0))))$
+--donc simp, dans ce cas, applique le théorème one_mul(m : mynat) : $m \times 1 = m$
+ repeat {rw mul\_succ}, -- on obtient $(a + b) * (a + b) = a * a + (b * b + a * (b * 0 + b + b))$
+ simp, -- on obtient $(a + b) \times (a + b) = a \times a + (b \times b + a \times (b + b))$
+ -- donc simp, dans ce cas, applique les théorèmes mul_zero(a : mynat):$a \times 0 = 0$ 
+ -- et zero_add(n : mynat):$0 + n = n$
+ -- on développe $(a + b) \times (a + b)$$ :
+ rw mul_add,
+ -- on développe $(a + b) \times a$ 
+ rw mul_comm,
+ rw mul_add,
+ -- on développe $(a + b) \times b$ 
+ rw mul_comm (a + b) b,
+ rw mul_add,
+ simp, -- on met les termes du membre de gauche dans le bon ordre 
+ rw |$\to$| add\_assoc (a * b) (a * b) (b * b), -- on obtient $a \times a + (a \times b + a \times b + b \times b) = a \times a + (b \times b + a \times (b + b))$
+ rw add_right_comm,
+ rw add_comm (a * b) (b * b),
+ rw add_assoc (b * b) (a * b) (a * b), -- on obtient 
+ -- $a \times a + (b \times b + (a \times b + a \times b)) = a \times a + (b \times b + a \times (b + b))$
+ -- on factorise par a :\
+ rw |$\to$| mul_add a b b, -- on obtient $a \times a + (b \times b + a \times (b + b)) = a \times a + (b \times b + a \times (b + b))$
+ refl
+end
+\end{minted}
