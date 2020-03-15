@@ -3,8 +3,8 @@
 En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant \textit{Addition World}, on peut utiliser les deux théorèmes suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.
 \textit{Addition World} contient 6 niveaux: \texttt{zero\_add}, \texttt{add\_assoc}, \texttt{succ\_add}, \texttt{add\_comm}, \texttt{succ\_eq\_add\_one} et \texttt{add\_right\_comm}.
 Détaillons la démonstration du théorème suivant:\\
-\paragraph{niveau 5} : succ\_eq\_add\_one \begin{center}   $\forall n \in \mathbb{N},$  $succ(n)=n+1$ \end{center}
-Preuve
+\paragraph{Niveau 5} : \texttt{succ\_eq\_add\_one} \begin{center}   $\forall n \in \mathbb{N},$  $succ(n)=n+1$ \end{center}
+
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 theorem succ_eq_add_one (n : mynat) : succ n = n + 1 :=
 begin [nat_num_game]
@@ -18,7 +18,7 @@ end
 \end{minted}
 \subsection{Multiplication World}
 Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication World} contient 9 niveaux: \texttt{zero\_mul}, \texttt{mul\_one}, \texttt{one\_mul}, \texttt{mul\_add}, \texttt{mul\_assoc}, \texttt{succ\_mul}, \texttt{add\_mul}, \texttt{mul\_comm} et \texttt{mul\_left\_comm}.\\ Nous explicitons la démonstration du théorème suivant: \\
-\paragraph{niveau 4} :  mul\_add  \begin{center} La multiplication est distributive, c'est à dire  $\forall a, b, t \in \mathbb{N},$  $t\times(a+b)=t\times a+t\times b $ \end{center}
+\paragraph{Niveau 4} :  \texttt{mul\_add}  \begin{center} La multiplication est distributive, c'est à dire  $\forall a, b, t \in \mathbb{N},$  $t\times(a+b)=t\times a+t\times b $ \end{center}
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma mul_add (t a b : mynat) : t*(a+b) = t*a+t*b :=
 begin [nat_num_game]
@@ -51,7 +51,7 @@ end
 \subsection{Power World}
 Ce monde contient 8 niveaux: \texttt{zero\_pow\_zero}, \texttt{zero\_pow\_succ}, \texttt{pow\_one}, \texttt{one\_pow}, \texttt{pow\_add}, \texttt{mul\_pow}, \texttt{pow\_pow} et \texttt{add\_squared}.
 Nous explicitons la démonstration du théorème suivant:\\
-\paragraph{niveau 7} add\_squared (Cas particulier de la formule du binôme de Newton: $(a+b)^n=\sum_{k=0}^{n}{\frac{n!}{k!(n-k)!} a^nb^{n-k}}$, pour $n=2$)
+\paragraph{Niveau 7} \texttt{add\_squared} (Cas particulier de la formule du binôme de Newton: $(a+b)^n=\sum_{k=0}^{n}{\frac{n!}{k!(n-k)!} a^nb^{n-k}}$, pour $n=2$)
 \begin{center} $\forall a, b \in \mathbb{N}$, $(a+b)^2=a^2+b^2+2*a*b $\end{center}
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma pow_pow (a m n : mynat) : (a^m)^n = a^(m*n) :=
