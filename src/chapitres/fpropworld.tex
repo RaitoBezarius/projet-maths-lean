@@ -25,7 +25,7 @@ Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : u
 \paragraph{Niveau 1}
 Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. 
 
-\mint{lean}|lemma : (P,Q : Prop) (p : P) (h : P → Q) : Q|
+\mintinline[breaklines]{lean}|lemma : (P,Q : Prop) (p : P) (h : P → Q) : Q|
 
 Donc, en français, on dispose d'une preuve de P, et d'une fonction de P dans Q (i-e d'un élément de type $P \to Q$), trouvons un élément de type Q (montrons que Q est vrai). 
 Ce qui se résout tout aussi succintement : 
@@ -54,7 +54,9 @@ exact h(f(p)), -- Ce qui conclut la preuve.
 Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation de consjonctions et disjonctions logiques. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : 
 
 
-\mint{lean}|lemma : (P,Q,R : Prop) : P ∧ (Q ∨ R) ⇔ (P ∧ Q) ∨ (P ∧ R)|
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines, escapeinside = ||]{lean}
+lemma : (P,Q,R : Prop) : |$P \land (Q \lor R) \leftrightarrow (P \land Q) \lor (P \land R)$|
+\end{minted}
 
 Ici on ne démontrera que l'implication directe, l'implication réciproque se faisant de façon similaire.
 Pour séparer les implications, une technique existe : \texttt{split}, qui permet de montrer d'abord l'implication directe puis l'implication réciproque. A noter que cette technique permet aussi de séparer le but en plusieurs buts lorsqu'on a à montrer une conjonction de propositions.
