@@ -18,7 +18,7 @@ Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : u
 \\
 Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. \\ \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-Lemma : if P is true and $P \to Q$ is true, then Q is true.
+Lemma : if P is true and $P to Q$ is true, then Q is true.
 \end{minted}
 Soit en Lean : \textit{(P Q : Prop) (p : P) (h : $P \to Q$) : Q} \\
 Donc, en français, on dispose d'une preuve de P, et d'une fonction de P dans Q (i-e d'un élément de type $P \to Q$), trouvons un élément de type Q (montrons que Q est vrai). \\
@@ -29,7 +29,7 @@ exact h(p),
 Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant, une implication de l'équivalence entre une proposition et sa contraposée (si cela a du sens) : \\
 \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-Lemme : ($P to Q) to (lnot Q to lnot P)$. 
+Lemma : ($P to Q) to (lnot Q to lnot P)$. 
 
 -- En Lean, on demande donc de créer une fonction qui prend une preuve que $P to Q$ et renvoie une preuve de $lnot Q to lnot P$.
 intro f, -- On dispose d'une preuve de $Pto Q$ 
@@ -46,7 +46,7 @@ exact h(f(p)), -- Ce qui conclut la preuve.
 Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation de consjonctions et disjonctions logiques. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : \\
 \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-Lemme : Soient P,Q et R trois propositions, alors $Pland(Q lor R) Longleftrightarrow (Pland Q) lor (P land R)$.
+Lemme : Soient P,Q et R trois propositions, alors $P land(Q lor R) Longleftrightarrow (P land Q) lor (P land R)$.
 \end{minted}
 Ici on ne démontrera que l'implication directe, l'implication réciproque se faisant de façon similaire.\\
 Pour séparer les implications, une technique existe : \textit{split}, qui permet de montrer d'abord l'implication directe puis l'implication réciproque. A noter que cette technique permet aussi de séparer le but en plusieurs buts lorsqu'on a à montrer une conjonction de propositions.\\
