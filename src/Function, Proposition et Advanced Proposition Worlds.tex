@@ -54,11 +54,11 @@ Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme su
 \\
 \textbf{Lemme} : ($P \to Q) \to (\lnot Q \to \lnot P)$. \\
 \\
-En Lean, on demande donc de créer une fonction qui prend une preuve que $P \to Q$ et renvoie une preuve de $\lnot Q \to \lnot Q$.
+En Lean, on demande donc de créer une fonction qui prend une preuve que $P \to Q$ et renvoie une preuve de $\lnot Q \to \lnot P$.
 \\
 Pour cela, la première étape est de disposer d'une preuve de $P \to Q$ :\\
 \textit{intro f,}\\
-Lean nous demande alors de créer un élément de type $\lnot Q \to \lnot Q$, qui serait l'image de la fonction qu'il nous est demandé de créer.\\
+Lean nous demande alors de créer un élément de type $\lnot Q \to \lnot P$, qui serait l'image de la fonction qu'il nous est demandé de créer.\\
 L'astuce est ensuite de revenir à la définition de $\lnot P$ :  $\lnot P \equiv P \to false$. On retranscrit cette définition : \\
 \textit{repeat\{rw not\_iff\_imp\_false\},} \\
 Le but est alors réécrit en $(Q \to false) \to P \to false$, ce qui revient à créer une fonction curryfiée des éléments de type $(Q \to false) \times P$ vers les preuves de $false$\\
