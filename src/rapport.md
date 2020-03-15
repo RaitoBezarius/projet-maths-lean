@@ -14,6 +14,7 @@ papersize: a4
 ---
 
 \newcommand{\mynat}{\N_{\text{mynat}}}
+\newcommand{\Type}{\mathrm{Type}}
 
 # Introduction
 
