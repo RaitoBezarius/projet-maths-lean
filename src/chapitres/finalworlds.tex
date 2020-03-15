@@ -3,11 +3,11 @@
 À ce niveau, nous avons déjà montré que $(\mynat , +)$ est un monoïde commutatif.
 Dans ce monde, nous allons prouvé des propriétés un peu plus complexes, comme l'injectivité de la fonction successeur ou la régularité du monoïde.
 
-\paragraph{Niveau 10}
+\subsubsection{Niveau 10}
 
 Ce lemme ressemble à la régularité à gauche du monoïde $(\mynat, +)$ qu'on a prouvé au niveau 6 de ce monde.
 On a démontré que :
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
+\begin{minted}[mathescape,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 (a b c : mynat) : a + b = a + c → b = c
 \end{minted}
 Donc pour $a = 0$ et $c = 0$ et $a + b = a + c$ impliquent $b = 0$.
@@ -39,7 +39,7 @@ end
 
 Nous avons prouvé dans les mondes précédents que $(\mynat , \times )$ est un monoïde commutatif et que la multiplication est distributive par rapport à l'addition.
 
-\paragraph{Niveau 4}
+\subsubsection{Niveau 4}
 
 Ce théorème consiste à prouver la régularité à gauche du monoïde $(\mynat, \times)$.
 L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactique, \texttt{revert}.
@@ -108,19 +108,19 @@ end
 
 Dans ce monde, nous allons définir et prouver des propriété sur la relation d'ordre $≤$ et son ordre strict $<$.
 
-\paragraph{Niveau 15}
+\subsubsection{Niveau 15}
 
 Dans la suite, nous allons définir > tel que :
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
+\begin{minted}[mathescape,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 def a < b := a |$≤$| b |$∧ ¬$| (b |$≤$| a)
 \end{minted}
 Mais la définition :
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
+\begin{minted}[mathescape,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 def a < b := succ a |$≤$| b
 \end{minted}
 est plus pratique à utiliser et mathématiquement équivalente dans les entiers naturels.
 Nous allons donc prouver que 
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
+\begin{minted}[mathescape,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 (a b : mynat) : a |$≤$| b |$∧ ¬$| (b |$≤$| a) → succ a |$≤$| b
 \end{minted}
 dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
