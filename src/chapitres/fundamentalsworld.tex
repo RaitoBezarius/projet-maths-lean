@@ -10,7 +10,7 @@ theorem succ_eq_add_one (n : mynat) : succ n = n + 1 :=
 begin [nat_num_game]
 rw one_eq_succ_zero, -- c'est plus facile de manipuler le chiffre 0 que le chiffre 1. 
 --On réécrit donc 1 en succ(0), puisque 1=succ(0) ( la preuve de cette égalité est
---one\_eq\_succ\_zero). On obtient succ(n)=n+succ(0)
+--one_eq_succ_zero). On obtient succ(n)=n+succ(0)
  rw add_succ, -- add_succ fournit l'égalité n+succ(0)=succ(n+0), on l'utilise alors pour réécrire succ(n)=n+succ(0) en succ(n)=succ(n+0). Ainsi, on pourra utiliser un des théorèmes qui manipulent le chiffre 0
 rw add_zero, -- utilisation de ce théorème pour réécrire n+0 en n\\
 refl,
@@ -20,7 +20,7 @@ end
 \subsection{Multiplication World}
 Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication World} contient 9 niveaux: \texttt{zero\_mul}, \texttt{mul\_one}, \texttt{one\_mul}, \texttt{mul\_add}, \texttt{mul\_assoc}, \texttt{succ\_mul}, \texttt{add\_mul}, \texttt{mul\_comm} et \texttt{mul\_left\_comm}.\\ Nous explicitons la démonstration du théorème suivant: \\
 \textbf{Le 4$^{ème}$ niveau} :  mul\_add  \begin{center} La multiplication est distributive, c'est à dire  $\forall a, b, t \in \mathbb{N},$  $t\times(a+b)=t\times a+t\times b $ \end{center}\\
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma mul_add (t a b : mynat) : t*(a+b) = t*a+t*b :=
 begin [nat_num_game]
 induction a with d hd, -- Dans l'induction, a est renommé en d qui varie inductivement 
@@ -55,7 +55,7 @@ Ce monde contient 8 niveaux: \texttt{zero\_pow\_zero}, \texttt{zero\_pow\_succ},
 Nous explicitons la démonstration du théorème suivant: \\
 \textbf{Le 7$^{ème}$ niveau}: add\_squared (Cas particulier de la formule du binôme de Newton: $(a+b)^n=\sum_{k=0}^{n}{\frac{n!}{k!(n-k)!} a^nb^{n-k}}$, pour $n=2$)
 \begin{center} $\forall a, b \in \mathbb{N}$, $(a+b)^2=a^2+b^2+2*a*b $\end{center}
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma pow_pow (a m n : mynat) : (a^m)^n = a^(m*n) :=
 begin [nat_num_game]
  -- on simplifie les puissances, en réécrivant les puissances 2 en fonction de 0 
@@ -66,11 +66,11 @@ begin [nat_num_game]
  repeat {rw pow_zero}, -- on obtient $1 \times (a + b) \times (a + b) = 1 \times a \times a + 1 \times b \times b + succ (succ (0)) \times a \times b$
  simp, -- on obtient $(a + b) \times (a + b) = a \times a + (b \times b + a \times (b \times succ (succ (0))))$
 --donc simp, dans ce cas, applique le théorème one_mul(m : mynat) : $m \times 1 = m$
- repeat {rw mul\_succ}, -- on obtient $(a + b) * (a + b) = a * a + (b * b + a * (b * 0 + b + b))$
+ repeat {rw mul_succ}, -- on obtient $(a + b) * (a + b) = a * a + (b * b + a * (b * 0 + b + b))$
  simp, -- on obtient $(a + b) \times (a + b) = a \times a + (b \times b + a \times (b + b))$
  -- donc simp, dans ce cas, applique les théorèmes mul_zero(a : mynat):$a \times 0 = 0$ 
  -- et zero_add(n : mynat):$0 + n = n$
- -- on développe $(a + b) \times (a + b)$$ :
+ -- on développe $(a + b) \times (a + b)$ :
  rw mul_add,
  -- on développe $(a + b) \times a$ 
  rw mul_comm,
@@ -79,13 +79,13 @@ begin [nat_num_game]
  rw mul_comm (a + b) b,
  rw mul_add,
  simp, -- on met les termes du membre de gauche dans le bon ordre 
- rw |$\to$| add\_assoc (a * b) (a * b) (b * b), -- on obtient $a \times a + (a \times b + a \times b + b \times b) = a \times a + (b \times b + a \times (b + b))$
+ rw |$\leftarrow$| add_assoc (a * b) (a * b) (b * b), -- on obtient $a \times a + (a \times b + a \times b + b \times b) = a \times a + (b \times b + a \times (b + b))$
  rw add_right_comm,
  rw add_comm (a * b) (b * b),
  rw add_assoc (b * b) (a * b) (a * b), -- on obtient 
  -- $a \times a + (b \times b + (a \times b + a \times b)) = a \times a + (b \times b + a \times (b + b))$
  -- on factorise par a :\
- rw |$\to$| mul_add a b b, -- on obtient $a \times a + (b \times b + a \times (b + b)) = a \times a + (b \times b + a \times (b + b))$
+ rw |$\leftarrow$| mul_add a b b, -- on obtient $a \times a + (b \times b + a \times (b + b)) = a \times a + (b \times b + a \times (b + b))$
  refl
 end
 \end{minted}
