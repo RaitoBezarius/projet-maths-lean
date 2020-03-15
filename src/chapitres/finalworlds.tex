@@ -15,7 +15,7 @@ lemma add_left_eq_zero {{a b : mynat}} : a + b = 0 → b = 0 :=
 begin [nat_num_game]
   intro H,
   --On fait une distinction de cas
-  --Soit $b = 0$ soit il existe d : mynat tel que $b = \msucc(d)$ :
+  --Soit $b = 0$ soit il existe $d$ : mynat tel que $b = \msucc(d)$ :
   cases b with d,
 
   --Cas $b = 0$, le but devient $0 = 0$, la résolution est triviale :
@@ -28,7 +28,7 @@ begin [nat_num_game]
   exfalso, -- le but est impossible à prouver donc on le change en $faux$
   --Et on a le théorème succ_ne_zero $(n : mynat) : \msucc n = 0 -> faux$, donc on sait que l'hypothèse $H$ implique $faux$
   exact succ_ne_zero H,
-  --On a donc prouver que l'hypothèse $\exists d : mynat tel que b = \msucc(d)$ est est contradictoire avec nos axiome
+  --On a donc prouver que l'hypothèse $\exists d$ : mynat tel que $b = \msucc(d)$ est est contradictoire avec nos axiome
 end
 \end{minted}
 
