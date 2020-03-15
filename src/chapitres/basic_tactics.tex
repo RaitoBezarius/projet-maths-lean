@@ -1,18 +1,18 @@
 \subsection{Tactiques de base en Lean}
 
-% Tactiques de Léa (modifiées par Ivan)
+% Tactiques de Léa
 
-Les tactiques suivantes permettent la manipulation de fonction en Lean, une fonction f : $A\to B$ pour A et B deux types étant simplement un élément de type $A\to B$, qui à une preuve de A renvoie une preuve de B.\\
 \paragraph{\texttt{intro}}
+Les tactiques suivantes permettent la manipulation de fonction en Lean, une fonction f : $A\to B$ pour A et B deux types étant simplement un élément de type $A\to B$, qui à une preuve de A renvoie une preuve de B.\\
 
 Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que $A \to B$, on va prouver $B$ sachant $A$ vrai. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en $B$. C'est ce que fait la tactique \texttt{intro}. On peut donner un nom à l'hypothèse qu'on introduit : \texttt{intro h,} ou laisser Lean choisir un nom par défaut.
 On peut écrire \texttt{intros h1 h2 \ldots hn,} pour introduire plusieurs hypothèses en même temps.
 On entrera plus en détails dans la structure des implications dans le Function World.
 
-\paragraph{\texttt{have}}
+\paragraph{have}
 
-Pour déclarer une nouvelle hypothèse, on peut utiliser la tactique \texttt{have}.
-\texttt{have p : P} diviser le but en 2 sous-buts : montrer qu'on peut construire un élément de type P avec les hypothèses actuelles puis montrer le but initial avec l'hypothèse $p : P$ en plus.
+Pour déclarer une nouvelle hypothèse, on peut utiliser la tactique $have$.
+\texttt{have p : P} divise le but en 2 sous-buts : montrer qu'on peut construire un élément de type P avec les hypothèses actuelles puis montrer le but initial avec l'hypothèse $p : P$ en plus.
 Lorsque la preuve de l'existence de l'objet qu'on crée est brève, on peut contracter sa définition :
 \texttt{have p := f a} avec $a : A$ et $f : A \to P$ comme hypothèses déjà présentes ajoutera directement $p : P$ dans la liste d'hypothèses.  
 
