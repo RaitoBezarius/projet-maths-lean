@@ -1,4 +1,7 @@
-d\subsection{Advanced Addition World}
+\subsection{Advanced Addition World}
+
+À ce niveau, nous avons déjà montré que $(\mynat , +)$ est un monoïde commutatif.
+Dans ce monde, nous allons prouvé des propriétés un peu plus complexes, comme l'injectivité de la fonction successeur ou la régularité du monoïde.
 
 \paragraph{Niveau 10}
 
@@ -15,24 +18,26 @@ lemma add_left_eq_zero {{a b : mynat}} : a + b = 0 → b = 0 :=
 begin [nat_num_game]
   intro H,
   --On fait une distinction de cas
-  --Soit $b = 0$ soit il existe $d$ : mynat tel que $b = \msucc(d)$ :
+  --Soit $b = 0$ soit il existe d : mynat tel que $b = \msucc(d)$ :
   cases b with d,
 
   --Cas $b = 0$, le but devient $0 = 0$, la résolution est triviale :
   refl,
 
   --Cas $b = \msucc(d)$, le but devient $\msucc d = 0$
-  --Ce qui est impossible, cela contredit l'axiome de Peano $zero\_ne\_succ$
+  --Ce qui est impossible, cela contredit l'axiome de Peano $zero_ne_succ$
   --On va donc faire une preuve par l'absurde :
   rw add_succ at H, --on fait rentrer a dans le succ donc $H : \msucc (a + d) = 0$
   exfalso, -- le but est impossible à prouver donc on le change en $faux$
-  --Et on a le théorème succ_ne_zero |$(n : mynat) : \msucc n = 0 \to faux$|, donc on sait que l'hypothèse $H$ implique $faux$
+  --Et on a le théorème succ_ne_zero $(n : mynat) : \msucc n = 0 -> faux$, donc on sait que l'hypothèse $H$ implique $faux$
   exact succ_ne_zero H,
-  --On a donc prouver que l'hypothèse $\exists d: \mynat, b = \msucc(d)$ est est contradictoire avec nos axiome
+  --On a donc prouver que l'hypothèse $\exists d : mynat tel que b = \msucc(d)$ est est contradictoire avec nos axiome
 end
 \end{minted}
 
 \subsection{Advanced Multiplication World}
+
+Nous avons prouvé dans les mondes précédents que $(\mynat , \times )$ est un monoïde commutatif et que la multiplication est distributive par rapport à l'addition.
 
 \paragraph{Niveau 4}
 
@@ -52,9 +57,9 @@ begin
   --Le cas de base $\forall (b : mynat), a * b = a * 0 → b = 0$ :
   rw mul_zero, --On simplifie
   intros b h, --On introduit un $b$ et l'hypothèse $h : a * b = 0$
-  rw mul_eq_zero_iff a b at h, --$h$ est équivalent à $a = 0 ∨ b = 0$ donc on la réécrit
+  rw mul_eq_zero_iff a b at h, --$h$ est équivalent à $a = 0 or b = 0$ donc on la réécrit
   
-  --On casse le $a = 0 ∨ b = 0$ en deux cas:
+  --On casse le $a = 0 or b = 0$ en deux cas:
   cases h with hha hhb,
   
   --Si $a = 0$ (but : $b = 0$) :
@@ -74,10 +79,10 @@ begin
   cases b with c,
 
   --Cas $b = 0$ (but : $0 = \msucc n$) :
-  --Cela contredit l'axiome de Peano $zero\_ne\_succ$, on va donc passer par l'absurde :
+  --Cela contredit l'axiome de Peano $zero_ne_succ$, on va donc passer par l'absurde :
   rw mul_zero at h, --On simplifie $h$ pour obtenir $h : 0 = a * \msucc n$
   exfalso,
-  apply mul_pos a (succ n), --On a besoin de démontrer les hypothèses de $mul\_pos$ :
+  apply mul_pos a (succ n), --On a besoin de démontrer les hypothèses de mul_pos :
   --Hypothèse $a \ne 0$ :
   exact ha,
   --Hypothèse $\msucc n \ne 0$ :
@@ -101,6 +106,8 @@ end
 
 \subsection{Inequality World}
 
+Dans ce monde, nous allons définir et prouver des propriété sur la relation d'ordre $≤$ et son ordre strict $<">.
+
 \paragraph{Niveau 15}
 
 Dans la suite, nous allons définir > tel que :
@@ -116,7 +123,7 @@ Nous allons donc prouver que
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 (a b : mynat) : a |$≤$| b |$∧ ¬$| (b |$≤$| a) → succ a |$≤$| b
 \end{minted}
-dans ce lemme (la réciproque est le niveau 16).
+dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma lt_aux_one (a b : mynat) : a |$≤$| b |$∧ ¬$| (b |$≤$| a) → succ a |$≤$| b :=
