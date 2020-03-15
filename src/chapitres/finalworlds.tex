@@ -2,13 +2,13 @@
 
 Ce lemme ressemble à la régularité à gauche du monoïde $(\mynat, +)$ qu'on a prouvé au niveau 6 de ce monde.
 On a démontré que :
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 (a b c : mynat) : a + b = a + c → b = c
 \end{minted}
 Donc pour $a = 0$ et $c = 0$ et $a + b = a + c$ impliquent $b = 0$.
 Dans ce lemme, nous allons montrer qu'il suffit d'avoir les hypothèses $a+c = 0$ et $c = 0$ et $a + b = a + c$ pour prouver $b = 0$.
 
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma add_left_eq_zero {{a b : mynat}} : a + b = 0 → b = 0 :=
 begin [nat_num_game]
   intro H,
@@ -34,7 +34,7 @@ end
 
 Ce théorème consiste à prouver la régularité à gauche du monoïde (\mynat, *).
 L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactique, \textit{revert}.
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 theorem mul_left_cancel (a b c : mynat) (ha : a ≠ 0) : a * b = a * c → b = c :=
 begin
   revert b,
@@ -98,21 +98,21 @@ end
 \paragraph{Inequality World Level 15}
 
 Dans la suite, nous allons définir > tel que :
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
     a < b := a $\leq$ b $\land \lnot$ (b $\leq$ a)
 \end{minted}
 Mais la définition :
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
     a < b := succ a $\leq$ b
 \end{minted}
 est plus pratique à utiliser et mathématiquement équivalente dans les entiers naturels.
 Nous allons donc prouver  que 
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 a $\leq$ b $\land \lnot$ (b $\leq$ a) → succ a $\leq$ b
 \end{minted}
 dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
 
-\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma lt_aux_one (a b : mynat) : a $\leq$ b $\land \lnot$ (b $\leq$ a) → succ a $\leq$ b :=
 begin
   --On commence par transformer $a \leq b \land \lnot (b \leq a)$ en 2 hypothèses :
