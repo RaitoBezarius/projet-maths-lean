@@ -11,6 +11,7 @@ lang: fr
 classoption: 
 - twocolumn
 papersize: a4
+numbersections: true
 ---
 
 \newcommand{\mynat}{\N_{\text{mynat}}}
@@ -67,13 +68,13 @@ Dans une certaine mesure, Lean est capable d'assister à trouver des morceaux de
 
 Nous allons d'abord nous familiariser au langage de Lean \cite{avigad2014lean}, l'assistant de preuve de Microsoft Research qui sera utilisé pour ce projet, ses concepts à travers le « Number Games » de Kevin Buzzard \cite{natgames2019} qui consiste à redémontrer quelques théorèmes autour des entiers naturels en partant des axiomes de Peano.
 
-Nous fournissons en XXX, des solutions détaillées et expliquées des théorèmes qu'on a jugé un peu subtil tout en introduisant le système de tactique, pièce fondamentale des assistants de preuve et de l'automatisation des démonstrations.
+Nous fournissons en \ref{number_games_solution}, des solutions détaillées et expliquées des théorèmes qu'on a jugé un peu subtil tout en introduisant le système de tactique, pièce fondamentale des assistants de preuve et de l'automatisation des démonstrations.
 
 Ensuite, nous nous dirigerons vers les espaces métriques et construirons leur formalisme dans un cadre usuel, alors que la bibliothèque mathlib \cite{mathlib} construit les espaces topologiques, uniformes, métriques avec des notions de suites généralisées et de filtres.
 
 Enfin, ambitieux mais si le temps le permet, nous attaquerons une démonstration formalisée du théorème d'Ostrowski\footnote{Dont le livre d'Artin fournit une démonstration} en posant la théorie des valuations d'Artin \cite{artin2005algebraic}.
 
-# Détail des exercices du « Number Games » de Kevin Buzzard
+# Détail des exercices du « Number Games » de Kevin Buzzard {#number_games_solution}
 
 On se donnera pendant cette section un alphabet $\Sigma$ qui pourra contenir selon le contexte, les opérateurs usuels en mathématiques $\{ +, -, \times, / \}$, les chiffres, l'alphabet grec et latin.
 
