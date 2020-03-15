@@ -99,23 +99,23 @@ end
 
 Dans la suite, nous allons définir > tel que :
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
-	def a < b := a |$\leq$| b |$∧ \lnot$| (b |$\leq$| a)
+	def a < b := a |$≤$| b |$∧ \lnot$| (b |$≤$| a)
 \end{minted}
 Mais la définition :
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
-	def a < b := succ a |$\leq$| b
+	def a < b := succ a |$≤$| b
 \end{minted}
 est plus pratique à utiliser et mathématiquement équivalente dans les entiers naturels.
 Nous allons donc prouver que 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
-	(a b : mynat) : a |$\leq$| b |$∧ \lnot$| (b |$\leq$| a) → succ a |$\leq$| b
+	(a b : mynat) : a |$≤$| b |$∧ \lnot$| (b |$≤$| a) → succ a |$≤$| b
 \end{minted}
 dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
-lemma lt_aux_one (a b : mynat) : a |$\leq$| b |$∧ \lnot$| (b |$\leq$| a) → succ a |$\leq$| b :=
+lemma lt_aux_one (a b : mynat) : a |$≤$| b |$∧ \lnot$| (b |$≤$| a) → succ a |$≤$| b :=
 begin
-  --On commence par transformer $a \leq b ∧ \lnot (b \leq a)$ en 2 hypothèses :
+  --On commence par transformer $a ≤ b ∧ \lnot (b ≤ a)$ en 2 hypothèses :
   intro h,
   cases h with hab htba,
   --On introduit $c$ tel que $b = a + c$
@@ -130,7 +130,7 @@ begin
   apply htba,
   exact zero_le a,
 
-  --Cas $b = \succ b$ (but : $\succ a \leq \succ b$) :
+  --Cas $b = \succ b$ (but : $\succ a ≤ \succ b$) :
   --Là, c'est le cas $a = 0$ qui nous pose problème
   cases a,
 
@@ -138,10 +138,10 @@ begin
   apply succ_le_succ,
   exact zero_le b,
 
-  --Cas $a = \succ a$ (but : $\succ (\succ a) \leq \succ b$) :
+  --Cas $a = \succ a$ (but : $\succ (\succ a) ≤ \succ b$) :
   rw hc,
   rw succ_add,
-  apply succ_le_succ, --but : $\succ a \leq a + c$
+  apply succ_le_succ, --but : $\succ a ≤ a + c$
   
   --Cette inégalité est impossible si $c = 0$
   cases c,
@@ -155,7 +155,7 @@ begin
   symmetry,
   exact hc,
 
-  --Cas $c = \succ c$ (but : $\succ a \leq a + \succ c$) :
+  --Cas $c = \succ c$ (but : $\succ a ≤ a + \succ c$) :
   --Les +1 se simplifient
   rw add_succ,
   apply succ_le_succ,
