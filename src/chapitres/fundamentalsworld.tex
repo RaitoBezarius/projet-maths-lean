@@ -82,7 +82,7 @@ begin [nat_num_game]
  rw add_comm (a * b) (b * b),
  rw add_assoc (b * b) (a * b) (a * b), -- on obtient 
  -- $a \times a + (b \times b + (a \times b + a \times b)) = a \times a + (b \times b + a \times (b + b))$
- -- on factorise par a :\
+ -- on factorise par a :
  rw |$\leftarrow$| mul_add a b b, -- on obtient $a \times a + (b \times b + a \times (b + b)) = a \times a + (b \times b + a \times (b + b))$
  refl
 end
