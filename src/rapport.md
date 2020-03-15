@@ -12,6 +12,8 @@ classoption:
 papersize: a4paper
 ---
 
+\newcommand{\mynat}{\N_{\text{mynat}}}
+
 # Introduction
 
 Avant d'expliquer en quoi consiste un assistant de preuve, donnons quelques éléments d'histoire autour de ces derniers.
