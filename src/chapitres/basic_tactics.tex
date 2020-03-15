@@ -36,7 +36,7 @@ Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un n
 
 
 \paragraph{\texttt{Exact}}
-La première de ces tactiques est \texttt{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est  $\exists  p$ de type P, et que vous disposez de p de type P dans les hypothèses, alors \textit{exact p,} terminera la preuve. De même, si le but est  $\exists  q$ de type Q et que vous disposez d'un élément p de type P et d'une fonction f : $P \to Q$, alors \textit{exact f(p),} terminera la preuve.\\
+La première de ces tactiques est \texttt{exact}. Elle permet de dire à Lean que le but recherché correspond exactement à ce que vous lui indiquez. Par exemple, si le but est  $\exists  p:P$, et que vous disposez de p de type P dans les hypothèses, alors \textit{exact p,} terminera la preuve. De même, si le but est  $\exists  q:Q$ et que vous disposez d'un élément p de type P et d'une fonction f : $P \to Q$, alors \textit{exact f(p),} terminera la preuve.\\
 \paragraph{\texttt{Apply}}
 Cette technique vous permet de modifier le but sans rajouter de variables : de fait, elle raisonne comme ceci : vous avez pour but un élément de Q. Or vous disposez d'une fonction f : $P \to Q$. De ce fait, pour disposer d'un élément de Q, il vous suffit de disposer d'un élément de P, car f(p) sera dans Q. \textit{apply f,} fait exactement ça, et donc changera le but de Q en P.\\
 
