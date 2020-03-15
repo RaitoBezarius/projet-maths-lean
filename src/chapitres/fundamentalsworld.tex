@@ -1,6 +1,6 @@
 \subsection{Addition World}
 \textit{Addition World} est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initiée dans \textit{Tutorial}) et \textit{induction}.\\
-En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant \textit{Addition World}, on peut utiliser les deux théorèmes suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.\\
+En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant \textit{Addition World}, on peut utiliser les deux théorèmes suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.
 \textit{Addition World} contient 6 niveaux: \texttt{zero\_add}, \texttt{add\_assoc}, \texttt{succ\_add}, \texttt{add\_comm}, \texttt{succ\_eq\_add\_one} et \texttt{add\_right\_comm}.
 Détaillons la démonstration du théorème suivant:\\
 \textbf{Le 5$^{ème}$ niveau} : succ\_eq\_add\_one \begin{center}   $\forall n \in \mathbb{N},$  $succ(n)=n+1$ \end{center}
@@ -12,14 +12,13 @@ rw one_eq_succ_zero, -- c'est plus facile de manipuler le chiffre 0 que le chiff
 --On réécrit donc 1 en succ(0), puisque 1=succ(0) ( la preuve de cette égalité est
 --one_eq_succ_zero). On obtient succ(n)=n+succ(0)
  rw add_succ, -- add_succ fournit l'égalité n+succ(0)=succ(n+0), on l'utilise alors pour réécrire succ(n)=n+succ(0) en succ(n)=succ(n+0). Ainsi, on pourra utiliser un des théorèmes qui manipulent le chiffre 0
-rw add_zero, -- utilisation de ce théorème pour réécrire n+0 en n\\
+rw add_zero, -- utilisation de ce théorème pour réécrire n+0 en n
 refl,
 end
 \end{minted}
-
 \subsection{Multiplication World}
 Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication World} contient 9 niveaux: \texttt{zero\_mul}, \texttt{mul\_one}, \texttt{one\_mul}, \texttt{mul\_add}, \texttt{mul\_assoc}, \texttt{succ\_mul}, \texttt{add\_mul}, \texttt{mul\_comm} et \texttt{mul\_left\_comm}.\\ Nous explicitons la démonstration du théorème suivant: \\
-\textbf{Le 4$^{ème}$ niveau} :  mul\_add  \begin{center} La multiplication est distributive, c'est à dire  $\forall a, b, t \in \mathbb{N},$  $t\times(a+b)=t\times a+t\times b $ \end{center}\\
+\textbf{Le 4$^{ème}$ niveau} :  mul\_add  \begin{center} La multiplication est distributive, c'est à dire  $\forall a, b, t \in \mathbb{N},$  $t\times(a+b)=t\times a+t\times b $ \end{center}
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma mul_add (t a b : mynat) : t*(a+b) = t*a+t*b :=
 begin [nat_num_game]
@@ -49,10 +48,9 @@ rw |$\to$|  mul_succ, --on utilise rw $\leftarrow$ pour remplacer t$\times$d +t 
 refl
 end
 \end{minted}
-
 \subsection{Power World}
-Ce monde contient 8 niveaux: \texttt{zero\_pow\_zero}, \texttt{zero\_pow\_succ}, \texttt{pow\_one}, \texttt{one\_pow}, \texttt{pow\_add}, \texttt{mul\_pow}, \texttt{pow\_pow} et \texttt{add\_squared}.\\  
-Nous explicitons la démonstration du théorème suivant: \\
+Ce monde contient 8 niveaux: \texttt{zero\_pow\_zero}, \texttt{zero\_pow\_succ}, \texttt{pow\_one}, \texttt{one\_pow}, \texttt{pow\_add}, \texttt{mul\_pow}, \texttt{pow\_pow} et \texttt{add\_squared}.
+Nous explicitons la démonstration du théorème suivant:
 \textbf{Le 7$^{ème}$ niveau}: add\_squared (Cas particulier de la formule du binôme de Newton: $(a+b)^n=\sum_{k=0}^{n}{\frac{n!}{k!(n-k)!} a^nb^{n-k}}$, pour $n=2$)
 \begin{center} $\forall a, b \in \mathbb{N}$, $(a+b)^2=a^2+b^2+2*a*b $\end{center}
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
