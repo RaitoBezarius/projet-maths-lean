@@ -68,7 +68,7 @@ intro h,     -- h de type $P \land (Q \lor R)$
 cases h with p qor,     -- p de type P , qor de type $Q \lor R$
 cases qor with q r,     -- On sépare en deux cas en fonction de la disjonction :
 
--- Premier cas q de type Q
+-- Premier cas : q de type Q
 left,    -- On choisit de montrer $P \land Q$
 split,     -- On sépare en deux buts
 exact p,
