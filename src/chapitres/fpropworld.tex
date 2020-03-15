@@ -4,7 +4,9 @@ Un élément important à remarquer est qu'en Lean, toutes les fonctions sont cu
 
 Voici un exemple de niveau de ce monde, le niveau 6, qui demande de créer une fonction de fonctions assez fastidieuse, et qui utilise le fait que ces fonctions sont curryfiées. \\
 L'énoncé se formule comme ceci : \\
-$(P, Q, R : Type) : (P \to (Q \to R)) \to ((P \to Q) \to (P \to R))$\\
+\begin{equation*}
+        (P, Q, R : \Type) : (P \to (Q \to R)) \to ((P \to Q) \to (P \to R))
+\end{equation*}
 La preuve est de fait assez simple : \\
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines, escapeinside = ||]{lean}
 intros f g p, -- On introduit les différents éléments/fonctions pour créer la fonction demandée 
