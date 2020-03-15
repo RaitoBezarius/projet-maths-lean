@@ -41,3 +41,15 @@ De façon similaire, lorsque de le but est de la forme $P_1 \to P_2 \to ... \to 
 Cette technique permet de renommer des variables : par exemple, si vous disposez de p de type P et de f : $P \to Q$, alors \textit{have q : Q := f(p),} vous permet de renommer un élément $q = f(p)$. Le principe du Démiurge nous permet en effet de renommer comme on veut ce que l'on veut, ce qui garantit la validité de la preuve dans le cas de l'utilisation de have. \\
 \textbf{Apply}\\
 Cette technique vous permet de modifier le but sans rajouter de variables : de fait, elle raisonne comme ceci : vous avez pour but un élément de Q. Or vous disposez d'une fonction f : $P \to Q$. De ce fait, pour disposer d'un élément de Q, il vous suffit de disposer d'un élément de P, car f(p) sera dans Q. \textit{apply f,} fait exactement ça, et donc changera le but de Q en P.\\
+
+\paragraph{Induction}
+
+La tactique \texttt{induction} permet de démontrer une proposition quantifié sur un type inductif, à l'aide du principe d'induction.
+
+Sans rentrer dans les détails de théorie des types, dans les axiomes de Peano, cela revient au théorème suivant, pour toute proposition logique $P$ :
+
+\begin{equation*}
+\left(P(0) \land \forall n, P(n) \implies P(n + 1)\right) \implies (\forall n, P(n))
+\end{equation*}
+
+En Lean, cela se matérialise par la syntaxe \texttt{induction <variable> with <nom de la variable inductive> <hypothèse d'induction>} et transforme le but en deux buts: le cas de base et le cas inductif.
