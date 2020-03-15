@@ -85,7 +85,7 @@ begin
   --Cas $b = \succ c$ (but : $\succ c = \succ n$) :
   repeat {rw succ_eq_add_one},
   rw add_right_cancel_iff, --On simplifie le but pour lui appliquer l'hypothèse d'induction
-  --C'est là que le $revert b$ prend tout son importance car le but est $c = n$
+  --C'est là que le $revert \ b$ prend tout son importance car le but est $c = n$
   --On n'aurait pas pu appliquer l'hypothèse d'induction si elle prenait un $b$ particulier
   apply hn,
   --Il ne reste plus qu'a simplifier l'hypothèse $h$ :
