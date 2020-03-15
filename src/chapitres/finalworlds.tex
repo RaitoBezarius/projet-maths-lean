@@ -99,16 +99,16 @@ end
 
 Dans la suite, nous allons définir > tel que :
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
-    a < b := a $\leq$ b $\land \lnot$ (b $\leq$ a)
+	def a < b := a $\leq$ b $\land \lnot$ (b $\leq$ a)
 \end{minted}
 Mais la définition :
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
-    a < b := succ a $\leq$ b
+	def a < b := succ a $\leq$ b
 \end{minted}
 est plus pratique à utiliser et mathématiquement équivalente dans les entiers naturels.
 Nous allons donc prouver  que 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
-a $\leq$ b $\land \lnot$ (b $\leq$ a) → succ a $\leq$ b
+	(a b : mynat) : a $\leq$ b $\land \lnot$ (b $\leq$ a) → succ a $\leq$ b
 \end{minted}
 dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
 
