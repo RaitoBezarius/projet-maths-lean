@@ -1,10 +1,18 @@
 \subsection{Addition World}
-\textit{Addition World} est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initiée dans \textit{Tutorial}) et \textit{induction}.\\
+
+\textit{Addition World} est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: 
+
+\textit{refl}, \textit{rw} (dont l'application était initiée dans \textit{Tutorial}) et \textit{induction}.\\
 En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant \textit{Addition World}, on peut utiliser les deux théorèmes suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.\\
+
 \textit{Addition World} contient 6 niveaux: zero\_add, add\_assoc, succ\_add, add\_comm, succ\_eq\_add\_one et add\_right\_comm.
 Détaillons la démonstration du théorème suivant:\\
+
 \textbf{Le 5$^{ème}$ niveau} : succ\_eq\_add\_one \begin{center}  pour tout entier naturel $n$,  $succ(n)=n+1$ \end{center}
 Preuve
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
+
+
 \textbf{rw one\_eq\_succ\_zero,} : c'est plus facile de manipuler le chiffre 0 que le chiffre 1. On réécrit donc 1 en succ(0), puisque $1=succ(0)$ ( la preuve de cette égalité est one\_eq\_succ\_zero). On obtient $succ(n)=n+succ(0)$\\
  \textbf{rw add\_succ,} : add\_succ fournit l'égalité $n+succ(0)=succ(n+0)$, on l'utilise alors pour réécrire $succ(n)=n+succ(0)$ en $succ(n)=succ(n+0)$. Ainsi, on pourra utiliser un des théorèmes qui manipulent le chiffre 0\\
 \textbf{rw add\_zero,} : utilisation de ce théorème pour réécrire $n+0$ en $n$\\
