@@ -3,7 +3,6 @@
 % Tactiques de Léa (modifiées par Ivan)
 
 Les tactiques suivantes permettent la manipulation de fonction en Lean, une fonction f : $A\to B$ pour A et B deux types étant simplement un élément de type $A\to B$, qui à une preuve de A renvoie une preuve de B.\\
-
 \paragraph{\texttt{intro}}
 
 Parfois, le but que nous cherchons à atteindre est une implication. Pour prouver que $A \to B$, on va prouver $B$ sachant $A$ vrai. En Lean, cela revient à inclure A dans les hypothèses et à changer le but en $B$. C'est ce que fait la tactique \texttt{intro}. On peut donner un nom à l'hypothèse qu'on introduit : \texttt{intro h,} ou laisser Lean choisir un nom par défaut.
@@ -19,18 +18,15 @@ Lorsque la preuve de l'existence de l'objet qu'on crée est brève, on peut cont
 
 % Tactiques de Maryem
 
-\paragraph {refl}: Cette tactique correspond à la réflexivité de l'égalité, d'où le nom \textbf{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
-\textit{Exemple}Soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y \times (z+w)=x+y \times (z+w)$ en appliquant la tactique \big\{\textbf{refl,}\big\}.
-\paragraph {\large\textbf{rw}}: Le nom de cette tactique correspond au mot anglais \textit{rewrite}. Elle s'applique dans deux cas distincts.
+\paragraph { \texttt{refl}}: Cette tactique correspond à la réflexivité de l'égalité, d'où le nom \texttt{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
+\textit{Exemple:} soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y \times (z+w)=x+y \times (z+w)$ en exécutant l'instruction \texttt{refl,}.
+\paragraph {\texttt{rw}}: Soient $F$, $A$ et $B$ des mots de $\Sigma^*$.\\
+Le nom de cette tactique (rw) correspond au mot anglais \texttt{rewrite}. Elle s'applique dans 2 cas distincts:\\
+Soit $H$ une hypothèse, sous la forme $A=B$. Supposons que l'équation à démontrer est le mot $F$. \\Si $F$ contient au moins un $A$, l'instruction \texttt{rw $H$} dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (présents dans $F$) sont réécrits en $Bs$. De même, si $F$ contient au moins un $B$ et si on utilise \texttt{rw $\leftarrow$ H}, alors le seul changement sera: tous les $Bs$ (présents dans $F$) sont réécrits en $As$.\\
+Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \texttt{rw T} (respectivement \texttt{rw $\leftarrow$ T}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (resp. $Bs$) sont remplacés par des $Bs$ (resp. $As$). 
 
-Soit $H : A = B$ une hypothèse d'égalité. \footnote{ou une preuve de $A = B$, c'est la même chose.}
-Supposons que l'équation à démontrer est le mot $F$. \\Si $F$ contient au moins un $A$, l'instruction \big\{\textbf{rw $H$,}\big\} dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $A$ (présents dans $F$) sont réécrits en $B$. De même, si $F$ contient au moins un $B$ et si on utilise \big\{\textbf{rw $\leftarrow$ H,}\big\}, alors le seul changement sera: tous les $B$ (présents dans $F$) sont réécrits en $As$.
-
-Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \big\{\textbf{rw T,}\big\} (respectivement \big\{\textbf{rw $\leftarrow$ T,}\big\}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (resp. $Bs$) sont remplacés par des $Bs$ (resp. $As$). 
-
-\paragraph {simp}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition World}. Son principe est le suivant: elle utilise la tactique \textbf{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont disponibles à partir du dernier niveau de \textit{Multiplication World}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \textbf{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
-\textit{Exemple} Soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer que $x+y+z+w+u=y+(z+x+u)+w$ en utilisant \big\{\textbf{simp,} \big\}
-
+\paragraph {\texttt{simp}}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition World}. Son principe est le suivant: elle utilise la tactique \texttt{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont disponibles à partir du dernier niveau de \textit{Multiplication World}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \texttt{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
+\textit{Exemple:} Soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer que $x+y+z+w+u=y+(z+x+u)+w$ en utilisant \big\{\texttt{simp,} \big\}
 
 % Tactiques de Ivan
 \paragraph{Exact, Intro, Have, Apply}
