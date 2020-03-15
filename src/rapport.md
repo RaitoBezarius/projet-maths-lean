@@ -4,11 +4,15 @@ author: \textsc{Maryem Hajji, Léa Riant, Ryan Lahfa, Ivan Hasenohr}
 advanced-maths: true
 advanced-cs: true
 toc: true
+minted: true
+lean-minted: true
 lang: fr
 classoption: 
 - twocolumn
 papersize: a4paper
 ---
+
+\newcommand{\mynat}{\N_{\text{mynat}}}
 
 # Introduction
 
