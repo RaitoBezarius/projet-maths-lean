@@ -14,93 +14,86 @@
 
 \section{Tactiques}
 \begin{itemize}
-    \item \textbf{refl}: Cette tactique prouve toute égalité de la forme A=A. C'est à dire tout égalité dont les deux cotés sont égaux terme à terme. \\
-    \textit{Exemple:} soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y*(z+w)=x+y*(z+w)$ par \textbf{refl,}\\
-    \item \textbf{rw}: rw correspond au mot anglais \textit{rewrite}. Elle s'applique en 2 cas distincts:
+    \item On suppose dans cette partie que:\\ - $\Sigma$ est un alphabet fini qui contient les lettres de l'alphabet latin, les parenthèses et les opérateurs arithmétiques.\\
+    - $\Sigma^*$ est l'ensemble des mots possibles qu'on peut construire à partir de $\Sigma$.\\
+    - $F$, $A$ et $B$ sont des mots de $\Sigma^*$.
+    \item {\large \textbf{refl}}: Cette tactique correspond à la reflexivité de l'égalité, d'où le nom \textbf{refl}. Elle peut s'appliquer pour prouver toute égalité de la forme $A=A$. C'est à dire, toute égalité dont les deux membres sont égaux terme à terme. \\
+    \textit{Exemple:} soient $x,y,z,w$ des entiers naturels, alors on peut prouver que $x+y*(z+w)=x+y*(z+w)$ en exécutant l'instruction \big\{\textbf{refl,}\big\}.
+    \item {\large\textbf{rw}}: le nom de cette tactique (rw) correspond au mot anglais \textit{rewrite}. Elle s'applique dans 2 cas distincts:
     
-     \hspace{1cm} Soit H une hypothèse, sous la forme A=B.
-    Soit F l'équation à démontrer.
-    Si F contient au moins une occurrence de A, alors \textbf{rw H,} remplace chacune des occurrences de A, dans F, par B. De même, si F contient au moins une occurrence de B, alors \textbf{rw $\leftarrow$ H,} remplace chacune des occurrences de B, dans F, par A.
+     \hspace{1cm} Soit $H$ une hypothèse, sous la forme $A=B$. 
+    Supposons que l'équation à démontrer est le mot $F$. \\ L'instruction \big\{\textbf{rw $H$,}\big\} un mot $F'$ dérive du mot $F$, en effectuant un seul changement: tous les $As$ (présents dans $F$) sont réécrits en $Bs$. De même, si on utilise \big\{\textbf{rw $\leftarrow$ H,}\big\}, alors le seul changement sera: tous les $Bs$ (présents dans $F$) sont réécrits en $As$.
     
-    \hspace{1cm} Soit T une preuve d'un théorème sous la forme d'une égalité (c'est à dire T: A=B), supposé prouvé dans un des niveaux précédent (figure sur le menu des théorèmes). Alors \textbf{rw T,} (respectivement \textbf{rw $\leftarrow$ T,}) remplace chacune des occurrences de A (resp. B), dans F, par B (resp. A).\\
-    \item \textbf{simp}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition world}. Son principe est le suivant; elle utilise la tactique \textbf{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (l' associativité et la commutativité de la multiplication sont diponibles à partir du dernier niveau de \textit{multiplication world}) \\
-    \textit{Exemple:} soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer $x+y+z+w+u=y+(z+x+u)+w$ par \textbf{simp,}
+    \hspace{1cm} Soit $T: A=B$, c'est à dire $T$ est une preuve de $A=B$, supposé faite à un niveau qui précède le niveau traité. Dans ce cas, elle figure sur le menu des théorèmes. Alors \big\{\textbf{rw T,}\big\} (respectivement \big\{\textbf{rw $\leftarrow$ T,}\big\}) dérive un mot $F'$ du mot $F$, en effectuant un seul changement: tous les $As$ (resp.$Bs$) sont remplacés par des $Bs$ (resp.$As$). 
+    \item {\large\textbf{simp}}: C'est une tactique de haut niveau. Elle est disponible à partir du dernier niveau de \textit{Addition world}. Son principe est le suivant: elle utilise la tactique \textbf{rw} avec les preuves des théorèmes d'associativité et de commutativité de l'addition pour prouver une certaine égalité (les preuves de l' associativité et la commutativité de la multiplication sont diponibles à partir du dernier niveau de \textit{multiplication world}). De plus, à l'aide du langage de métaprogrammation de Lean, on peut éventuellement apprendre  à \textbf{simp} à simplifier une variété de formules plus large en utilisant d'autres preuves outre celles de l'associativité et de la commutativité.   \\
+    \textit{Exemple:} Soient $x,y,z,w,u$ des entiers naturels, alors on peut démontrer que $x+y+z+w+u=y+(z+x+u)+w$ en utilisant \big\{\textbf{simp,} \big\}
+    
     
 \end{itemize}
 
 
 \section{Addition world}
-Addition world est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initié dans tutorial world) et \textit{induction}.\\
+Addition world est le premier monde de \textbf{Natural Number Game}. Dans ce monde, on dispose principalement de 3 tactiques: \textit{refl}, \textit{rw} (dont l'application était initiée dans tutorial world) et \textit{induction}.\\
 En plus, chaque théorème, une fois démontré, sera utilisé comme un résultat acquis dans les démonstrations de tous les théorèmes qui suivent. Par exemple, en commençant Addition world, on peut utiliser les deux résultats suivants: add\_zero et add\_succ, qui sont supposés démontrés dans la partie \textit{Tutorial}.\\
-Addition world contient 6 niveaux: zero\_add, add\_assoc, succ\_add, add\_comm, succ\_eq\_add\_one et add_right_comm.\\
+Addition world contient 6 niveaux: zero\_add, add\_assoc, succ\_add, add\_comm, succ\_eq\_add\_one et add\_right\_comm.
 
-Détaillons la démonstration de quelques théorèmes:\\
-
-\textbf{4${ème}$ niveau}: L'addition est commutative, c'est à dire pour tout entiers naturels a et b : $$a+b=b+a$$ 
-\textbf{induction b with n hn,} : Par induction sur b \\
-\textit{Cas de base, à démontrer $a + 0 = 0 + a$}\\
-\textbf{rw zero\_add,}\\
- \textbf{rw add\_zero,}\\
- \textbf{refl,}\\
-\textit{cas d'induction, Supposons hn: $a + n = n + a$ et montrons $a + succ (n) = succ (n) + a
-$}\\
- \textbf{rw add\_succ,}\\
- \textbf{rw succ\_add,}\\
- \textbf{rw hn,}\\
- \textbf{refl,}\\
- 
-\textbf{5${ème}$ niveau}, qui correspond au résultat suivant: pour tout entier naturel n  $$succ(n)=n+1$$
-\textbf{rw one\_eq\_succ\_zero,} : On remplace 1 par succ(0), puisque c'est plus facile de manipuler le chiffre 0 que le chiffre 1. On obtient donc $succ(n)=n+succ(0)$\\
- \textbf{rw add\_succ,} : Pour utiliser un des théorèmes qui manipulent le chiffre 0, il faut qu'on introduit la variable $n$ dans $succ()$. On obtient ainsi $succ(n)=succ(n+0)$ \\
-\textbf{rw add\_zero,} : utilisation de ce théorème pour réecrire $n+0$ en $n$ \\
+Détaillons la démonstration du théorème suivant:\\
+\textbf{Le 5$^{ème}$ niveau} : succ\_eq\_add\_one \begin{center}  pour tout entier naturel $n$,  $succ(n)=n+1$ \end{center}\\
+{\large\underline{Preuve:}} \\
+\textbf{rw one\_eq\_succ\_zero,} : c'est plus facile de manipuler le chiffre 0 que le chiffre 1. On réécrit donc 1 en succ(0), puisque $1=succ(0)$ ( la preuve de cette égalité est one\_eq\_succ\_zero). On obtient $succ(n)=n+succ(0)$\\
+ \textbf{rw add\_succ,} : add\_succ fournit l'égalité $n+succ(0)=succ(n+0)$, on l'utilise alors pour réécrire $succ(n)=n+succ(0)$ en $succ(n)=succ(n+0)$. Ainsi, on pourra utiliser un des théorèmes qui manipulent le chiffre 0\\
+\textbf{rw add\_zero,} : utilisation de ce théorème pour réécrire $n+0$ en $n$\\
 \textbf{refl,}
 
 \section{Multiplication world}
-Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité par rapport à l'addition dans les deux sens ( à gauche et à droite). Multiplication world contient 9 niveaux. Nous explicitons le démonstration du théorème suivant: \\
-
-\textbf{4$^{ème}$ niveau }: La multiplication est distributive, c'est à dire pour tout entiers naturels a, b et t: $$t*(a+b)=t*a+t*b$$
-\textbf{induction a with d hd,} : Par induction sur a\\
-\textit{Cas de base, à démontrer $t * (0 + b) = t * 0 + t * b$}\\
-\textbf{rw zero\_add,} : on remplce 0+b par b, on obtient $t * b = t * 0 + t * b$ \\
-\textbf{rw mul\_zero,} : on remplace $t*0$ par 0, on obtient $t * b = 0 + t * b$ \\
-\textbf{rw zero\_add,} : on obtient $t * b = t * b$ \\
+Dans ce monde, les théorèmes reposent principalement sur les propriétés basiques de la multiplication, tels que la commutativité, l'associativité, et la distributivité de la multiplication par rapport à l'addition dans les deux sens (à gauche et à droite). \textit{Multiplication world} contient 9 niveaux: zero\_mul, mul\_one, one\_mul, mul\_add, mul\_assoc, succ\_mul, add\_mul, mul\_comm et mul\_left\_comm.\\ Nous explicitons la démonstration du théorème suivant: \\
+\textbf{Le 4$^{ème}$ niveau} : mul\_add  \begin{center} La multiplication est distributive, c'est à dire pour tous entiers naturels a, b et t : $$t*(a+b)=t*a+t*b$$ \end{center}\\
+{\large\underline{Preuve:}} \\
+\textbf{induction a with d hd,} : Dans l'induction, \textbf{$a$} est renommé en \textbf{$d$} qui varie inductivement et \textbf{$hd$} est l'hypothèse d'induction sur $d$ (cas de base: $d=0$, cas d'induction: on suppose $hd$, on démontre $h(succ(d))$)   \\
+\textit{\underline{Cas de base}: montrons que $t * (0 + b) = t * 0 + t * b$}\\
+\textbf{rw zero\_add,} : on remplace $0+b$ par $b$, on obtient $t*b=t*0+t*b$ \\
+\textbf{rw mul\_zero,} : on remplace $t*0$ par $0$, on obtient $t*b=0+t*b$ \\
+\textbf{rw zero\_add,} : on obtient $t*b=t*b$ \\
 \textbf{refl,} \\
-\textit{Cas d'induction , supposons hd : $t * (d + b) = t * d + t * b$ et montrons $t * (succ d + b) = t * succ d + t * b$ }\\
-\textbf{rw succ\_add,} : on doit se ramener à une équation où l'un des deux cotés est égal à un coté de hd, donc on doit remplacer succ() par des opérations arithmétiques\\
-\textbf{rw mul\_succ,} : on utilise \textit{mul\_succ} (a b : mynat) : $a * succ(b) = a * b + a $\\
+\textit{\underline{Cas d'induction}: supposons $hd$ : $t*(d+b) = t * d + t * b$ et montrons $h(succ(d)):$ $t * (succ (d) + b) = t * succ (d) + t * b$ }\\
+\textbf{rw succ\_add,} :une solution serait de se ramener à une équation où l'un des deux membres est égal à un membre de hd. Pour faire cela, on utilise succ\_add qui s'applique uniquement sur une quantité de la forme $succ(d)+b$ ($d$ et $b$ étant deux entiers naturels quelconques), nous permettant ainsi de la remplacer par $succ(d+b)$\\
+\textbf{rw mul\_succ,} : on utilise \textit{mul\_succ} ($a$ $b$ : mynat) : $a * succ(b) = a * b + a $\\
 \textbf{rw hd,} on remplace $t * (d + b) + t$ par $t * d + t * b+t$\\
-\textbf{rw add\_right\_comm,} : on applique la commutativité de la multiplication pour remplacer $t * b + t$ par $ t + t * b$\\
-\textbf{rw $\leftarrow$  mul\_succ, }: utilisation de rw \leftarrow pour remplacer $t * d + t$ (qui est à droite de l'équation du théorème mul\_succ) par $t * succ (d)$ \\
+\textbf{rw add\_right\_comm,} : on applique la commutativité de l'addition pour remplacer $t * b + t$ par $ t + t * b$\\
+\textbf{rw $\leftarrow$  mul\_succ, }: on utilise rw $\leftarrow$ pour remplacer $t * d + t$ (qui est le membre droit de l'égalité qui correspond au théorème mul\_succ) par $t * succ (d)$ \\
 \textbf{refl,} \\
 
 \section{Power world}
-Ce monde contient 8 niveaux. 
-Nous avons choisi de détailler la démonstration du niveau suivant: \\
-\textbf{7$^{ème}$ niveau}:
-pour tout entiers naturels a et b:$$ (a+b)^2=a^2+b^2+2*a*b $$
- \textit{On simplifie les puissances, en réevrivant les puissances 2 en fonction de 0 }\\
-  \textbf{rw two\_eq\_succ\_one,} \\
- \textbf{rw one\_eq\_succ\_zero,} : \textit{ On obtient $(a + b) ^ succ (succ 0) = a ^ succ (succ 0) + b ^ succ (succ 0) + succ (succ 0) * a * b$}\\
-  \textbf{repeat {rw pow\_succ},} \textit{repeat permet d'appliquer la tactique rw (rewrite) sur tous les termes $succ(0)$ de l'équation} \\
-  \textbf{repeat {rw pow\_zero},} \\
-  \textbf{simp,} \\
-  \textbf{repeat {rw mul\_succ},} \\
-  \textbf{simp,} \\
+Ce monde contient 8 niveaux: zero\_pow\_zero, zero\_pow\_succ, pow\_one, one\_pow, pow\_add, mul\_pow, pow\_pow et add\_squared.\\ 
+Nous avons choisi de détailler la démonstration du théorème suivant: \\
+\textbf{Le 7$^{ème}$ niveau}: add\_squared
+\begin{center} pour tous entiers naturels $a$ et $b$ : $(a+b)^2=a^2+b^2+2*a*b $\end{center}
+{\large\underline{Preuve:}}\\
+ \textit{On simplifie les puissances, en réécrivant les puissances 2 en fonction de 0 }\\
+  \textbf{rw two\_eq\_succ\_one,} : on utilise la preuve de $succ(1)=2$ pour réécrire le chiffre $2$ en $succ(1)$ \\
+ \textbf{rw one\_eq\_succ\_zero,} :  on réécrit $1$ en $succ(0)$, on obtient donc $(a + b) ^ {succ (succ (0))} = a ^ {succ (succ (0)) }+ b ^ {succ (succ (0)) }+ succ (succ (0)) * a * b$\\
+  \textbf{repeat {rw pow\_succ},} : on obtient $(a + b) ^ 0 * (a + b) * (a + b) = a ^ 0 * a * a + b ^ 0 * b * b + succ (succ (0)) * a * b$ \\
+  \textbf{repeat {rw pow\_zero},} : on obtient $1 * (a + b) * (a + b) = 1 * a * a + 1 * b * b + succ (succ (0)) * a * b$\\
+  \textbf{simp,} : on obtient $(a + b) * (a + b) = a * a + (b * b + a * (b * succ (succ (0))))
+$, donc simp, dans ce cas, applique le théorème one\_mul(m : mynat) : $m * 1 = m$\\ 
+  \textbf{repeat {rw mul\_succ},} : on obtient $(a + b) * (a + b) = a * a + (b * b + a * (b * 0 + b + b))$\\
+  \textbf{simp,} : on obtient $(a + b) * (a + b) = a * a + (b * b + a * (b + b))$, donc simp, dans ce cas, applique les théorèmes mul\_zero(a : mynat):$a * 0 = 0$  et zero\_add(n : mynat):$0 + n = n$\\
   \textit{On développe (a + b) * (a + b) :} \\
  \textbf{rw mul\_add,} \\
- \textit{On développe (a + b) * a :}\\
+ \textit{On développe $(a + b) * a$ :}\\
   \textbf{rw mul\_comm,} \\
   \textbf{rw mul\_add,} \\
-  \textit{On développe (a + b) * b :} \\
+  \textit{On développe $(a + b) * b$ :} \\
  \textbf{ rw mul\_comm (a + b) b,} \\
   \textbf{rw mul\_add,} \\
- \textbf{simp,}  \textit{On met les termes de gauche dans le bon ordre } \\
-  \textbf{rw $\leftarrow$ add\_assoc (a * b) (a * b) (b * b),}\\
+ \textbf{simp,}  \textit{On met les termes à gauche dans le bon ordre } \\
+  \textbf{rw $\leftarrow$ add\_assoc (a * b) (a * b) (b * b),} : on obtient $a * a + (a * b + a * b + b * b) = a * a + (b * b + a * (b + b))$\\
   \textbf{rw add\_right\_comm,} \\
   \textbf{rw add\_comm (a * b) (b * b),} \\
-  \textbf{rw add\_assoc (b * b) (a * b) (a * b),}\\
+  \textbf{rw add\_assoc (b * b) (a * b) (a * b),} : on obtient $a * a + (b * b + (a * b + a * b)) = a * a + (b * b + a * (b + b))$\\
   \textit{On factorise par a :}\\
-  \textbf{rw $\leftarrow$ mul\_add a b b,}\\
+  \textbf{rw $\leftarrow$ mul\_add a b b,} : on obtient $a * a + (b * b + a * (b + b)) = a * a + (b * b + a * (b + b))
+$\\
   \textbf{refl,}\\
 
 
