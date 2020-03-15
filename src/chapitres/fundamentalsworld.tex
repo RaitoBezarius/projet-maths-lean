@@ -40,7 +40,7 @@ rw succ_add, -- une solution serait de se ramener à une équation où l'un des 
 --de la remplacer par succ(d+b)
 rw mul_succ, -- on utilise mul_succ (a b : mynat) : a$\times$succ(b) = a$\times$b+a
 rw hd, -- on remplace t$\times$(d+b)+t par t$\times$d+t$\times$b+t en utilisant hd, 
--- on obtient t$\times$d+t*b+t = t$\times$succ(d)+t$\times$b\\
+-- on obtient t$\times$d+t*b+t = t$\times$succ(d)+t$\times$b
 rw add_right_comm, -- on applique la commutativité de l'addition pour remplacer t$\times$b+t par t+t$\times$b
 rw |$\to$|  mul_succ, --on utilise rw $\leftarrow$ pour remplacer t$\times$d +t (qui est le membre droit
 -- de l'égalité qui correspond au théorème mul_succ) par t$\times$succ(d), 
