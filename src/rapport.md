@@ -63,6 +63,16 @@ En somme, c'est un problème très difficile, mais sur lequel il a été possibl
 
 Dans une certaine mesure, Lean est capable d'assister à trouver des morceaux de preuve par lui-même à l'aide de tactiques qui peuvent être aussi écrite par les utilisateurs afin d'améliorer l'intelligence de Lean dans certains contextes (chasse aux diagrammes en catégories par exemple).
 
+## Objectifs de ce projet
+
+Nous allons d'abord nous familiariser au langage de Lean \cite{avigad2014lean}, l'assistant de preuve de Microsoft Research qui sera utilisé pour ce projet, ses concepts à travers le « Number Games » de Kevin Buzzard qui consiste à redémontrer quelques théorèmes autour des entiers naturels en partant des axiomes de Peano.
+
+Nous fournissons en XXX, des solutions détaillées et expliquées des théorèmes qu'on a jugé un peu subtil tout en introduisant le système de tactique, pièce fondamentale des assistants de preuve et de l'automatisation des démonstrations.
+
+Ensuite, nous nous dirigerons vers les espaces métriques et construirons leur formalisme dans un cadre usuel, alors que la bibliothèque mathlib \cite{mathlib} construit les espaces topologiques, uniformes, métriques avec des notions de suites généralisées et de filtres.
+
+Enfin, ambitieux mais si le temps le permet, nous attaquerons une démonstration formalisée du théorème d'Ostrowski\footnote{Dont le livre d'Artin fournit une démonstration} en posant la théorie des valuations d'Artin \cite{artin2005algebraic}.
+
 # Détail des exercices du « Number Games » de Kevin Buzzard
 
 On se donnera pendant cette section un alphabet $\Sigma$ qui pourra contenir selon le contexte, les opérateurs usuels en mathématiques $\{ +, -, \times, / \}$, les chiffres, l'alphabet grec et latin.
