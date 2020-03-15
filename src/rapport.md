@@ -9,7 +9,7 @@ lean-minted: true
 lang: fr
 classoption: 
 - twocolumn
-papersize: a4paper
+papersize: a4
 ---
 
 \newcommand{\mynat}{\N_{\text{mynat}}}
@@ -20,11 +20,11 @@ Avant d'expliquer en quoi consiste un assistant de preuve, donnons quelques él�
 
 ## Courte histoire des assistants de preuve et du rêve d'Hilbert
 
-En août 1900, David Hilbert présente ses 23 problèmes, dont le second est la cohérence de l'arithmétique, fracassé par le résultat d'incomplétude de Gödel (qui ne résoud pas tout à fait la question) en 1931, et dont une réponse positive est obtenue par Gantzen à l'aide de la récurrence transfinie. C'est l'élan qui va lancer la théorie de la démonstration.
+En août 1900, David Hilbert présente ses 23 problèmes, dont le second est la cohérence de l'arithmétique, fracassé par le résultat d'incomplétude de Gödel (qui ne résoud pas tout à fait la question et dont on pourra retrouver une démonstration en profondeur dans \cite{girard2006le}) en 1931, et dont une réponse positive est obtenue par Gantzen à l'aide de la récurrence transfinie. C'est l'élan qui va lancer la théorie de la démonstration.
 
-En 1966, de Bruijn lance le projet Automath qui a pour visée de pouvoir exprimer des théories mathématiques complètes, c'est-à-dire des théories qui sont des ensembles maximaux cohérents de propositions, i.e. le théorème d'incomplétude de Gödel ne s'y applique pas notamment.
+En 1966, de Bruijn lance le projet Automath\cite{Automath} qui a pour visée de pouvoir exprimer des théories mathématiques complètes, c'est-à-dire des théories qui sont des ensembles maximaux cohérents de propositions, i.e. le théorème d'incomplétude de Gödel ne s'y applique pas notamment.
 
-Peu après, les projets Mizar, HOL-Isabelle et Coq naissent pour devenir les assistants de preuve mathématiques que l'on connaît.
+Peu après, les projets Mizar\cite{Mizar}, HOL-Isabelle\cite{IsabelleHOL} et Coq \cite{Coq} naissent pour devenir les assistants de preuve mathématiques que l'on connaît.
 
 ## Principe d'un assistant de preuves
 
@@ -78,3 +78,6 @@ Puis, on munit $(\Sigma^{*}, \cdot)$ d'une structure de monoïde usuelle où $\c
 
 # Excursion dans le formalisme des espaces métriques
 
+
+\bibliographystyle{plain}
+\bibliography{references}
