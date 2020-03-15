@@ -5,7 +5,7 @@ On a démontré que :
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 (a b c : mynat) : a + b = a + c → b = c
 \end{minted}
-Donc pour 'a = 0' et 'c = 0' et 'a + b = a + c' impliquent 'b = 0'.
+Donc pour $a = 0$ et $c = 0$ et $a + b = a + c$ impliquent $b = 0$.
 Dans ce lemme, nous allons montrer qu'il suffit d'avoir les hypothèses 'a+c = 0' et 'c = 0' et 'a + b = a + c' pour prouver 'b = 0'.
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
@@ -13,79 +13,79 @@ lemma add_left_eq_zero {{a b : mynat}} : a + b = 0 → b = 0 :=
 begin [nat_num_game]
   intro H,
   --On fait une distinction de cas
-  --Soit 'b = 0' soit il existe d : mynat tel que 'b = succ(d)' :
+  --Soit $b = 0$ soit il existe d : mynat tel que $b = succ(d)$ :
   cases b with d,
 
-  --Cas 'b = 0', le but devient '0 = 0', la résolution est triviale :
+  --Cas $b = 0$, le but devient $0 = 0$, la résolution est triviale :
   refl,
 
-  --Cas 'b = succ(d)', le but devient 'succ d = 0'
-  --Ce qui est impossible, cela contredit l'axiome de Peano 'zero_ne_succ'
+  --Cas $b = succ(d)$, le but devient $succ d = 0$
+  --Ce qui est impossible, cela contredit l'axiome de Peano $zero_ne_succ$
   --On va donc faire une preuve par l'absurde :
-  rw add_succ at H, --on fait rentrer a dans le succ donc 'H : succ (a + d) = 0'
-  exfalso, -- le but est impossible à prouver donc on le change en 'faux'
-  --Et on a le théorème succ_ne_zero '(n : mynat) : succ n = 0 -> faux', donc on sait que l'hypothèse H implique 'faux'
+  rw add_succ at H, --on fait rentrer a dans le succ donc $H : succ (a + d) = 0$
+  exfalso, -- le but est impossible à prouver donc on le change en $faux$
+  --Et on a le théorème succ_ne_zero $(n : mynat) : succ n = 0 -> faux$, donc on sait que l'hypothèse H implique $faux$
   exact succ_ne_zero H,
-  --On a donc prouver que l'hypothèse '\exists d : mynat tel que b = succ(d)' est est contradictoire avec nos axiome
+  --On a donc prouver que l'hypothèse $\exists d : mynat tel que b = succ(d)$ est est contradictoire avec nos axiome
 end
 \end{minted}
 
 \paragraph{Advanced Multiplication World : Level 4}
 
 Ce théorème consiste à prouver la régularité à gauche du monoïde (mynat, *).
-L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactic, 'revert'.
+L'idée est instinctive mais la preuve nécessite en réalité beaucoup de distinctions de cas et l'utilisation d'une nouvelle tactic, \textit{revert}.
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
 theorem mul_left_cancel (a b c : mynat) (ha : a ≠ 0) : a * b = a * c → b = c :=
 begin
   revert b,
   --On ne considère plus b comme une hypothèse,
-  --à la place, on rajoute un '∀ (b : mynat)' au but
+  --à la place, on rajoute un $\forall (b : mynat)$ au but
   --Ce sera utile plus tard, dans l'hypothèse d'induction
   
   -- On fait une induction sur c :
   induction c with n hn,
 
-  --Le cas de base '∀ (b : mynat), a * b = a * 0 → b = 0' :
+  --Le cas de base $\forall (b : mynat), a * b = a * 0 → b = 0$ :
   rw mul_zero, --On simplifie
-  intros b h, --On introduit un b et l'hypothèse 'h : a * b = 0'
-  rw mul_eq_zero_iff a b at h, --h est équivalent à 'a = 0 or b = 0' donc on la réécrit
+  intros b h, --On introduit un b et l'hypothèse $h : a * b = 0$
+  rw mul_eq_zero_iff a b at h, --h est équivalent à $a = 0 or b = 0$ donc on la réécrit
   
-  --On casse le 'a = 0 or b = 0' en deux cas:
+  --On casse le $a = 0 or b = 0$ en deux cas:
   cases h with hha hhb,
   
-  --Si 'a = 0' (but : 'b = 0') :
-  --On a 'a ≠ 0' en hypothèse donc on sait que ce cas est impossible
+  --Si $a = 0$ (but : $b = 0$) :
+  --On a $a \ne 0$ en hypothèse donc on sait que ce cas est impossible
   --On va donc faire une preuve par l'absurde :
-  exfalso, --but = 'false'
-  apply ha, --but = 'a = 0'
+  exfalso, --but = $false$
+  apply ha, --but = $a = 0$
   exact hha, --Il n'y a plus qu'à appliquer l'hypothèse de disjonction de cas
   
-  --Si 'b = 0' (but : 'b = 0'), c'est trivial :
+  --Si $b = 0$ (but : $b = 0$), c'est trivial :
   exact hhb,
 
-  --Le cas d'induction (but : '∀ (b : mynat), a * b = a * succ n → b = succ n') :
-  intros b h, --On introduit un b et l'hypothèse 'h : a * b = a * succ n'
-  --Le but est juste 'b = succ n' maintenant
+  --Le cas d'induction (but : $\forall (b : mynat), a * b = a * succ n → b = succ n$) :
+  intros b h, --On introduit un b et l'hypothèse $h : a * b = a * succ n$
+  --Le but est juste $b = succ n$ maintenant
   --On fait une distinction de cas sur b :
   cases b with c,
 
-  --Cas 'b = 0' (but : '0 = succ n') :
-  --Cela contredit l'axiome de Peano 'zero_ne_succ', on va donc passer par l'absurde :
-  rw mul_zero at h, --On simplifie h pour obtenir ' h : 0 = a * succ n'
+  --Cas $b = 0$ (but : $0 = succ n$) :
+  --Cela contredit l'axiome de Peano $zero_ne_succ$, on va donc passer par l'absurde :
+  rw mul_zero at h, --On simplifie h pour obtenir $h : 0 = a * succ n$
   exfalso,
   apply mul_pos a (succ n), --On a besoin de démontrer les hypothèses de mul_pos :
-  --Hypothèse 'a ≠ 0' :
+  --Hypothèse $a \ne 0$ :
   exact ha,
-  --Hypothèse 'succ n ≠ 0' :
+  --Hypothèse $succ n \ne 0$ :
   exact succ_ne_zero n,
   --Retour à la preuve par l'absurde :
   symmetry,
   exact h,
 
-  --Cas 'b = succ c' (but : 'succ c = succ n') :
+  --Cas $b = succ c$ (but : $succ c = succ n$) :
   repeat {rw succ_eq_add_one},
   rw add_right_cancel_iff, --On simplifie le but pour lui appliquer l'hypothèse d'induction
-  --C'est là que le 'revert b' prend tout son importance car le but est 'c = n'
+  --C'est là que le $revert b$ prend tout son importance car le but est $c = n$
   --On n'aurait pas pu appliquer l'HR si elle prenait un b particulier
   apply hn,
   --Il ne reste plus qu'a simplifier l'hypothèse h :
@@ -99,54 +99,54 @@ end
 
 Dans la suite, nous allons définir > tel que :
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-    a < b := a ≤ b ∧ ¬ (b ≤ a)
+    a < b := a \leq b \land \lnot (b \leq a)
 \end{minted}
 Mais la définition :
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-    a < b := succ a ≤ b
+    a < b := succ a \leq b
 \end{minted}
 est plus pratique à utiliser et mathématiquement équivalente dans les entiers naturels.
 Nous allons donc prouver  que 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-a ≤ b ∧ ¬ (b ≤ a) → succ a ≤ b
+a \leq b \land \lnot (b \leq a) → succ a \leq b
 \end{minted}
 dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines]{lean}
-lemma lt_aux_one (a b : mynat) : a ≤ b ∧ ¬ (b ≤ a) → succ a ≤ b :=
+lemma lt_aux_one (a b : mynat) : a \leq b \land \lnot (b \leqa) → succ a \leq b :=
 begin
-  --On commence par transformer 'a ≤ b ∧ ¬ (b ≤ a)' en 2 hypothèses :
+  --On commence par transformer $a \leq b \land \lnot (b \leq a)$ en 2 hypothèses :
   intro h,
   cases h with hab htba,
-  --On introduit 'c tel que b = a + c'
+  --On introduit $c tel que b = a + c$
   cases hab with c hc,
 
-  --On ne peut rien faire à ce niveau car le cas 'b = 0' pose problème
+  --On ne peut rien faire à ce niveau car le cas $b = 0$ pose problème
   --On fait donc une distinction de cas sur b :
   cases b,
 
-  --Cas 'b = 0' (impossible donc par l'absurde) :
+  --Cas $b = 0$ (impossible donc par l'absurde) :
   exfalso,
   apply htba,
   exact zero_le a,
 
-  --Cas 'b = succ b' (but : succ a ≤ succ b) :
-  --Là, c'est le cas 'a = 0' qui nous pose problème
+  --Cas $b = succ b$ (but : succ a \leq succ b) :
+  --Là, c'est le cas $a = 0$ qui nous pose problème
   cases a,
 
-  --Cas 'a = 0' (trivial vu que 'b != 0') :
+  --Cas $a = 0$ (trivial vu que $b != 0$) :
   apply succ_le_succ,
   exact zero_le b,
 
-  --Cas 'a = succ a' (but : 'succ (succ a) ≤ succ b') :
+  --Cas $a = succ a$ (but : $succ (succ a) \leq succ b$) :
   rw hc,
   rw succ_add,
-  apply succ_le_succ, --but : 'succ a ≤ a + c'
+  apply succ_le_succ, --but : $succ a \leq a + c$
   
-  --Cette inégalité est impossible si 'c = 0'
+  --Cette inégalité est impossible si $c = 0$
   cases c,
 
-  --Cas 'c = 0'
+  --Cas $c = 0$
   rw add_zero at hc,
   exfalso,
   apply htba,
@@ -155,7 +155,7 @@ begin
   symmetry,
   exact hc,
 
-  --Cas 'c = succ c' (but : 'succ a ≤ a + succ c') :
+  --Cas $c = succ c$ (but : $succ a \leq a + succ c$) :
   --Les +1 se simplifient
   rw add_succ,
   apply succ_le_succ,
