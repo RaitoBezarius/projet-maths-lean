@@ -54,7 +54,7 @@ begin
   intros b h, --On introduit un $b$ et l'hypothèse $h : a * b = 0$
   rw mul_eq_zero_iff a b at h, --$h$ est équivalent à $a = 0 ∨ b = 0$ donc on la réécrit
   
-  --On casse le $a = 0 or b = 0$ en deux cas:
+  --On casse le $a = 0 ∨ b = 0$ en deux cas:
   cases h with hha hhb,
   
   --Si $a = 0$ (but : $b = 0$) :
