@@ -116,7 +116,7 @@ Nous allons donc prouver que
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 (a b : mynat) : a |$≤$| b |$∧ ¬$| (b |$≤$| a) → succ a |$≤$| b
 \end{minted}
-dans ce lemme (l'autre partie de l'équivalence est le niveau 16).
+dans ce lemme (la réciproque est le niveau 16).
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
 lemma lt_aux_one (a b : mynat) : a |$≤$| b |$∧ ¬$| (b |$≤$| a) → succ a |$≤$| b :=
