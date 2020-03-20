@@ -88,7 +88,7 @@ def bornee (x: ℕ → X) :=
 def suite_image (f : X → Y) (x : ℕ → X) (n: ℕ) := f (x n)
 def sous_suite (x: ℕ → X) (φ : ℕ → ℕ) (n: ℕ) := x (φ n)
 
--- point limite
+-- point limite: l adhère à S \ { l }
 def point_limite (S: set X) (l: X) := ∃ (x : ℕ → X), (∀ n : ℕ, x n ∈ S ∧ x n ≠ l) ∧ (converge x l)
 
 -- sous hypothèse que le sup ou l'inf ne sont pas dans l'ensemble, ils forment des points limites.
@@ -272,8 +272,43 @@ by_cases (set.finite (range x)),
 }
 end
 
+lemma finite_set_has_a_sup [conditionally_complete_lattice X] (S: set X):
+  S.finite → conditionally_complete_lattice.Sup S ∈ S := sorry
+
+
+-- image f S
+-- preimage f S
 -- niveau: facile
-lemma cauchy_est_bornee {x: ℕ → X} : cauchy x → bornee x := sorry
+lemma cauchy_est_bornee {x: ℕ → X} : cauchy x → bornee x := begin
+intros cauch y,
+obtain ⟨ N, H ⟩ : ∃ N, ∀ p ≥ N, ∀ q ≥ N, ((d (x p) (x q)) < 1),
+apply cauch, linarith,
+have sup_est_atteint: conditionally_complete_lattice.Sup { M : ℝ | ∃ n ≤ N, M = d (x n) y } ∈ { M: ℝ | ∃ n ≤ N, M = d (x n) y}
+  := begin
+  apply finite_set_has_a_sup,
+  -- f : n → d (x n) y
+  -- f : ℕ → ℝ
+  -- f([[0, N]]).finite <=> [[0, N]].finite
+end,
+simp at sup_est_atteint,
+obtain ⟨ n, hn, sup_atteint ⟩ := sup_est_atteint,
+use (max (d (x n) y) (1 + d (x N) y)), -- max(d(x_n, y), 1 + d(x_N, y))
+split,
+sorry,
+intro p,
+by_cases (p < N),
+-- ici on applique l'inégalité du sup
+sorry,
+push_neg at h,
+have := H p h N (by simp),
+transitivity,
+exact espace_metrique.triangle (x p) (x N) y,
+transitivity,
+apply le_of_lt,
+sorry,
+apply le_max_left,
+-- d (x p) y ≤ d (x p) (x N) + d (x N) y < 1 + d (x N) y ≤ max (d (x n) y) (1 + d (x N) y)
+end
 -- niveau: moyen
 lemma cauchy_admet_une_va {x: ℕ → X} : cauchy x → ∀ l₁ : X, ∀ l₂ : X, adhere x l₁ ∧ adhere x l₂ → l₁ = l₂ := sorry
 -- niveau: difficile
