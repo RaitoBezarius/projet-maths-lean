@@ -93,10 +93,10 @@ def point_limite (S: set X) (l: X) := ∃ (x : ℕ → X), (∀ n : ℕ, x n ∈
 
 -- sous hypothèse que le sup ou l'inf ne sont pas dans l'ensemble, ils forment des points limites.
 -- niveau: facile
-lemma sup_est_un_point_limite [complete_linear_order X] {S: set X}: 
-  complete_lattice.Sup S ∉ S → point_limite S (complete_lattice.Sup S) := sorry
-lemma inf_est_un_point_limite [complete_linear_order X] (S: set X): 
-  complete_lattice.Inf S ∉ S → point_limite S (complete_lattice.Inf S) := sorry
+lemma sup_est_un_point_limite [has_Sup X] (S: set X): 
+  Sup S ∉ S → point_limite S (Sup S) := sorry
+lemma inf_est_un_point_limite [has_Inf X] (S: set X): 
+  Inf S ∉ S → point_limite S (Inf S) := sorry
 
 -- valeur d'adhérence.
 def adhere (x: ℕ → X) (l: X) := ∀ ε > 0, ∀ N : ℕ, ∃ p ≥ N, d (x p) l < ε
@@ -148,7 +148,6 @@ begin
 end
 
 
-/-- Le résultat suivant pourra être admis ou démontré en utilisant la bibliotheque mathlib --/
 -- le master lemme, gagnerait à se généraliser pour X séquentiellement compact
 -- mais requiert dans ce cas de poser ce qu'est:
 -- — compact
@@ -157,31 +156,93 @@ end
 -- et il faut prouver que R est séquentiellement compact, ce qui reste à peu près la même galère pour R.
 -- mais devient intéressant si on veut introduire la complétion d'un espace.
 
-def strictement_croissante [lo: linear_order X] (x: ℕ → X) := ∀ p : ℕ, ∀ q > p, x p < x q
+def strictement_croissante [linear_order X] (x: ℕ → X) := ∀ p : ℕ, ∀ q > p, x p < x q
 
--- on a pas besoin d'un ordre complet linéaire… mais bon.
--- Note à moi-même (Ryan): quel est la structure d'ordre suffisante pour avoir ce résultat?
 -- il suffit que l'inf existe et soit atteint → (X, ≤) est bien fondé!
 -- construire x_n = inf (S \ { x_i | i < n }) par induction forte.
-lemma construire_suite_strictement_croissante [lo: complete_linear_order X] {S: set X} (Hinf: set.infinite S):
-  (∀ M ⊂ S, M.nonempty → (Inf M ∈ M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊂ S := sorry
+
+def suite_st_croissante [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S)
+  (Hset: ∀ M ⊆ S, M.nonempty → (Inf M ∈ M)): ℕ → X := 
+  well_founded.fix nat.lt_wf
+  (λ n suite_st_croissante, 
+    Inf (S \ { x : X | ∃ k < n, x = suite_st_croissante k H}))
+
+def suite_st_croissante_def [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S)
+  (Hset: ∀ M ⊆ S, M.nonempty → (Inf M ∈ M)) (n: ℕ):
+    suite_st_croissante Hinf Hset n = Inf (S \ { x: X | ∃ k < n, x = suite_st_croissante Hinf Hset k })
+    := sorry
+
+lemma suite_st_croissante_props [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S):
+  (∀ M ⊆ S, M.nonempty → (Inf M ∈ M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S :=
+  begin
+  intro H,
+  use suite_st_croissante Hinf H,
+  split,
+  intros p q hq,
+  rw suite_st_croissante_def,
+  rw suite_st_croissante_def,
+  -- ici il s'agit de prouver une inégalité stricte entre deux infs.
+  -- il faut comprendre: S_q est inclus strictement dans S_p
+  -- donc inf S_p ≤ inf S_q
+  -- de plus (inf S_p) = suite_st_croissante p
+  -- donc, (inf S_p) n'est pas dans S_q
+  -- or, inf S_q est dans S_q
+  -- donc, inf S_p < inf S_q.
+  -- niveau: moyen+
+  sorry,
+  intros x hx,
+  simp at hx,
+  obtain ⟨ y ⟩ := hx,
+  rw suite_st_croissante_def at hx_h,
+  apply set.diff_subset,
+  rw ← hx_h,
+  apply H,
+  apply set.diff_subset,
+  apply set.nonempty_diff.2,
+  by_contra,
+  apply Hinf,
+  have : ({x : X | ∃ (k : ℕ) (H_1 : k < y), x = suite_st_croissante Hinf H k}).finite := begin
+    have:
+    {x : X | ∃ (k : ℕ) (H_1 : k < y), x = suite_st_croissante Hinf H k}
+      = (suite_st_croissante Hinf H) '' { i : ℕ | i < y} := begin
+        ext,
+        split,
+        repeat {
+          intro H1,
+          simp at H1,
+          simp,
+          obtain ⟨ x, ⟨ hxy, heq ⟩ ⟩ := H1,
+          use x,
+          split,
+          exact hxy,
+          symmetry,
+          exact heq,
+        },
+      end,
+      rw this,
+      apply set.finite_image,
+      apply set.finite_lt_nat,
+  end,
+  apply set.finite_subset this,
+  exact a,
+  end
 
 -- preuve un peu moche, à embellir?
 -- proposition: prendre la contraposition plutôt que l'absurde et pour la preuve interne, faire du direct.
-lemma lemme_fondateur_de_bw [lo: complete_linear_order X] (S: set X) 
+lemma lemme_fondateur_de_bw [linear_order X] [has_Sup X] [has_Inf X] (S: set X) 
   -- si pour toute partie M non vide de S, inf(M), sup(M) existent et sont dans M.
-  (H: ∀ U ⊂ S, U.nonempty → complete_lattice.Sup U ∈ U ∧ complete_lattice.Inf U ∈ U): set.finite S :=
+  (H: ∀ U ⊆ S, U.nonempty → Sup U ∈ U ∧ Inf U ∈ U): set.finite S :=
 begin
 by_contra,
 -- en supposant S infini, on peut construire une infinité de x_n comme il suit:
-suffices hsuite: ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊂ S, from begin
+suffices hsuite: ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S, from begin
   -- prendre X = { x_n | n ≥ 0 } partie de S non vide
   -- puisque (x_n)_n est une suite infine strictement croissante, alors sup(X) n'est pas dans X
   -- or, X est une partie de S, par caractère bien fondé, c'est absurde.
   -- donc S est fini.
   obtain ⟨ x, hm, R1 ⟩ := hsuite,
   have R2: (range x).nonempty := range_nonempty_iff_nonempty.2 nonempty_of_inhabited,
-  have: ¬((complete_lattice.Sup (range x)) ∈ (range x)) := begin
+  have: ¬((Sup (range x)) ∈ (range x)) := begin
     by_contra,
     simp at a_1,
     -- puisque a_1 donne le fait que le sup (range x) est dans (range x)
@@ -200,7 +261,7 @@ suffices hsuite: ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊂ S
   apply this,
   exact (H (range x) R1 R2).1,
 end,
-exact construire_suite_strictement_croissante a (λ M hs hn, (H M hs hn).2),
+exact suite_st_croissante_props a (λ M hs hn, (H M hs hn).2),
 end
 
 lemma bolzano_weierstrass_v2 (S: set ℝ): (set.infinite S) → bdd_above S ∧ bdd_below S → ∃ l : ℝ, point_limite S l :=
@@ -209,20 +270,38 @@ intros hs hb,
 by_contra,
 push_neg at a,
 apply hs,
--- TODO: se démerder avec ces histoires de réseaux complets…
--- Note à moi-même (Ryan): partir d'un conditionnally complete lattice, le compléter par hypothèse sur les bornes
--- puis le filer à lemme_fondateur_de_bw (?).
 apply lemme_fondateur_de_bw,
-intros M subM hM,
+intros U subU hU,
 split,
--- niveau: difficile
--- prouver que inf(M) et sup(M) existent (bornitude de S).
--- inf(M) est dans M puisque sinon,
--- par caractérisation séquentielle de l'inf, inf(M) serait un point limite.
--- or, il y en a pas!
--- prouver que sup(M) est dans M (pas de pt limite.)
-sorry,
-sorry
+-- TODO: c'est la même preuve pour sup ou inf à sup/inf près. Autant utiliser l'automatisation.
+by_contra,
+apply a (Sup U),
+have: point_limite U (Sup U) := sup_est_un_point_limite U a_1,
+obtain ⟨ x, hx, hc ⟩ := this,
+use x,
+split,
+intro n,
+obtain ⟨ hsubset, hnotsup ⟩ := hx n,
+split,
+apply mem_of_subset_of_mem,
+exact subU,
+exact hsubset,
+exact hnotsup,
+exact hc,
+by_contra,
+apply a (Inf U),
+have: point_limite U (Inf U) := inf_est_un_point_limite U a_1,
+obtain ⟨ x, hx, hc ⟩ := this,
+use x,
+split,
+intro n,
+obtain ⟨ hsubset, hnotsup ⟩ := hx n,
+split,
+apply mem_of_subset_of_mem,
+exact subU,
+exact hsubset,
+exact hnotsup,
+exact hc,
 end
 
 -- le merveilleux.
@@ -286,6 +365,7 @@ apply cauch, linarith,
 have sup_est_atteint: conditionally_complete_lattice.Sup { M : ℝ | ∃ n ≤ N, M = d (x n) y } ∈ { M: ℝ | ∃ n ≤ N, M = d (x n) y}
   := begin
   apply finite_set_has_a_sup,
+  sorry,
   -- f : n → d (x n) y
   -- f : ℕ → ℝ
   -- f([[0, N]]).finite <=> [[0, N]].finite
