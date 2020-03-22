@@ -170,7 +170,7 @@ def suite_st_croissante [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infin
 def suite_st_croissante_def [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S)
   (Hset: ∀ M ⊆ S, M.nonempty → (Inf M ∈ M)) (n: ℕ):
     suite_st_croissante Hinf Hset n = Inf (S \ { x: X | ∃ k < n, x = suite_st_croissante Hinf Hset k })
-    := sorry
+    := well_founded.fix_eq _ _ _
 
 lemma suite_st_croissante_props [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S):
   (∀ M ⊆ S, M.nonempty → (Inf M ∈ M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S :=
