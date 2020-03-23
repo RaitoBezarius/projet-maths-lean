@@ -352,43 +352,46 @@ by_cases (set.finite (range x)),
 end
 
 lemma finite_set_has_a_sup [conditionally_complete_lattice X] (S: set X):
-  S.finite → conditionally_complete_lattice.Sup S ∈ S := sorry
-
+  S.finite → conditionally_complete_lattice.Sup S ∈ S := sorry  
 
 -- image f S
 -- preimage f S
 -- niveau: facile
-lemma cauchy_est_bornee {x: ℕ → X} : cauchy x → bornee x := begin
+
+def fonction_distance (x : ℕ → X) (n: ℕ) (y: X) := d (x n) y
+
+lemma cauchy_est_bornee {x: ℕ → X} : cauchy x → bornee x := 
+begin
 intros cauch y,
 obtain ⟨ N, H ⟩ : ∃ N, ∀ p ≥ N, ∀ q ≥ N, ((d (x p) (x q)) < 1),
 apply cauch, linarith,
-have sup_est_atteint: conditionally_complete_lattice.Sup { M : ℝ | ∃ n ≤ N, M = d (x n) y } ∈ { M: ℝ | ∃ n ≤ N, M = d (x n) y}
-  := begin
-  apply finite_set_has_a_sup,
-  sorry,
+have sup_est_atteint: conditionally_complete_lattice.Sup { M: ℝ | ∃ n ≤ N, M = d (x n) y } 
+∈ { M: ℝ | ∃ n ≤ N, M = d (x n) y}:= begin apply finite_set_has_a_sup, set L:={ M: ℝ | ∃ n ≤ N, M = d (x n) y } , set F:={ M: ℝ | ∃ n ≤ N, M = fonction_distance(x)(n)(y)}, refine lemme_fondateur_de_bw L _,
+intros h1 h2 h3, sorry, end, 
   -- f : n → d (x n) y
   -- f : ℕ → ℝ
   -- f([[0, N]]).finite <=> [[0, N]].finite
-end,
 simp at sup_est_atteint,
 obtain ⟨ n, hn, sup_atteint ⟩ := sup_est_atteint,
 use (max (d (x n) y) (1 + d (x N) y)), -- max(d(x_n, y), 1 + d(x_N, y))
 split,
-sorry,
+have h1:  d (x N) y ≥  0 := begin simp, apply d_pos end, 
+have h2:  1 ≤ d (x N) y + 1  := begin simp, exact h1, end,
+have h3:  0 ≤ 1 := begin exact zero_le 1,  end,
+have h4:  d (x N) y + 1 >  0:= begin refine lt_iff_le_and_ne.mpr _, split,refine (ge_from_le (d (x N) y + 1) 0).mp _, 
+refine add_nonneg h1 _,exact zero_le_one, refine ne_comm.mp _, refine (push_neg.not_eq (d (x N) y + 1) 0).mp _,
+refine imp_false.mp _, intro h5, 
+have h6: d (x N) y + 1 < 1 :=begin  rw h5, exact zero_lt_one, end, 
+have h7: ¬  (1 ≤ d (x N) y + 1) := begin exact not_le.mpr h6, end, exact h7 h2,  end,
+refine lt_max_iff.mpr _, right,refine (gt_from_lt (1 + d (x N) y) 0).mp _, rw add_comm 1 (d (x N) y), exact h4, 
 intro p,
-by_cases (p < N),
--- ici on applique l'inégalité du sup
-sorry,
-push_neg at h,
-have := H p h N (by simp),
-transitivity,
-exact espace_metrique.triangle (x p) (x N) y,
-transitivity,
-apply le_of_lt,
-sorry,
-apply le_max_left,
--- d (x p) y ≤ d (x p) (x N) + d (x N) y < 1 + d (x N) y ≤ max (d (x n) y) (1 + d (x N) y)
+by_cases (p ≥ N ), refine le_max_iff.mpr _, right, 
+have h1:  d (x p) (x N)+d (x N) y ≤  1 + d (x N) y := begin refine add_le_add _ _, refine le_of_lt _, apply H, exact h, exact le_refl N, exact le_refl (d (x N) y), end,
+have h2: d (x p) y ≤ d (x p) (x N) + d (x N) y := begin apply triangle, end,
+exact le_trans h2 h1, 
+begin refine le_max_iff.mpr _, left, simp at h, suggest,  sorry, end,
 end
+
 -- niveau: moyen
 lemma cauchy_admet_une_va {x: ℕ → X} : cauchy x → ∀ l₁ : X, ∀ l₂ : X, adhere x l₁ ∧ adhere x l₂ → l₁ = l₂ := sorry
 -- niveau: difficile
