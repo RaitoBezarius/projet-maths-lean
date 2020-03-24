@@ -172,15 +172,13 @@ def suite_st_croissante_def [linear_order X] [has_Inf X] {S: set X} (Hinf: set.i
     suite_st_croissante Hinf Hset n = Inf (S \ { x: X | ∃ k < n, x = suite_st_croissante Hinf Hset k })
     := well_founded.fix_eq _ _ _
 
-lemma suite_st_croissante_props [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S):
-  (∀ M ⊆ S, M.nonempty → (Inf M ∈ M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S :=
+lemma suite_st_croissante_props [linear_order X] {S: set X} (Hlattice: complete_lattice S) (Hinf: set.infinite S):
+  (∀ M ⊆ S, M.nonempty → (complete_lattice.Inf M ∈ M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S :=
   begin
   intro H,
   use suite_st_croissante Hinf H,
   split,
   intros p q hq,
-  rw suite_st_croissante_def,
-  rw suite_st_croissante_def,
   -- ici il s'agit de prouver une inégalité stricte entre deux infs.
   -- il faut comprendre: S_q est inclus strictement dans S_p
   -- donc inf S_p ≤ inf S_q
@@ -189,6 +187,16 @@ lemma suite_st_croissante_props [linear_order X] [has_Inf X] {S: set X} (Hinf: s
   -- or, inf S_q est dans S_q
   -- donc, inf S_p < inf S_q.
   -- niveau: moyen+
+  apply lt_of_le_of_ne,
+  rw suite_st_croissante_def,
+  rw suite_st_croissante_def,
+  apply cInf_le_cInf,
+  sorry,
+  sorry, -- preuve déjà faite plus bas.
+  have: S \ {x : X | ∃ (k : ℕ) (H_1 : k < q), x = suite_st_croissante Hinf H k} ⊆ S \ {x : X | ∃ (k : ℕ) (H_1 : k < p), x = suite_st_croissante Hinf H k} := sorry,
+  exact this,
+  by_contra,
+  push_neg at a,
   sorry,
   intros x hx,
   simp at hx,
@@ -284,6 +292,7 @@ intro n,
 obtain ⟨ hsubset, hnotsup ⟩ := hx n,
 split,
 apply mem_of_subset_of_mem,
+
 exact subU,
 exact hsubset,
 exact hnotsup,
@@ -352,7 +361,7 @@ by_cases (set.finite (range x)),
 end
 
 lemma finite_set_has_a_sup [conditionally_complete_lattice X] (S: set X):
-  S.finite → conditionally_complete_lattice.Sup S ∈ S := sorry  
+  S.finite → conditionally_complete_lattice.Sup S ∈ S := sorry
 
 -- image f S
 -- preimage f S
@@ -375,23 +384,37 @@ simp at sup_est_atteint,
 obtain ⟨ n, hn, sup_atteint ⟩ := sup_est_atteint,
 use (max (d (x n) y) (1 + d (x N) y)), -- max(d(x_n, y), 1 + d(x_N, y))
 split,
-have h1:  d (x N) y ≥  0 := begin simp, apply d_pos end, 
-have h2:  1 ≤ d (x N) y + 1  := begin simp, exact h1, end,
-have h3:  0 ≤ 1 := begin exact zero_le 1,  end,
-have h4:  d (x N) y + 1 >  0:= begin refine lt_iff_le_and_ne.mpr _, split,refine (ge_from_le (d (x N) y + 1) 0).mp _, 
-refine add_nonneg h1 _,exact zero_le_one, refine ne_comm.mp _, refine (push_neg.not_eq (d (x N) y + 1) 0).mp _,
-refine imp_false.mp _, intro h5, 
-have h6: d (x N) y + 1 < 1 :=begin  rw h5, exact zero_lt_one, end, 
-have h7: ¬  (1 ≤ d (x N) y + 1) := begin exact not_le.mpr h6, end, exact h7 h2,  end,
-refine lt_max_iff.mpr _, right,refine (gt_from_lt (1 + d (x N) y) 0).mp _, rw add_comm 1 (d (x N) y), exact h4, 
+refine lt_max_iff.mpr _,
+right,
+apply add_pos_of_pos_of_nonneg,
+exact zero_lt_one,
+exact d_pos _ _,
 intro p,
-by_cases (p ≥ N ), refine le_max_iff.mpr _, right, 
-have h1:  d (x p) (x N)+d (x N) y ≤  1 + d (x N) y := begin refine add_le_add _ _, refine le_of_lt _, apply H, exact h, exact le_refl N, exact le_refl (d (x N) y), end,
-have h2: d (x p) y ≤ d (x p) (x N) + d (x N) y := begin apply triangle, end,
+by_cases (p ≥ N),
+have h1: d (x p) (x N) + d (x N) y ≤ max (d (x n) y) (1 + d (x N) y) := begin 
+    {
+      transitivity,
+      apply add_le_add,
+      apply le_of_lt,
+      apply H _ h N (le_refl _),
+      exact le_refl (d (x N) y),
+      exact le_max_right _ _,
+    }
+  end,
+have h2: d (x p) y ≤ d (x p) (x N) + d (x N) y := triangle (x p) (x N) y,
 exact le_trans h2 h1, 
-begin refine le_max_iff.mpr _, left, simp at h, suggest,  sorry, end,
+refine le_max_iff.mpr _,
+left,
+simp at h,
+rw ← sup_atteint,
+apply le_cSup,
+sorry, -- montrer que l'ensemble fini est bornée par en haut.
+simp,
+use p,
+split,
+exact le_of_lt h,
+refl,
 end
-
 -- niveau: moyen
 lemma cauchy_admet_une_va {x: ℕ → X} : cauchy x → ∀ l₁ : X, ∀ l₂ : X, adhere x l₁ ∧ adhere x l₂ → l₁ = l₂ := sorry
 -- niveau: difficile
