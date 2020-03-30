@@ -3,12 +3,14 @@
 Ce monde nous introduit un outil fondamental de Lean : les fonctions. 
 Un élément important à remarquer est qu'en Lean, toutes les fonctions sont curryfiées.
 
+
+\subsubsection{Niveau 6}
 Voici un exemple de niveau de ce monde, le niveau 6, qui demande de créer une fonction de fonctions assez fastidieuse, et qui utilise le fait que ces fonctions sont curryfiées. 
 L'énoncé se formule comme ceci : 
 
-\begin{equation*}
-        (P, Q, R : \Type) : (P \to (Q \to R)) \to ((P \to Q) \to (P \to R))
-\end{equation*}
+\begin{align*}
+        & (P, Q, R : \Type) : \\ & (P \to (Q \to R)) \to ((P \to Q) \to (P \to R))
+\end{align*}
 
 La preuve est de fait succinte : 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines, escapeinside = ||]{lean}
@@ -20,16 +22,17 @@ Ce qui conclut la preuve.
 
 \subsection{Proposition World}
 Dans ce monde on aborde un aspect fondamental de l'assistant de preuves Lean : une preuve est composée d'implications, et c'est ici que les fonctions prennent toute leur importance : pour montrer que A implique B, il suffit de créer une fonction de A vers B, soit un élément de type $A \to B$.
-
+\subsubsection{Niveau 1}
 Pour illustrer ce point, voici un exemple simple, le tout premier niveau de Proposition World. 
 
-\mint{lean}|lemma : (P,Q : Prop) (p : P) (h : P → Q) : Q|
+\mintinline[breaklines]{lean}|lemma : (P,Q : Prop) (p : P) (h : P → Q) : Q|
 
 Donc, en français, on dispose d'une preuve de P, et d'une fonction de P dans Q (i-e d'un élément de type $P \to Q$), trouvons un élément de type Q (montrons que Q est vrai). 
 Ce qui se résout tout aussi succintement : 
 
 \mint{lean}|exact h(p),| 
 
+\subsubsection{Niveau 8}
 Un autre niveau intéressant est le niveau 8, qui propose une preuve du lemme suivant, une implication de l'équivalence entre une proposition et sa contraposée (si cela a du sens) : 
 
 \begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines, escapeinside = ||]{lean}
@@ -47,10 +50,13 @@ exact h(f(p)), -- Ce qui conclut la preuve.
 
 
 \subsection{Advanced Proposition World}
+\subsubsection{Niveau 8}
 Dans ce monde on démontre à l'aide de fonctions et de nouvelles méthodes les règles de base de la manipulation de consjonctions et disjonctions logiques. Un exemple combinant la plupart des nouvelles méthodes est le Lemme suivant : 
 
 
-\mint{lean}|lemma : (P,Q,R : Prop) : P ∧ (Q ∨ R) ⇔ (P ∧ Q) ∨ (P ∧ R)|
+\begin{minted}[mathescape,numbersep=5pt,frame=lines,framesep=2mm,breaklines, escapeinside = ||]{lean}
+lemma : (P,Q,R : Prop) : |$P \land (Q \lor R) \leftrightarrow (P \land Q) \lor (P \land R)$|
+\end{minted}
 
 Ici on ne démontrera que l'implication directe, l'implication réciproque se faisant de façon similaire.
 Pour séparer les implications, une technique existe : \texttt{split}, qui permet de montrer d'abord l'implication directe puis l'implication réciproque. A noter que cette technique permet aussi de séparer le but en plusieurs buts lorsqu'on a à montrer une conjonction de propositions.
@@ -62,7 +68,7 @@ intro h,     -- h de type $P \land (Q \lor R)$
 cases h with p qor,     -- p de type P , qor de type $Q \lor R$
 cases qor with q r,     -- On sépare en deux cas en fonction de la disjonction :
 
--- Premier cas q de type Q
+-- Premier cas : q de type Q
 left,    -- On choisit de montrer $P \land Q$
 split,     -- On sépare en deux buts
 exact p,
