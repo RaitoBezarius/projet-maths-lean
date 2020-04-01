@@ -3,6 +3,7 @@ import data.real.basic
 import data.real.cau_seq
 import data.set
 import data.set.finite
+import data.finset
 import order.bounds
 import order.complete_lattice
 import topology.algebra.ordered
@@ -361,8 +362,30 @@ by_cases (set.finite (range x)),
 }
 end
 
-lemma finite_set_has_a_sup [conditionally_complete_lattice X] (S: set X):
-  S.finite → conditionally_complete_lattice.Sup S ∈ S := sorry
+lemma finite_set_has_greatest_element [decidable_linear_order X] (S: set X):
+  S.finite → S.nonempty → ∃ x ∈ S, is_greatest S x := begin
+  intros Hf Hnn,
+  lift S to (finset X) using Hf,
+  use (finset.max' S Hnn),
+  have Hmem := finset.max'_mem S Hnn,
+  split,
+  exact Hmem,
+  rw is_greatest,
+  split,
+  exact Hmem,
+  rw upper_bounds,
+  simp,
+  exact finset.le_max' S Hnn,
+  end
+
+lemma finite_set_has_a_reached_sup
+  [conditionally_complete_linear_order X] {S: set X}:
+  S.finite → S.nonempty → Sup S ∈ S := begin
+  intros Hf Hnn,
+  obtain ⟨ x, Hmem, Hgt ⟩ := (finite_set_has_greatest_element S Hf Hnn),
+  rw is_greatest.cSup_eq Hgt,
+  exact Hmem,
+  end
 
 -- image f S
 -- preimage f S
@@ -375,9 +398,23 @@ begin
 intros cauch y,
 obtain ⟨ N, H ⟩ : ∃ N, ∀ p ≥ N, ∀ q ≥ N, ((d (x p) (x q)) < 1),
 apply cauch, linarith,
-have sup_est_atteint: conditionally_complete_lattice.Sup { M: ℝ | ∃ n ≤ N, M = d (x n) y } 
-∈ { M: ℝ | ∃ n ≤ N, M = d (x n) y}:= begin apply finite_set_has_a_sup, set L:={ M: ℝ | ∃ n ≤ N, M = d (x n) y } , set F:={ M: ℝ | ∃ n ≤ N, M = fonction_distance x y n}, refine lemme_fondateur_de_bw L _,
-intros h1 h2 h3, sorry, end, 
+set Limage := { M: ℝ | ∃ n ≤ N, M = d (x n) y},
+have limage_finiteness: Limage.finite := begin
+  have: ((fonction_distance x y) '' ({ i: ℕ | i ≤ N })) = Limage := begin
+    {
+      ext,
+      split,
+      sorry,
+      sorry,
+    }
+  end,
+  rw ← this,
+  apply set.finite_image,
+  exact set.finite_le_nat N,
+  end,
+have limage_nonempty: Limage.nonempty := sorry,
+have sup_est_atteint: Sup Limage ∈ Limage
+  := finite_set_has_a_reached_sup limage_finiteness limage_nonempty,
   -- f : n → d (x n) y
   -- f : ℕ → ℝ
   -- f([[0, N]]).finite <=> [[0, N]].finite
@@ -410,17 +447,7 @@ simp at h,
 rw ← sup_atteint,
 apply le_cSup,
 apply set.bdd_above_finite,
-have: ((fonction_distance x y) '' ({ i: ℕ | i ≤ N })) = { M: ℝ | ∃ n : ℕ, n ≤ N ∧ M = d (x n) y } := begin
-  {
-    ext,
-    split,
-    sorry,
-  }
-end,
-rw ← this,
-apply set.finite_image,
-exact set.finite_le_nat N,
-sorry, -- montrer que l'ensemble fini est bornée par en haut.
+exact limage_finiteness,
 simp,
 use p,
 split,
