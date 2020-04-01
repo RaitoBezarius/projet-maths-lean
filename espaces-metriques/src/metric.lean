@@ -2,6 +2,7 @@
 import data.real.basic
 import data.real.cau_seq
 import data.set
+import data.set.finite
 import order.bounds
 import order.complete_lattice
 import topology.algebra.ordered
@@ -367,7 +368,7 @@ lemma finite_set_has_a_sup [conditionally_complete_lattice X] (S: set X):
 -- preimage f S
 -- niveau: facile
 
-def fonction_distance (x : ℕ → X) (n: ℕ) (y: X) := d (x n) y
+def fonction_distance (x : ℕ → X) (y: X) (n: ℕ) := d (x n) y
 
 lemma cauchy_est_bornee {x: ℕ → X} : cauchy x → bornee x := 
 begin
@@ -375,7 +376,7 @@ intros cauch y,
 obtain ⟨ N, H ⟩ : ∃ N, ∀ p ≥ N, ∀ q ≥ N, ((d (x p) (x q)) < 1),
 apply cauch, linarith,
 have sup_est_atteint: conditionally_complete_lattice.Sup { M: ℝ | ∃ n ≤ N, M = d (x n) y } 
-∈ { M: ℝ | ∃ n ≤ N, M = d (x n) y}:= begin apply finite_set_has_a_sup, set L:={ M: ℝ | ∃ n ≤ N, M = d (x n) y } , set F:={ M: ℝ | ∃ n ≤ N, M = fonction_distance(x)(n)(y)}, refine lemme_fondateur_de_bw L _,
+∈ { M: ℝ | ∃ n ≤ N, M = d (x n) y}:= begin apply finite_set_has_a_sup, set L:={ M: ℝ | ∃ n ≤ N, M = d (x n) y } , set F:={ M: ℝ | ∃ n ≤ N, M = fonction_distance x y n}, refine lemme_fondateur_de_bw L _,
 intros h1 h2 h3, sorry, end, 
   -- f : n → d (x n) y
   -- f : ℕ → ℝ
@@ -408,9 +409,17 @@ left,
 simp at h,
 rw ← sup_atteint,
 apply le_cSup,
-rw bdd_above,
-apply set.nonempty_of_mem,
-rw upper_bounds,
+apply set.bdd_above_finite,
+have: ((fonction_distance x y) '' ({ i: ℕ | i ≤ N })) = { M: ℝ | ∃ n : ℕ, n ≤ N ∧ M = d (x n) y } := begin
+  {
+    ext,
+    split,
+    sorry,
+  }
+end,
+rw ← this,
+apply set.finite_image,
+exact set.finite_le_nat N,
 sorry, -- montrer que l'ensemble fini est bornée par en haut.
 simp,
 use p,
