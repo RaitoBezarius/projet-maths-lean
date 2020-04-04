@@ -81,8 +81,7 @@ lemma suite_st_croissante_props (S: set X)
   (Hinf: set.infinite S):
   (∀ M ⊆ S, M.nonempty → is_least M (Inf M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (set.range x) ⊆ S :=
   begin
-  sorry,
-  /-intro H,
+  intro H,
   use suite_st_croissante Hinf H,
   split,
   intros p q hq,
@@ -151,6 +150,6 @@ lemma suite_st_croissante_props (S: set X)
   simp at hx,
   obtain ⟨ y ⟩ := hx,
   rw ← hx_h,
-  exact suite_st_croissante_mem Hinf H _,-/
+  exact suite_st_croissante_mem Hinf H _,
 end
 end suites
