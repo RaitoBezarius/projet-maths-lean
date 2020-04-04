@@ -14,43 +14,29 @@ section bw
 variables {X: Type} [espace_metrique X] [conditionally_complete_linear_order X]
 
 open set
--- preuve un peu moche, à embellir?
--- proposition: prendre la contraposition plutôt que l'absurde et pour la preuve interne, faire du direct.
-lemma lemme_fondateur_de_bw [conditionally_complete_linear_order X] (S: set X) 
-  -- si pour toute partie M non vide de S, inf(M), sup(M) existent et sont dans M.
-  (H: ∀ U ⊆ S, U.nonempty → is_greatest U (Sup U) ∧ is_least U (Inf U)): set.finite S :=
+
+lemma strictly_increasing_sequence_is_not_bdd_above (S: set X)
+  (x: ℕ → X): strictement_croissante x → ¬ bdd_above (range x) := begin
+  sorry,
+end
+
+/-- Il faut comprendre ce lemme comme:
+-- Dès lors que toutes parties de S ont des max et des min, alors S est finie.
+-- Ce lemme est fondamental dans la mesure où il entraîne directement l'existence des points limites
+-- dans le cas de parties infinies.
+--/
+lemma lemme_fondateur_de_bw (S: set X):
+  (∀ U ⊆ S, U.nonempty → is_greatest U (Sup U) ∧ is_least U (Inf U)) →  set.finite S :=
 begin
-by_contra,
--- en supposant S infini, on peut construire une infinité de x_n comme il suit:
-suffices hsuite: ∃ x : ℕ → X, strictement_croissante x ∧ (set.range x) ⊆ S, from begin
-  -- prendre X = { x_n | n ≥ 0 } partie de S non vide
-  -- puisque (x_n)_n est une suite infine strictement croissante, alors sup(X) n'est pas dans X
-  -- or, X est une partie de S, par caractère bien fondé, c'est absurde.
-  -- donc S est fini.
-  obtain ⟨ x, hm, R1 ⟩ := hsuite,
-  have R2: (range x).nonempty := range_nonempty_iff_nonempty.2 nonempty_of_inhabited,
-  have: ¬((Sup (range x)) ∈ (range x)) := begin
-    by_contra,
-    simp at a_1,
-    -- puisque a_1 donne le fait que le sup (range x) est dans (range x)
-    -- il existe donc n0 tel que x n0 = sup (range x)
-    obtain ⟨ n₀, h ⟩ := a_1,
-    -- or: x (n0 + 1) > x n0 = sup (range x).
-    have : x (n₀ + 1) > x n₀ := begin
-      apply hm,
-      exact lt_add_one n₀,
-    end,
-    -- absurde par déf du sup (linarith ne suffira pas.)
-    -- introduire l'inégalité du sup pour x (n0 + 1), réécrire le sup avec x n0.
-    -- conclure avec linarith.
-    sorry -- niveau: très facile
-  end,
-  apply this,
-  exact (H (range x) R1 R2).1.1,
-end,
-apply suite_st_croissante_props S a,
-intros M hs hn,
-exact (H M hs hn).2,
+  by_contra H,
+  push_neg at H,
+  rw ← set.infinite at H,
+  obtain ⟨ Hsupinf, Hinfinite ⟩ := H,
+  have Hinf: ∀ U ⊆ S, U.nonempty → is_least U (Inf U) := λ U hU hN, (Hsupinf U hU hN).2,
+  obtain ⟨ x, hsc, hrange ⟩ := suite_st_croissante_props S Hinfinite Hinf,
+  apply strictly_increasing_sequence_is_not_bdd_above S x hsc,
+  apply is_greatest.bdd_above,
+  exact (Hsupinf (range x) hrange (set.range_nonempty _)).1,
 end
 
 lemma bolzano_weierstrass_v2 (S: set ℝ): (set.infinite S) → bdd_below S ∧ bdd_above S → ∃ l : ℝ, point_limite S l :=
