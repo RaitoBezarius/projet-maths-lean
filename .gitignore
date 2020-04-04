@@ -1,5 +1,5 @@
-src/chapitres/finalworlds.tex
-src/rapport.pdf
+docs/chapitres/finalworlds.tex
+docs/rapport.pdf
 *.olean
 /_target
 /leanpkg.path
