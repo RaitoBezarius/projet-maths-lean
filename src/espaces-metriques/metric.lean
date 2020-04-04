@@ -91,14 +91,45 @@ def suite_image (f : X → Y) (x : ℕ → X) (n: ℕ) := f (x n)
 def sous_suite (x: ℕ → X) (φ : ℕ → ℕ) (n: ℕ) := x (φ n)
 
 -- point limite: l adhère à S \ { l }
-def point_limite (S: set X) (l: X) := ∃ (x : ℕ → X), (∀ n : ℕ, x n ∈ S ∧ x n ≠ l) ∧ (converge x l)
+def adhere_ens (S: set X) (l: X) := ∃ (x: ℕ → X), (range x) ⊆ S ∧ (converge x l)
+def point_limite (S: set X) (l: X) := adhere_ens (S \ {l}) l
+
+-- niveau: très difficile à cause de la construction de suite adhoc
+-- FIXME: pourquoi ne pas avoir quelque chose qui généralise l'équivalence epsilon-delta → séquentiel
+lemma sup_is_a_cv_seq [conditionally_complete_linear_order X] (S: set X):
+  bdd_above S → ∃ (x: ℕ → X), (range x) ⊆ S ∧ converge x (Sup S) := begin
+  intro hbdd,
+  choose x y h using cSup_le,
+  end
+
+lemma inf_is_a_cv_seq [has_Inf X] [preorder X] (S: set X):
+  bdd_below S → ∃ (x: ℕ → X), (range x) ⊆ S ∧ converge x (Inf S) := sorry
 
 -- sous hypothèse que le sup ou l'inf ne sont pas dans l'ensemble, ils forment des points limites.
--- niveau: facile
-lemma sup_est_un_point_limite [has_Sup X] (S: set X): 
-  Sup S ∉ S → point_limite S (Sup S) := sorry
-lemma inf_est_un_point_limite [has_Inf X] (S: set X): 
-  Inf S ∉ S → point_limite S (Inf S) := sorry
+lemma sup_est_un_point_limite [has_Sup X] [preorder X] (S: set X): 
+  (Sup S) ∉ S → bdd_above S → point_limite S (Sup S) := begin
+  intros hsup hbdd,
+  obtain ⟨ x, hrange, hcv ⟩ := sup_is_a_cv_seq S hbdd,
+  use x,
+  split,
+  rw set.diff_singleton_eq_self,
+  exact hrange,
+  exact hsup,
+  exact hcv
+end
+
+lemma inf_est_un_point_limite [has_Inf X] [preorder X] (S: set X): 
+  (Inf S) ∉ S → bdd_below S → point_limite S (Inf S) := 
+  begin
+  intros hinf hbdd,
+  obtain ⟨ x, hrange, hcv ⟩ := inf_is_a_cv_seq S hbdd,
+  use x,
+  split,
+  rw set.diff_singleton_eq_self,
+  exact hrange,
+  exact hinf,
+  exact hcv
+  end
 
 -- valeur d'adhérence.
 def adhere (x: ℕ → X) (l: X) := ∀ ε > 0, ∀ N : ℕ, ∃ p ≥ N, d (x p) l < ε
@@ -163,19 +194,76 @@ def strictement_croissante [linear_order X] (x: ℕ → X) := ∀ p : ℕ, ∀ q
 -- il suffit que l'inf existe et soit atteint → (X, ≤) est bien fondé!
 -- construire x_n = inf (S \ { x_i | i < n }) par induction forte.
 
-def suite_st_croissante [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S)
-  (Hset: ∀ M ⊆ S, M.nonempty → (Inf M ∈ M)): ℕ → X := 
+def suite_st_croissante [conditionally_complete_linear_order X] {S: set X}
+  (Hinf: set.infinite S)
+  (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) : ℕ → X := 
   well_founded.fix nat.lt_wf
   (λ n suite_st_croissante, 
-    Inf (S \ { x : X | ∃ k < n, x = suite_st_croissante k H}))
+    Inf (S \ { x : X | ∃ k < n, suite_st_croissante k H = x}))
 
-def suite_st_croissante_def [linear_order X] [has_Inf X] {S: set X} (Hinf: set.infinite S)
-  (Hset: ∀ M ⊆ S, M.nonempty → (Inf M ∈ M)) (n: ℕ):
-    suite_st_croissante Hinf Hset n = Inf (S \ { x: X | ∃ k < n, x = suite_st_croissante Hinf Hset k })
+def suite_st_croissante_def [conditionally_complete_linear_order X] {S: set X}
+  (Hinf: set.infinite S)
+  (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) (n: ℕ):
+    suite_st_croissante Hinf Hset n = Inf (S \ { x: X | ∃ k < n, suite_st_croissante Hinf Hset k = x })
     := well_founded.fix_eq _ _ _
 
-lemma suite_st_croissante_props [linear_order X] {S: set X} (Hlattice: complete_lattice S) (Hinf: set.infinite S):
-  (∀ M ⊆ S, M.nonempty → (complete_lattice.Inf M ∈ M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S :=
+lemma suite_st_croissante_image [conditionally_complete_linear_order X] {S: set X}
+ (Hinf: set.infinite S) (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) (n: ℕ):
+    {x : X | ∃ k < n, suite_st_croissante Hinf Hset k = x}
+      = (suite_st_croissante Hinf Hset) '' { i : ℕ | i < n} := by ext; simp
+
+lemma suite_st_croissante_finite [conditionally_complete_linear_order X] {S: set X}
+ (Hinf: set.infinite S) (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) (n: ℕ):
+  ({x : X | ∃ k < n, suite_st_croissante Hinf Hset k = x}).finite := begin
+    rw suite_st_croissante_image,
+    apply set.finite_image,
+    apply set.finite_lt_nat,
+ end
+
+lemma suite_st_croissante_nonempty [conditionally_complete_linear_order X] {S: set X}
+ (Hinf: set.infinite S) (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) (n: ℕ):
+    (S \ { x: X | ∃ k < n, suite_st_croissante Hinf Hset k = x }).nonempty :=
+  begin
+  set L := {x : X | ∃ (k : ℕ) (H : k < n), suite_st_croissante Hinf Hset k = x},
+  by_contra,
+  apply Hinf,
+  have a := set.not_nonempty_iff_eq_empty.1 a,
+  have := set.diff_eq_empty.1 a,
+  apply set.finite_subset,
+  exact suite_st_croissante_finite Hinf Hset n,
+  exact this,
+  end
+
+lemma suite_st_croissante_subset [conditionally_complete_linear_order X] {S: set X}
+ (Hinf: set.infinite S) (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) (p: ℕ) (q: ℕ):
+    p ≤ q → 
+    S \ { x: X | ∃ k < q, suite_st_croissante Hinf Hset k = x } ⊆  S \ { x: X | ∃ k < p, suite_st_croissante Hinf Hset k = x } :=
+    begin
+    intro h,
+    apply set.diff_subset_diff_right,
+    rw suite_st_croissante_image,
+    rw suite_st_croissante_image,
+    apply set.image_subset,
+    intros i hi,
+    simp at hi,
+    simp,
+    exact lt_of_lt_of_le hi h,
+    end
+
+lemma suite_st_croissante_mem [conditionally_complete_linear_order X] {S: set X}
+ (Hinf: set.infinite S) (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) (n: ℕ):
+    suite_st_croissante Hinf Hset n ∈ S :=
+  begin
+  rw suite_st_croissante_def,
+  set L := S \ { x: X | ∃ k < n, suite_st_croissante Hinf Hset k = x },
+  have Hmem: L ⊆ S := set.diff_subset S _,
+  apply Hmem,
+  exact (Hset L Hmem (suite_st_croissante_nonempty _ _ n)).1,
+  end
+
+lemma suite_st_croissante_props [conditionally_complete_linear_order X] (S: set X)
+  (Hinf: set.infinite S):
+  (∀ M ⊆ S, M.nonempty → is_least M (Inf M)) → ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S :=
   begin
   intro H,
   use suite_st_croissante Hinf H,
@@ -192,56 +280,68 @@ lemma suite_st_croissante_props [linear_order X] {S: set X} (Hlattice: complete_
   apply lt_of_le_of_ne,
   rw suite_st_croissante_def,
   rw suite_st_croissante_def,
+  set ssc := suite_st_croissante Hinf H with ← hssc,
+  have S_nonempty: ∀ n, (S \ { x : X | ∃ k < n, ssc k = x }).nonempty := suite_st_croissante_nonempty Hinf _,
+  set Sp := S \ {x : X | ∃ k < p, ssc k = x} with ← hsp,
+  set Sq := S \ {x : X | ∃ k < q, ssc k = x} with ← hsq,
   apply cInf_le_cInf,
-  sorry,
-  sorry, -- preuve déjà faite plus bas.
-  have: S \ {x : X | ∃ (k : ℕ) (H_1 : k < q), x = suite_st_croissante Hinf H k} ⊆ S \ {x : X | ∃ (k : ℕ) (H_1 : k < p), x = suite_st_croissante Hinf H k} := sorry,
-  exact this,
+  have S_bdd: ∀ n, bdd_below (S \ { x : X | ∃ k < n, ssc k = x }) :=
+  begin
+    {
+      intro n,
+      set Sn := (S \ { x : X | ∃ k < n, ssc k = x }),
+      apply is_least.bdd_below,
+      apply H,
+      exact set.diff_subset S _,
+      exact S_nonempty n,
+    }
+  end,
+  apply S_bdd p,
+  exact S_nonempty q,
+  exact suite_st_croissante_subset Hinf H _ _ (le_of_lt hq),
+  set ssc := suite_st_croissante Hinf H with ← hssc,
+  set Sqq := {x : X | ∃ (k : ℕ) (H : k < q), ssc k = x} with ← hspp,
+  set Sp := S \ {x : X | ∃ k < p, ssc k = x} with ← hsp,
+  set Sq := S \ Sqq with ← hsq,
   by_contra,
-  push_neg at a,
-  sorry,
+  push_neg at a, -- x_p = x_q est impossible par construction de x.
+  -- en effet, puisque p < q, alors x_p = x_q = inf S_q = inf (S \ (réunion_(k < q) S_k)), or x_p est dans S_p
+  -- donc: x_p n'est pas dans S \ (réunion (k < q) S_k), donc x_p != inf (S \ …)
+  -- ABSURDE.
+  have Hn: ∀ n, ssc n ∈ (S \ { x: X | ∃ k < n, ssc k = x }) := begin
+  {
+    intro n,
+    set Sn := S \ {x : X | ∃ k < n, ssc k = x} with ← hsn,
+    rw ← hssc,
+    rw suite_st_croissante_def,
+    rw hssc,
+    rw hsn,
+    exact (H Sn (set.diff_subset S _) (suite_st_croissante_nonempty Hinf H _)).1,
+  }
+  end,
+  have Hp := Hn q,
+  rw ← a at Hp,
+  rw hsq at Hp,
+  have Hnp := set.not_mem_of_mem_diff Hp,
+  have Hpp: ssc p ∈ Sqq := begin
+    use p,
+    split,
+    exact hq,
+    refl,
+  end,
+  exact Hnp Hpp,
   intros x hx,
   simp at hx,
   obtain ⟨ y ⟩ := hx,
-  rw suite_st_croissante_def at hx_h,
-  apply set.diff_subset,
   rw ← hx_h,
-  apply H,
-  apply set.diff_subset,
-  apply set.nonempty_diff.2,
-  by_contra,
-  apply Hinf,
-  have : ({x : X | ∃ (k : ℕ) (H_1 : k < y), x = suite_st_croissante Hinf H k}).finite := begin
-    have:
-    {x : X | ∃ (k : ℕ) (H_1 : k < y), x = suite_st_croissante Hinf H k}
-      = (suite_st_croissante Hinf H) '' { i : ℕ | i < y} := begin
-        ext,
-        split,
-        repeat {
-          intro H1,
-          simp at H1,
-          simp,
-          obtain ⟨ x, ⟨ hxy, heq ⟩ ⟩ := H1,
-          use x,
-          split,
-          exact hxy,
-          symmetry,
-          exact heq,
-        },
-      end,
-      rw this,
-      apply set.finite_image,
-      apply set.finite_lt_nat,
-  end,
-  apply set.finite_subset this,
-  exact a,
+  exact suite_st_croissante_mem Hinf H _,
   end
 
 -- preuve un peu moche, à embellir?
 -- proposition: prendre la contraposition plutôt que l'absurde et pour la preuve interne, faire du direct.
-lemma lemme_fondateur_de_bw [linear_order X] [has_Sup X] [has_Inf X] (S: set X) 
+lemma lemme_fondateur_de_bw [conditionally_complete_linear_order X] (S: set X) 
   -- si pour toute partie M non vide de S, inf(M), sup(M) existent et sont dans M.
-  (H: ∀ U ⊆ S, U.nonempty → Sup U ∈ U ∧ Inf U ∈ U): set.finite S :=
+  (H: ∀ U ⊆ S, U.nonempty → is_greatest U (Sup U) ∧ is_least U (Inf U)): set.finite S :=
 begin
 by_contra,
 -- en supposant S infini, on peut construire une infinité de x_n comme il suit:
@@ -269,14 +369,16 @@ suffices hsuite: ∃ x : ℕ → X, strictement_croissante x ∧ (range x) ⊆ S
     sorry -- niveau: très facile
   end,
   apply this,
-  exact (H (range x) R1 R2).1,
+  exact (H (range x) R1 R2).1.1,
 end,
-exact suite_st_croissante_props a (λ M hs hn, (H M hs hn).2),
+apply suite_st_croissante_props S a,
+intros M hs hn,
+exact (H M hs hn).2,
 end
 
-lemma bolzano_weierstrass_v2 (S: set ℝ): (set.infinite S) → bdd_above S ∧ bdd_below S → ∃ l : ℝ, point_limite S l :=
+lemma bolzano_weierstrass_v2 (S: set ℝ): (set.infinite S) → bdd_below S ∧ bdd_above S → ∃ l : ℝ, point_limite S l :=
 begin
-intros hs hb,
+intros hs hbdd,
 by_contra,
 push_neg at a,
 apply hs,
@@ -286,33 +388,46 @@ split,
 -- TODO: c'est la même preuve pour sup ou inf à sup/inf près. Autant utiliser l'automatisation.
 by_contra,
 apply a (Sup U),
-have: point_limite U (Sup U) := sup_est_un_point_limite U a_1,
+rw is_greatest at a_1,
+push_neg at a_1,
+have := is_lub_cSup hU (bdd_above.mono subU hbdd.2),
+cases a_1 with hsup hub,
+have: point_limite U (Sup U) := sup_est_un_point_limite U hsup (bdd_above.mono subU hbdd.2),
 obtain ⟨ x, hx, hc ⟩ := this,
 use x,
 split,
 intro n,
-obtain ⟨ hsubset, hnotsup ⟩ := hx n,
-split,
 apply mem_of_subset_of_mem,
-
+transitivity,
+exact hx,
+apply diff_subset_diff_left,
 exact subU,
-exact hsubset,
-exact hnotsup,
 exact hc,
+rw is_lub at this,
+rw is_least at this,
+exfalso,
+exact hub this.1,
 by_contra,
 apply a (Inf U),
-have: point_limite U (Inf U) := inf_est_un_point_limite U a_1,
+rw is_least at a_1,
+push_neg at a_1,
+cases a_1 with hinf hlb,
+have: point_limite U (Inf U) := inf_est_un_point_limite U hinf (bdd_below.mono subU hbdd.1),
 obtain ⟨ x, hx, hc ⟩ := this,
 use x,
 split,
 intro n,
-obtain ⟨ hsubset, hnotsup ⟩ := hx n,
-split,
 apply mem_of_subset_of_mem,
+transitivity,
+exact hx,
+apply diff_subset_diff_left,
 exact subU,
-exact hsubset,
-exact hnotsup,
 exact hc,
+have := is_glb_cInf hU (bdd_below.mono subU hbdd.1),
+rw is_glb at this,
+rw is_greatest at this,
+exfalso,
+exact hlb this.1,
 end
 
 -- le merveilleux.
@@ -324,7 +439,7 @@ lemma principe_des_tiroirs {A: Type} {B: Type} {f: A → B} (Hinfinite: infinite
 lemma bolzano_weierstrass {x: ℕ → ℝ}: bornee x → ∃ l : ℝ, adhere x l :=
 begin
 intro Hb,
-have bdd_above_and_below_of_image: bdd_above (range x) ∧ bdd_below (range x) := sorry,
+have bdd_above_and_below_of_image: bdd_below (range x) ∧ bdd_above (range x) := sorry,
 by_cases (set.finite (range x)),
 {
   -- par principe des tiroirs, il existe x_0 dans S tel que x^-1{x_0} est infini.
@@ -412,7 +527,14 @@ have limage_finiteness: Limage.finite := begin
   apply set.finite_image,
   exact set.finite_le_nat N,
   end,
-have limage_nonempty: Limage.nonempty := sorry,
+have limage_nonempty: Limage.nonempty := begin
+  use (d (x 0) y),
+  simp,
+  use 0,
+  split,
+  exact zero_le N,
+  refl,
+end,
 have sup_est_atteint: Sup Limage ∈ Limage
   := finite_set_has_a_reached_sup limage_finiteness limage_nonempty,
   -- f : n → d (x n) y
