@@ -109,8 +109,49 @@ split,
 exact le_of_lt h,
 refl,
 end
+
+lemma gendarmes {x y z: ℕ → ℝ} {l: ℝ} : converge x l → converge z l → ∀ n:ℕ, (x n) ≤ (y n) → y n ≤ z n → converge y l := 
+begin 
+intros cx cz n xy yz,
+rw converge at cx,
+rw converge at cz,
+rw converge,
+intros ε peps at cx,
+obtain ⟨ Nx,Hx ⟩ : ∃ Nx:ℕ, ∀ n:ℕ, n ≥ Nx → d l (x n) < ε := cx ε peps,
+obtain ⟨ Nz,Hz ⟩ : ∃ Nz:ℕ, ∀ n:ℕ, n ≥ Nz → d l (z n) < ε := cz ε peps,
+use Nx + Nz,
+intros n hn,
+rw real.dist_eq,
+sorry
+end 
+
+lemma non_egal_eps {a:X} {b:X} : ¬ a = b → ∃ ε : ℝ, ε > 0 → d a b > ε := 
+begin 
+intro h,
+by_contra,
+simp at a_1, 
+apply h,
+have x : ℕ → ℝ,
+intro n,
+exact n,
+have n:ℕ,
+exact 0,
+
+sorry
+
+end 
+
 -- niveau: moyen
-lemma cauchy_admet_une_va {x: ℕ → X} : cauchy x → ∀ l₁ : X, ∀ l₂ : X, adhere x l₁ ∧ adhere x l₂ → l₁ = l₂ := sorry
+lemma cauchy_admet_une_va {x: ℕ → X} : cauchy x → ∀ l₁ : X, ∀ l₂ : X, adhere x l₁ ∧ adhere x l₂ → l₁ = l₂ := 
+begin 
+intros cauch l1 l2 h,
+by_contra,
+push_neg,
+
+end
+
+
+
 -- niveau: difficile
 lemma unicite_de_la_va {x: ℕ → X} {l: X} : adhere x l → (∀ l₀ : X, adhere x l₀ →  l = l₀) → converge x l := sorry
 
@@ -154,6 +195,7 @@ def pre_ecart (x : ℕ → X) (y : ℕ → X) : ℕ → ℝ  :=
 -- 2 coups d'inégalité triangulaires, en distiguant sur le signe de d(x,y) - d(z,t).
 lemma dist_ineg_utile (x y z t:X) : d (d x y)  (d z t) ≤ d x z + d y t:=
 begin
+
  sorry
 end
 
@@ -165,7 +207,26 @@ end
 lemma pre_ecart_cauchy (x y : ℕ →  X) (h1 : cauchy x) (h2 : cauchy y):
   cauchy (λ n : ℕ, d (x n) (y n)):=
  begin
-  sorry
+rw cauchy,
+intros ε peps,
+-- créer peps2 qui vaille ε/2 > 0 
+have peps2 :ε/2 > 0 := sorry,
+rw cauchy at h1,
+rw cauchy at h2,
+obtain ⟨ N1, h11 ⟩  : ∃ N1, ∀ p ≥ N1, ∀ q ≥ N1, ((d (x p) (x q)) < ε/2 ),
+exact h1 (ε/2) peps2,
+obtain ⟨ N2, h21 ⟩  : ∃ N2, ∀ p ≥ N2, ∀ q ≥ N2, ((d (y p) (y q)) < ε/2 ),
+exact h2 (ε/2) peps2,
+use N1 + N2,
+intros p hp q hq,
+rw real.dist_eq,
+have H : d (x p) (y p) - d (x q) (y q) = d (x p) (y p) - d (x q) (y p) + d (x q) (y p) - d (x q) (y q) := begin simp, end,
+rw H,
+have H2 : abs(d (x p) (y p) - d (x q) (y p) + d (x q) (y p) - d (x q) (y q)) < abs(d (x p) (y p) - d (x q) (y p)) + abs(d (x q) (y p) - d (x q) (y q)) := sorry, --1ere IT
+have H3 :abs(d (x p) (y p) - d (x q) (y p) + d (x q) (y p) - d (x q) (y q))  < abs(d (x p) (x q)) + abs(d (y p) (y q)) := sorry, --2eme IT
+have H4 : abs(d (x p) (y p) - d (x q) (y p) + d (x q) (y p) - d (x q) (y q))  < d (x p) (x q) + d (y p) (y q) := sorry, --distance positives
+have H5 : abs(d (x p) (y p) - d (x q) (y p) + d (x q) (y p) - d (x q) (y q)) < ε := sorry, --remplacer
+exact H5,
  end
 
 /-- on définit l'ensemble des suites de Cauchy --/
