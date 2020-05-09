@@ -110,47 +110,55 @@ exact le_of_lt h,
 refl,
 end
 
-lemma gendarmes {x y z: ℕ → ℝ} {l: ℝ} : converge x l → converge z l → ∀ n:ℕ, (x n) ≤ (y n) → y n ≤ z n → converge y l := 
-begin 
-intros cx cz n xy yz,
-rw converge at cx,
-rw converge at cz,
-rw converge,
-intros ε peps at cx,
-obtain ⟨ Nx,Hx ⟩ : ∃ Nx:ℕ, ∀ n:ℕ, n ≥ Nx → d l (x n) < ε := cx ε peps,
-obtain ⟨ Nz,Hz ⟩ : ∃ Nz:ℕ, ∀ n:ℕ, n ≥ Nz → d l (z n) < ε := cz ε peps,
-use Nx + Nz,
-intros n hn,
-rw real.dist_eq,
-sorry
+lemma dist_lt_of_ne {x: X} {y: X} : d x y ≠ 0 → d x y > 0 :=
+begin
+intro dnnz,
+simp,
+refine lt_of_le_of_ne _ (ne.symm dnnz),
+apply espace_metrique.d_pos,
 end 
 
-lemma non_egal_eps {a:X} {b:X} : ¬ a = b → ∃ ε : ℝ, ε > 0 → d a b > ε := 
-begin 
-intro h,
-by_contra,
-simp at a_1, 
-apply h,
-have x : ℕ → ℝ,
-intro n,
-exact n,
-have n:ℕ,
-exact 0,
 
-sorry
+lemma eq_of_dist_lt {x: X} {y: X} : (∀ ε > 0, d x y < ε) → x = y := begin
+  contrapose!,
+  intro hnnz,
+  use ((d x y)/2),
+  split,
+  apply div_pos_of_pos_of_pos,
+  apply dist_lt_of_ne,
+  revert hnnz,
+  contrapose!,
+  exact espace_metrique.sep x y,
+  exact zero_lt_two,
+  apply le_of_lt,
+  apply div_two_lt_of_pos,
+  apply dist_lt_of_ne,
+  revert hnnz,
+  contrapose!,
+  exact espace_metrique.sep x y,
+end
 
-end 
-
+#check gt_iff_lt.2 
 -- niveau: moyen
 lemma cauchy_admet_une_va {x: ℕ → X} : cauchy x → ∀ l₁ : X, ∀ l₂ : X, adhere x l₁ ∧ adhere x l₂ → l₁ = l₂ := 
 begin 
 intros cauch l1 l2 h,
-by_contra,
-push_neg,
-
+apply eq_of_dist_lt,
+intros ε hε,
+have hε3 : ε/3 > 0 := by linarith,
+obtain ⟨ n₀, h_cauchy ⟩ := cauch (ε/3) hε3,
+obtain ⟨ p₀, ⟨ hp₀, hl₁ ⟩ ⟩ := h.1 (ε/3) hε3 (n₀),
+obtain ⟨ p₁, ⟨ hp₁, hl₂ ⟩ ⟩ := h.2 (ε/3) hε3 (n₀),
+calc
+  d l1 l2 ≤ d l1 (x p₀) + d (x p₀) l2 : espace_metrique.triangle _ _ _
+    ... < ε/3 + d (x p₀) l2 : begin rw espace_metrique.sym l1 (x p₀), exact add_lt_add_right hl₁ (d (x p₀) l2), end 
+    ... ≤ ε/3 + d (x p₀) (x p₁) + d (x p₁) l2 : begin have := espace_metrique.triangle (x p₀) (x p₁) l2, rw add_assoc (ε/3)  (d (x p₀) (x p₁)) (d (x p₁) l2), exact add_le_add_left this (ε/3), end 
+    ... < ε/3 + ε/3 + d (x p₁) l2 : begin have := h_cauchy p₀ hp₀ p₁ hp₁, rw add_comm (ε/3) (d (x p₀) (x p₁)), rw add_assoc, rw add_assoc, exact add_lt_add_right this (ε / 3 + d (x p₁) l2), end 
+    ... < ε/3 + ε/3 + ε/3 :  add_lt_add_left hl₂ (ε/3 + ε/3)
+    ... = ε : by ring,
 end
 
-
+-- 
 
 -- niveau: difficile
 lemma unicite_de_la_va {x: ℕ → X} {l: X} : adhere x l → (∀ l₀ : X, adhere x l₀ →  l = l₀) → converge x l := sorry
