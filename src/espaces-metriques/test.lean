@@ -1,30 +1,42 @@
-import data.set
 import data.real.basic
-import algebra.pi_instances
+class metric_space (X : Type*) :=
+(d : X → X → ℝ)
+(d_pos : ∀ x y, d x y ≥ 0)
+(presep : ∀ x y, x=y → d x y = 0)
+(sep : ∀ x y, d x y = 0 →  x = y)
+(sym : ∀ x y, d x y = d y x)
+(triangle : ∀ x y z, d x z ≤ d x y + d y z)
 
-section negative_sets
+section test
+open metric_space
+variables {X: Type*} [metric_space X]
 
-def negative_set (S: set ℝ): set ℝ := { x : ℝ | -x ∈ S}
+def is_cauchy (x: ℕ → X) :=
+  ∀ ε > 0, ∃ N, ∀ p ≥ N, ∀ q ≥ N, ((d (x p) (x q)) < ε)
+
+def cauchy_seqs (X : Type*) [metric_space X] := { f : ℕ → X // is_cauchy f }
 
 
-def cv (x: ℕ → ℝ) (l: ℝ):= ∀ ε > 0, ∃ N ≥ 0, ∀ n ≥ N, abs ((x n) - l) < ε
-def accu_point (S: set ℝ) (l: ℝ) :=
-  ∃ (x: ℕ → ℝ), cv x l ∧ (∀ n, x n ∈ S)
+def cauchy.setoid (X : Type*) [metric_space X] : setoid (cauchy_seqs X) :=
+{
+  r := sorry,
+  iseqv := sorry
+}
+-- Définit la distance entre 2 suites de Cauchy par lim d(x_n, y_n).
+def cauchy.dist (T: Type*) [metric_space T] (x y: cauchy_seqs T): ℝ
+  := sorry -- some cauchy limit stuff.
 
--- where it is?
-/-instance seq.neg : has_neg (ℕ → ℝ) := {
-  neg := λ x, (λ n, - x n)
-}-/
+def completion (X : Type*) [metric_space X] : Type* := quotient (cauchy.setoid X)
+def completion.dist (T: Type*) [metric_space T] (x y: completion T): ℝ :=
+  sorry -- quotient.lift₂ (cauchy.dist T) x y
 
-def negative_set.adhere_ens_iff {S: set ℝ} {l: ℝ}:
-  accu_point S l ↔ accu_point (negative_set S) (-l) :=
-begin
-  split,
-  intro adh,
-  rw accu_point at adh,
-  obtain ⟨ x, hx ⟩ := adh,
-  use (-x),
-  sorry
-end
+  
 
-end negative_sets
+instance completion.metric_space (X: Type*) [metric_space X]: metric_space (completion X) :=
+{
+  d := completion.dist,
+  d_pos := sorry,
+  -- etc
+}
+
+end test

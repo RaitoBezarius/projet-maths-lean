@@ -9,7 +9,7 @@ open set
 open_locale classical
 
 -- Une structure d'espace pré-métrique sur un type X --
-class espace_pre_metrique (X : Type) :=
+class espace_pre_metrique (X : Type*) :=
 (d : X → X → ℝ)
 (d_pos : ∀ x y, d x y ≥ 0)
 (presep : ∀ x y, x=y → d x y = 0)
@@ -17,7 +17,7 @@ class espace_pre_metrique (X : Type) :=
 (triangle : ∀ x y z, d x z ≤ d x y + d y z)
 
 -- Une structure d'espace métrique sur un type X --
-class espace_metrique (X : Type) :=
+class espace_metrique (X : Type*) :=
 (d : X → X → ℝ)
 (d_pos : ∀ x y, d x y ≥ 0)
 (presep : ∀ x y, x=y → d x y = 0)
