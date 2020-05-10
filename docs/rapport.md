@@ -98,5 +98,92 @@ Puis, on munit $(\Sigma^{*}, \cdot)$ d'une structure de monoïde usuelle où $\c
 \input{chapitres/Cauchy_est_bornee.tex}
 \input{chapitres/Cauchy_admet_une_va.tex}
 
+## $\R$ est un espace complet
+
+Nous allons détailler sans rentrer dans les preuves, comment démontrer que $\R$ est un espace complet, qui repose axiomatiquement seulement sur l'axiome de la borne supérieure et le fait que $\R$ soit archimédien :
+
+- Un lemme type Bolzano-Weierstrass qu'on retrouvera dans `custom/bolzano_weierstrass.lean` 
+- Un lemme qui nous donne la convergence d'une suite de Cauchy sous réserve d'existence d'une valeur d'adhérence: `converge_of_va_for_cauchy` dans `custom/cauchy.lean`
+
+Le second lemme repose sur des plus petits lemmes: une suite de Cauchy admet au plus une valeur d'adhérence, décrit sous le nom de `cauchy_admet_une_va`.
+
+Le premier lemme requiert aussi un lemme de bornitude des suites de Cauchy, sous le nom de `cauchy_est_bornee`, décrit précédemment.
+
+### Structure du code
+
+#### `custom/sequences.lean`
+
+On a des lemmes autour des suites, on a les définitions élémentaires de convergence, être de Cauchy, adhérence, bornitude, sous-suites et stricte croissance.
+
+On y démontre une forme d'équivalence entre l'adhérence et sa version séquentielle, des lemmes autour de l'affaiblissement dénombrable du quantificateur réel devant les $\forall \varepsilon > 0$.
+
+#### `custom/si_sequences.lean`
+
+On définit des lemmes autour de la construction des suites strictement croissantes dans un ensemble infini complètement linéairement ordonné^[Cette hypothèse est probablement trop forte, on peut sûrement exploiter des notions fines comme la topologie de l'ordre, mais nous n'avons pas eu le temps d'explorer cela.] (qu'on appliquera donc principalement à $\R$).
+
+Petit point sur ce qui se passe, car il s'agit de preuves non classiques, on exploite une autre forme d'infinitude, celle qui indique qu'un ensemble fini c'est exactement un ensemble pour lesquelles toutes ses parties non vides ont un plus grand et plus petit élément.
+
+Cela nous fournit une preuve efficace pour tirer une suite strictement croissante, qu'on utilisera dans un raisonnement par l'absurde pour Bolzano-Weierstrass.
+
+Un élément intéressant de ce fichier c'est la première utilisation de `well_founded.fix` avec l'ordre bien fondé de $\N$: `nat.lt_wf`, Lean permet de construire des objets donc par « récurrence » ^[On est plutôt dans l'induction bien-fondée, en réalité.].
+
+Cela fonctionne comme ceci: `well_founded.fix` effectue un calcul de point fixe, cela prend en premier argument un ordre bien fondé, et en second un argument une fonction qui prend un élément, disons $n$, de l'ensemble bien fondé et la fonction partiellement construite pour tout $\l n$ au sens de l'ordre bien fondé, on doit retourner le nouveau terme induit.
+
+Cependant, cela ne fait que construire la suite ou l'objet désiré, cela ne donne pas les propriétés sur lui qu'on veut.
+
+Pour cela, c'est quelque chose qu'on retrouve classiquement dans Lean, on utilise un théorème type « spec » ^[`classical_spec`, etc.], en l'occurrence: `well_founded.fix_eq` qui prouve que le calcul de point fixe vérifie l'équation du point fixe.
+
+De là, on construit notre suite par opérations ensemblistes, on pourrait explorer s'il était faisable de faire ça avec des types et des sous-types plutôt que des vrais ensembles.
+
+#### `custom/sups.lean`
+
+On y démontre des lemmes autour des bornes supérieures et inférieures, et des lemmes de type topologiques.
+
+Notamment, le fait que les sups et infs sont des points limites dès lorsqu'ils ne sont pas des max/min.
+
+On exploite `linarith` principalement et des morceaux de la `mathlib` sur les ordres qui ne reposent pas sur $\R$.
+
+#### `custom/topology.lean`
+
+Des définitions topologiques:
+
+- Complétude
+- Adhérence à un ensemble
+- Point limite
+
+#### `custom/negative_sets.lean`
+
+On y démontre de lemmes autour des ensembles opposés, i.e. pour $S$ un ensemble, on regarde $-S := \{ x \mid -x \in S \}$.
+
+On y démontre principalement des lemmes autour des sups/infs et de leurs adhérences.
+
+
+#### `custom/cauchy.lean`
+
+On y démontre des lemmes autour des suites de Cauchy, on détaillera plus ce fichier dans la partie sur les complétés.
+
+#### `custom/bolzano_weierstrass.lean`
+
+La preuve de Bolzano-Weierstrass en deux versions:
+
+- Version 1: Toute suite bornée a une valeur d'adhérence.
+- Version 2: Un ensemble infini borné a des points limites.
+
+La version 2 entraîne la version 1, nous allons montrer en quoi.
+
+### Bolzano-Weierstrass
+
+Démontrer Bolzano-Weierstrass proprement et efficacement en partant de l'axiome de la borne supérieure est difficile en raison de la quantité de lemmes requis, nous retrouverons donc la plupart des constructions nécessaires dans les fichiers précédents.
+
+Donnons la feuille de route pour le théorème final (Bolzano-Weierstrass version 2):
+
+- On a besoin du lemme fondateur: `lemme_fondateur_de_bw`: qui prouve la version d'infinitude dont on a parlé dans le fichier des suites strictement croissantes, par contraposée.
+- Ensuite, on prouve `bolzano_weierstrass_v2` en utilisant la nouvelle définition de l'infinitude, par l'absurde, en supposant que l'ensemble n'a pas de point limite, puis en montrant que l'ensemble est fini, puisqu'il n'a pas de point limite, son sup/inf qui en seraient sont nécessairement des max/min, d'où, ceci étant vrai pour toutes les parties, on en tire la finitude, donc l'absurdité.
+- Ensuite, on prouve la version 1: `bolzano_weierstrass`, en commençant par une distinction sur la cardinalité des valeurs prises par la suite, si c'est fini, on se contente d'utiliser le principe des tiroirs, sinon, on recourt à la version 2, on s'en tire en démontrant qu'on a une adhérence séquentielle en utilisant la tactique `choose`.
+
+## Complété d'un espace métrique
+
+
+
 \bibliographystyle{plain}
 \bibliography{references}
