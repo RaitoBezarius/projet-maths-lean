@@ -331,4 +331,19 @@ exact cauchy.converge_of_limit _ _,
 exact cauchy.converge_of_constant _,
 end
 
+def cauchy.pre_ecart_sym (x y: ℕ → X): pre_ecart x y = pre_ecart y x := begin
+rw pre_ecart,
+rw pre_ecart,
+ext,
+exact espace_metrique.sym _ _,
+end
+
+def cauchy.pre_ecart_self_eq_zero_seq (T: Type*) [espace_metrique T] (x: cauchy_seqs T):
+  pre_ecart x.val x.val = ((λ n, 0): ℕ → ℝ) := begin
+  rw pre_ecart,
+  ext,
+  apply espace_metrique.presep,
+  refl,
+end
+
 end suites
