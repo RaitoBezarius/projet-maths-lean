@@ -1,4 +1,3 @@
-
 \section{Lemma Cauchy\_est\_bornee}
 \subsection{Définition}
 Soit $(X,d)$ un espace métrique. On dit qu'une suite des éléments de $X$, $(u_n)_{n\in \mathbb{N}}$ est de Cauchy si est seulement si: $$\forall \varepsilon \in \mathbb{R_+^*}, \exists n_0 \in \mathbb{N}, \forall n,m \in \mathbb{N}, n,m \geq n_0 \Rightarrow d(U_n,U_m) \leq \varepsilon$$ 
@@ -19,11 +18,11 @@ On en déduit que la suite $(U_n)$ est majorée par $\max(M_1,d(U_{n_0},Y)+1)$. 
 
 Dans la partie ci-dessous, nous allons expliquer l'utilisation de certaines tactiques dans la démonstration de ce théorème sur Lean.\\
 \begin{itemize}
-    \item \texttt{obtain $\langle N, H \rangle $}: $\exists N, \forall p \geq N, \forall q \geq N, (d (x_p) (x_q)) < 1$
+    \item \texttt{obtain $\langle N, H \rangle $}: $\exists N, \forall p \geq N, \forall q \geq N, (d$ $(x_p)$ $(x_q)) < 1$
     
     On utilise cette tactique pour stocker dans $H$ une formule mathématique (hypothèse) qui dépend d'un entier $N$, et dans $N$ l'entier en question. \\ Suite à l'utilisation de \texttt{obtain}, on doit démontrer l'existence d'un entier $N$ qui vérifie $H$.\\ Pour ce faire, on utilise l'hypothèse de Cauchy sur $x$ et le fait que 1 soit un entier strictement positive.\\
     \'A ce niveau, le \textbf{goal} est: $\exists (M:\mathbb{R}), M > 0 \wedge \forall (n : \mathbb{N})$ $d$ $(x_n)$ $y \leq M$.
-    \item \texttt{set Limage:= $\big\{ M: \mathbb{R} \mid \exists n\leq N, M = d(x_n)y \big\}$}
+    \item \texttt{set Limage:= $\big\{ M: \mathbb{R} \mid \exists n\leq N, M = d$ $(x_n)$ $y\big\}$}
     
     
     Cet ensemble contient toutes les valeurs possibles de la distance entre un terme de la suite d'indice inférieur ou égal à $N$ et $y$ (qui est un terme fixe quelconque).\\ Afin de majorer cet ensemble, on peut démontrer qu'il est non vide et fini.
@@ -39,21 +38,21 @@ Dans la partie ci-dessous, nous allons expliquer l'utilisation de certaines tact
     \item \texttt{have limage\_nonempty: Limage.nonempty} 
     
     
-    Cette tactique permet d'ajouter une hypothèse nommée \texttt{limage\_nonempty} qui dit que l'ensemble Limage est non vide.\\ Afin de démontrer ce résultat, on utilise le fait que $d (x_0) y  \in \textrm{Limage}$ puisque $0 \leq N$.
+    Cette tactique permet d'ajouter une hypothèse nommée \texttt{limage\_nonempty} qui dit que l'ensemble Limage est non vide.\\ Afin de démontrer ce résultat, on utilise le fait que $d$ $(x_0)$ $y  \in \textrm{Limage}$ puisque $0 \leq N$.
     \item \texttt{have sup\_est\_atteint: Sup Limage $\in$ Limage}
     
     
-    Pour démontrer \texttt{sup\_est\_atteint} (c'est à dire que \texttt{Limage} admet un maximum), on utilise \texttt{set.finite.has\_a\_reached\_sup} avec les hypothèses \texttt{limage\_finiteness} et \texttt{limage\_nonempty}.\\ Donc, il existe un entier $n\leq N$ tel que $d (x_n) y= \max$(\textrm{Limage}).
-    \item \texttt{use $(\max (d(x_n)y , 1+d(x_N)y))$}
+    Pour démontrer \texttt{sup\_est\_atteint} (c'est à dire que \texttt{Limage} admet un maximum), on utilise \texttt{set.finite.has\_a\_reached\_sup} avec les hypothèses \texttt{limage\_finiteness} et \texttt{limage\_nonempty}.\\ Donc, il existe un entier $n\leq N$ tel que $d$ $(x_n)$ $y= \max$(\textrm{Limage}).
+    \item \texttt{use $(\max (d$ $(x_n)$ $y,$ $1+d$ $(x_N)$ $y))$}
     
     
-    De cette façon le \texttt{goal} devient de démontrer que $\max(d(x_n)y , 1+d(x_N)y)$ est un majorant de la suite de Cauchy $x$ en question. \newline C'est à dire qu'il faut montrer que $\max(d(x_n)y , 1+d(x_N)y)$ $>$ $0$ (ce qui est immédiat), \\ et que $\forall n_1 : \mathbb{N}, d (x_{n_1}) y \leq \max (d(x_n)y , 1+ d(x_N) y)$
+    De cette façon le \texttt{goal} devient de démontrer que $\max(d$ $(x_n)$ $y ,$ $1+d$ $(x_N)$ $y)$ est un majorant de la suite de Cauchy $x$ en question. \newline C'est à dire qu'il faut montrer que $\max(d$ $(x_n)$ $y , 1+d$ $(x_N)$ $y) > 0$ (ce qui est immédiat), \\ et que $\forall n_1 : \mathbb{N}, d$ $(x_{n_1})$ $y \leq \max (d$ $(x_n)$ $y , 1+ d$ $(x_N)$ $y)$
     \item \texttt{intro p, by\_cases (p \geq N)}
     
     
     C'est à dire qu'on prend un entier $p$ et on montre la propriété dans 2 cas: pour $p \geq N$ et pour $p < N$. \\
-    Dans le cas où $p \geq N$: \\ D'après l'hypothèse $H$, puisque $p \geq N$ et $N \geq N$, $d (x_p) (x_N) < 1$. \\ Alors $d (x_p) (x_N) + d (x_N) y \leq 1 + d (x_N) y$. \\ Donc à fortiori $d (x_p) (x_N) + d (x_N) y \leq \max (d (x_n) y , 1 + d (x_N) y)$. 
-    \\ Or d'après l'inégalité triangulaire $d (x_p) y \leq d (x_p) (x_N) + d (x_N) y$. \\ Donc $d (x_p) y \leq \max (d (x_n) y , 1 + d (x_N) y)$.\\
-    Dans le cas où $p < N$: \newline On applique l'hypothèse \texttt{sup\_atteint} pour majorer $d (x_p) y$ par $d (x_n) y$, puisque $d (x_n) y$ est la borne supérieure de l'ensemble \texttt{Limage} et $d (x_p) y \in$ \texttt{Limage}.\\
-    Donc $d (x_p) y \leq \max (d (x_n) y , 1 + d (x_N) y)$.
+    Dans le cas où $p \geq N$: \\ D'après l'hypothèse $H$, puisque $p \geq N$ et $N \geq N$, $d$ $(x_p)$ $(x_N) < 1$. \\ Alors $d$ $(x_p)$ $(x_N) + d$ $(x_N)$ $y \leq 1 + d$ $(x_N)$ $y$. \\ Donc à fortiori $d$ $(x_p)$ $(x_N) + d$ $(x_N)$ $y \leq \max (d$ $(x_n)$ $y ,$ $1 + d$ $(x_N)$ $y)$. 
+    \\ Or d'après l'inégalité triangulaire $d$ $(x_p)$ $y \leq d$ $(x_p)$ $(x_N) + d$ $(x_N)$ $y$. \\ Donc $d$ $(x_p)$ $y \leq \max (d$ $(x_n)$ $y ,$ $1 + d$ $(x_N)$ $y)$.\\
+    Dans le cas où $p < N$: \newline On applique l'hypothèse \texttt{sup\_atteint} pour majorer $d$ $(x_p)$ $y$ par $d$ $(x_n)$ $y$, puisque $d$ $(x_n)$ $y$ est la borne supérieure de l'ensemble \texttt{Limage} et $d$ $(x_p)$ $y \in$ \texttt{Limage}.\\
+    Donc $d$ $(x_p)$ $y \leq \max (d$ $(x_n)$ $y ,$ $1 + d$ $(x_N)$ $y)$.
 \end{itemize}
