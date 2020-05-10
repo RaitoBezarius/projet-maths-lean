@@ -30,9 +30,6 @@ lemma strictly_increasing_sequence_has_no_max (S: set X)
   sorry
 end
 
-lemma generalized_extractor_of_seq_in_range (x: ℕ → X) (y: ℕ → X) (S: set X):
-  S ⊆ (range x) → ∀ n, y n ∈ S → ∃ φ : ℕ → ℕ, y = sous_suite x φ := sorry
-
 lemma smallest_element (S: set ℕ): S.nonempty → ∃ n : ℕ, ∀ m < n, m ∉ S := begin
   intro H,
   use (nat.find H),

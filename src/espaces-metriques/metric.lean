@@ -245,9 +245,19 @@ lemma pre_ecart_cauchy (x y : ℕ →  X) (h1 : cauchy x) (h2 : cauchy y):
     ... = ε : by simp,
  end
 
+ lemma pre_ecart.triangle (x y z: ℕ → X):
+  ∀ n, pre_ecart x z n ≤ pre_ecart x y n + pre_ecart y z n := begin
+  intro n,
+  rw pre_ecart,
+  rw pre_ecart,
+  rw pre_ecart,
+  simp,
+  exact espace_metrique.triangle _ _ _,
+end
+
 /-- on définit le *type* des suites de Cauchy --/
 
-def cauchy_seqs (T: Type) [espace_metrique T] := { f : ℕ → T // cauchy f }
+def cauchy_seqs (X: Type*) [espace_metrique X] := { f : ℕ → X // cauchy f }
 
 /-- Si le temps le permet, et seulement dans ce cas,
 -- montrer que le pre-ecart induit une structure
@@ -261,7 +271,7 @@ def cauchy.limit (x: ℕ → ℝ) (H: cauchy x): ℝ := classical.some (R_is_com
 def cauchy.converge_of_limit (x: ℕ → ℝ) (H: cauchy x): converge x (cauchy.limit x H) := 
   classical.some_spec (R_is_complete x H)
 
-def cauchy.limit_le_of_seq_le (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n ≥ 0, x n ≥ a) → (cauchy.limit x H) ≥ a :=
+def cauchy.limit_ge_of_seq_ge (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≥ a) → (cauchy.limit x H) ≥ a :=
 begin
 intro Hineq,
 set l := cauchy.limit x H,
@@ -272,6 +282,38 @@ push_neg at a_1,
 -- donc abs (x_n - l) < eps/2 et x_n - a = x_n - l ≥ eps
 -- absurde, by linarith.
 sorry,
+end
+
+def cauchy.limit_le_of_seq_le (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≤ a) → (cauchy.limit x H) ≤ a :=
+begin
+intro Hineq,
+set l := cauchy.limit x H,
+by_contra,
+push_neg at a_1,
+-- idée: a = l - eps, par définition avec eps > 0.
+-- on prend converge x l avec eps/2
+-- donc abs (x_n - l) < eps/2 et x_n - a = x_n - l ≥ eps
+-- absurde, by linarith.
+sorry,
+end
+
+def cauchy.le_of_limit_le {x y: ℕ → ℝ} (Hy: cauchy y):
+  (∀ n, x n ≤ y n) → ∀ n, x n ≤ (cauchy.limit y Hy) := begin
+  intros Hc n,
+  set l := cauchy.limit y Hy,
+  by_contra,
+  push_neg at a,
+  -- idée: l = x_n + eps
+  sorry
+end
+
+def cauchy.limit_le_of_add_seq_le {x y z: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y) (Hz: cauchy z):
+  (∀ n: ℕ, x n ≤ y n + z n) → (cauchy.limit x Hx) ≤ (cauchy.limit y Hy) + (cauchy.limit z Hz) := begin
+  intro Hc,
+  apply cauchy.limit_le_of_seq_le,
+  intro n,
+  -- appliquer les lemmes précédent à la suite somme: y + z, qui est aussi de Cauchy.
+  sorry
 end
 
 def cauchy.cauchy_of_constant_real_seq (c: ℝ): cauchy (λ n, c) := begin
@@ -300,13 +342,13 @@ exact cauchy.converge_of_limit _ _,
 exact cauchy.converge_of_constant _,
 end
 -- Définit la distance entre 2 suites de Cauchy par lim d(x_n, y_n).
-def cauchy.dist (T: Type) [espace_metrique T] (x y: cauchy_seqs T): ℝ
+def cauchy.dist (T: Type*) [espace_metrique T] (x y: cauchy_seqs T): ℝ
   := cauchy.limit (pre_ecart x.val y.val) (pre_ecart_cauchy x.val y.val x.property y.property)
 
-def cauchy.d_pos (T: Type) [espace_metrique T] (x y: cauchy_seqs T): cauchy.dist T x y ≥ 0 := begin
+def cauchy.d_pos (T: Type*) [espace_metrique T] (x y: cauchy_seqs T): cauchy.dist T x y ≥ 0 := begin
 rw cauchy.dist,
-apply cauchy.limit_le_of_seq_le,
-intros n hn,
+apply cauchy.limit_ge_of_seq_ge,
+intro n,
 rw pre_ecart,
 simp,
 exact espace_metrique.d_pos _ _,
@@ -319,7 +361,7 @@ ext,
 exact espace_metrique.sym _ _,
 end
 
-def cauchy.pre_ecart_self_eq_zero_seq (T: Type) [espace_metrique T] (x: cauchy_seqs T):
+def cauchy.pre_ecart_self_eq_zero_seq (T: Type*) [espace_metrique T] (x: cauchy_seqs T):
   pre_ecart x.val x.val = ((λ n, 0): ℕ → ℝ) := begin
   rw pre_ecart,
   ext,
@@ -327,9 +369,9 @@ def cauchy.pre_ecart_self_eq_zero_seq (T: Type) [espace_metrique T] (x: cauchy_s
   refl,
 end
 
-instance pre_ecart.premetrique : espace_pre_metrique (cauchy_seqs X) :=
-{ d := cauchy.dist X,
-  d_pos := cauchy.d_pos X,
+instance pre_ecart.premetrique (T: Type*) [espace_metrique T]: espace_pre_metrique (cauchy_seqs T) :=
+{ d := cauchy.dist T,
+  d_pos := cauchy.d_pos T,
   presep := begin
   intros x y h,
   rw cauchy.dist,
@@ -337,7 +379,7 @@ instance pre_ecart.premetrique : espace_pre_metrique (cauchy_seqs X) :=
   conv {
     congr,
     congr,
-    rw cauchy.pre_ecart_self_eq_zero_seq X y,
+    rw cauchy.pre_ecart_self_eq_zero_seq T y,
     skip,
     skip,
   },
@@ -355,13 +397,42 @@ instance pre_ecart.premetrique : espace_pre_metrique (cauchy_seqs X) :=
     skip,
   },
   end,
-  triangle := sorry
+  triangle := begin
+  intros x y z,
+  rw cauchy.dist,
+  rw cauchy.dist,
+  rw cauchy.dist,
+  apply cauchy.limit_le_of_add_seq_le,
+  exact pre_ecart.triangle _ _ _,
+  end
 }
 
 def cauchy.cong (T: Type*) [espace_metrique T] (x y: cauchy_seqs T): Prop := cauchy.dist T x y = 0
-lemma cauchy.cong_refl (T: Type*) [espace_metrique T]: reflexive (cauchy.cong T) := sorry -- presep
-lemma cauchy.cong_symm (T: Type*) [espace_metrique T]: symmetric (cauchy.cong T) := sorry -- sym
-lemma cauchy.cong_trans (T: Type*) [espace_metrique T]: transitive (cauchy.cong T) := sorry -- triangle
+lemma cauchy.cong_refl (T: Type*) [espace_metrique T]: reflexive (cauchy.cong T) := begin
+  intro x,
+  rw cauchy.cong,
+  exact espace_pre_metrique.presep x x (by refl),
+end
+lemma cauchy.cong_symm (T: Type*) [espace_metrique T]: symmetric (cauchy.cong T) := begin
+  intros x y H,
+  rw cauchy.cong,
+  rw cauchy.cong at H,
+  rw ← H,
+  symmetry,
+  exact espace_pre_metrique.sym x y,
+end
+lemma cauchy.cong_trans (T: Type*) [espace_metrique T]: transitive (cauchy.cong T) := begin
+  intros x y z Hxy Hyz,
+  rw cauchy.cong,
+  rw cauchy.cong at Hxy,
+  rw cauchy.cong at Hyz,
+  apply le_antisymm,
+  calc
+    cauchy.dist T x z ≤ cauchy.dist T x y + cauchy.dist T y z : espace_pre_metrique.triangle x y z
+    ... ≤ 0 + 0 : by rw [Hxy, Hyz]
+    ... ≤ 0 : by simp,
+  exact espace_pre_metrique.d_pos x z,
+end
 theorem cauchy.cong_equiv (T: Type*) [espace_metrique T]: equivalence (cauchy.cong T) :=
 ⟨cauchy.cong_refl T, cauchy.cong_symm T, cauchy.cong_trans T⟩
 
@@ -371,20 +442,20 @@ instance pre_ecart.setoid (T: Type*) [espace_metrique T] : setoid (cauchy_seqs T
   iseqv := cauchy.cong_equiv T
 }
 
-local attribute [instance] pre_ecart.setoid
-
--- en termes d'univers, quotient retourne un type d'univers u + 1 en partant de X : Type u.
-/- FIXME: des erreurs de typeclasses, dûs p-ê au fait que le passage au quotient requiert une augmentation
-du niveau d'univers.
-
-def completion_of_metric_space (T: Type*) [espace_metrique T] := quotient (pre_ecart.setoid T)
--- set_option trace.class_instances true 
--- il est donc nécessaire d'employer des types avec des univers qui s'ajuste tout seul.
-instance completion.metric_space (T: Type*) [espace_metrique T]: espace_metrique (completion_of_metric_space T)
-{ d := sorry,
-}
-
-def completion_is_complete: complete (completion_of_metric_space X) := sorry
--/
-
 end suites
+section completion
+def completion (T: Type*) [espace_metrique T]: Type* := quotient (pre_ecart.setoid T)
+local attribute [instance] pre_ecart.setoid
+def completion.dist_soundness (T: Type*) [espace_metrique T]:
+  ∀ x₁ x₂: cauchy_seqs T, ∀ y₁ y₂: cauchy_seqs T, (x₁ ≈ y₁) → (x₂ ≈ y₂) → (cauchy.dist T x₁ x₂ = cauchy.dist T y₁ y₂) := begin
+  intros x y z t Hxz Hyt,
+end
+def completion.dist (T: Type*) [espace_metrique T] (x y: completion T): ℝ :=
+  quotient.lift₂ (cauchy.dist T) (completion.dist_soundness T) x y
+
+instance completion.metric_space (T: Type*) [espace_metrique T]: espace_metrique (completion T) :=
+{
+  d := completion.dist T,
+
+}
+end completion
