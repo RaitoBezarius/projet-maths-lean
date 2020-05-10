@@ -7,7 +7,6 @@ open espace_metrique
 
 section extra
 variables {X: Type} [espace_metrique X]
-
 /-- bornee => bounded (range x) -/
 lemma bornee_est_bounded (x: ℕ → X): bornee x → ∃ M > 0, bounded (λ x y, d x y ≤ M) (set.range x) :=
 begin
