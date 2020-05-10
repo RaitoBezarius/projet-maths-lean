@@ -10,7 +10,7 @@ Ensuite il faut définir une fonction qui renvoie la suite composée par deux fo
 On ne détaillera pas la preuve - rapide - de cette fonction.\\
 On définit ensuite la continuité séquentielle en un point de la composée : 
 
-\mintinline[escapeinside=||,mathescape, breaklines]{lean}{def comp_seq_continue_ponctuel |$(f : X \to Y) \,(l : X) :$|seq_continue_en_l|$\, f \, l \, \land \, $|seq_continue_en_l|$ \, g \, (f \, l) \to \,$|seq_continue_en_l|$ \, (g \circ f) \, l$|} \\
+\mintinline[escapeinside=||,mathescape, breaklines]{lean}{theorem comp_seq_continue_ponctuel |$(f : X \to Y) \,(l : X) :$|seq_continue_en_l|$\, f \, l \, \land \, $|seq_continue_en_l|$ \, g \, (f \, l) \to \,$|seq_continue_en_l|$ \, (g \circ f) \, l$|} \\
 
 Pour cette preuve, après introduction des variables, on crée une variable, on prouve que la suite image par $g$ de la suite image par $f$ de $x$ converge vers $g(f(l))$, ce qu'on modifie grâce à la tactique $\texttt{conv}$ en \og{}la suite image par $g \circ f$ de $x$ converge vers $g(f(l))$ \fg{}, ce qui correspond exactement au but.\\
 
