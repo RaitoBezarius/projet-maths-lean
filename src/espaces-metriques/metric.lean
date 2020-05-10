@@ -217,9 +217,9 @@ def cauchy.pre_ecart_self_eq_zero_seq (T: Type*) [espace_metrique T] (x: cauchy_
   refl,
 end
 
-instance pre_ecart.premetrique (T: Type*) [espace_metrique T]: espace_pre_metrique (cauchy_seqs T) :=
-{ d := cauchy.dist T,
-  d_pos := cauchy.d_pos T,
+instance pre_ecart.premetrique (X: Type*) [espace_metrique X]: espace_pre_metrique (cauchy_seqs X) :=
+{ d := cauchy.dist X,
+  d_pos := cauchy.d_pos X,
   presep := begin
   intros x y h,
   rw cauchy.dist,
@@ -227,7 +227,7 @@ instance pre_ecart.premetrique (T: Type*) [espace_metrique T]: espace_pre_metriq
   conv {
     congr,
     congr,
-    rw cauchy.pre_ecart_self_eq_zero_seq T y,
+    rw cauchy.pre_ecart_self_eq_zero_seq X y,
     skip,
     skip,
   },
@@ -290,23 +290,59 @@ instance pre_ecart.setoid (T: Type*) [espace_metrique T] : setoid (cauchy_seqs T
   iseqv := cauchy.cong_equiv T
 }
 
+local attribute [instance] pre_ecart.premetrique
+def completion.dist_soundness (T: Type*) [espace_metrique T]:
+  ∀ x₁ x₂: cauchy_seqs T, ∀ y₁ y₂: cauchy_seqs T, (x₁ ≈ y₁) → (x₂ ≈ y₂) → (cauchy.dist T x₁ x₂ = cauchy.dist T y₁ y₂) := begin
+  intros x y z t Hxz Hyt,
+  change (cauchy.dist T x z = 0) at Hxz,
+  change (cauchy.dist T y t = 0) at Hyt,
+  apply le_antisymm,
+  calc
+    cauchy.dist T x y ≤ cauchy.dist T x z + cauchy.dist T z y : espace_pre_metrique.triangle x z y
+    ... ≤ cauchy.dist T x z + (cauchy.dist T z t + cauchy.dist T t y) : add_le_add_left (espace_pre_metrique.triangle z t y) _
+    ... = cauchy.dist T z t + cauchy.dist T y t : by rw [Hxz, zero_add, espace_pre_metrique.sym t y]
+    ... = cauchy.dist T z t : by rw Hyt,
+  calc
+    cauchy.dist T z t ≤ cauchy.dist T z x + cauchy.dist T x t : espace_pre_metrique.triangle z x t
+    ... ≤ cauchy.dist T z x + (cauchy.dist T x y + cauchy.dist T y t) : add_le_add_left (espace_pre_metrique.triangle x y t) _
+    ... = cauchy.dist T x z + cauchy.dist T x y : by rw [Hyt, add_zero, espace_pre_metrique.sym z x]
+    ... = cauchy.dist T x y : by rw Hxz,
+end
+
 end suites
 
 -- Le complété !
 section completion
 def completion (T: Type*) [espace_metrique T]: Type* := quotient (pre_ecart.setoid T)
 local attribute [instance] pre_ecart.setoid
-def completion.dist_soundness (T: Type*) [espace_metrique T]:
-  ∀ x₁ x₂: cauchy_seqs T, ∀ y₁ y₂: cauchy_seqs T, (x₁ ≈ y₁) → (x₂ ≈ y₂) → (cauchy.dist T x₁ x₂ = cauchy.dist T y₁ y₂) := begin
-  intros x y z t Hxz Hyt,
-  simp at Hxz,
-end
+
 def completion.dist (T: Type*) [espace_metrique T] (x y: completion T): ℝ :=
   quotient.lift₂ (cauchy.dist T) (completion.dist_soundness T) x y
+
+def completion.dist_self_eq_zero (T: Type*) [espace_metrique T] (x: completion T): completion.dist T x x = 0 := sorry
+def completion.d_pos (T: Type*) [espace_metrique T] (x y: completion T): completion.dist T x y ≥ 0 := sorry
 
 instance completion.metric_space (T: Type*) [espace_metrique T]: espace_metrique (completion T) :=
 {
   d := completion.dist T,
+  d_pos := completion.d_pos T,
+  presep := begin
+    intros x y h,
+    rw h,
+    exact completion.dist_self_eq_zero T y,
+  end,
+  sep := begin
+    intros x y h,
+    apply (completion T),
+    sorry,
+  end,
+  sym := begin
+    intros x y,
+    rw completion.dist,
+    unfold completion.dist,
+    simp,
+  end,
+  triangle := sorry }
 
 }
 end completion

@@ -158,7 +158,7 @@ by_cases (set.finite (range x)),
   rw hn_preimage,
   rw presep,
   exact hε,
-  trivial, -- l = l
+  refl, -- l = l
 },
 {
   -- C'est un peu moche, on peut directement utiliser y et prouver que c'est une sous-suite

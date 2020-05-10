@@ -6,6 +6,12 @@ class metric_space (X : Type*) :=
 (sep : ∀ x y, d x y = 0 →  x = y)
 (sym : ∀ x y, d x y = d y x)
 (triangle : ∀ x y z, d x z ≤ d x y + d y z)
+class premetric_space (X : Type*) :=
+(d : X → X → ℝ)
+(d_pos : ∀ x y, d x y ≥ 0)
+(presep : ∀ x y, x=y → d x y = 0)
+(sym : ∀ x y, d x y = d y x)
+(triangle : ∀ x y z, d x z ≤ d x y + d y z)
 
 instance real.metric_space: metric_space ℝ :=
  { d := sorry, d_pos := sorry, presep := sorry, sep := sorry,
@@ -34,6 +40,14 @@ def cauchy.limit (x: ℕ → ℝ) (H: is_cauchy x): ℝ := classical.some (R_is_
 def cauchy.dist (T: Type*) [metric_space T] (x y: cauchy_seqs T): ℝ
   := cauchy.limit (cauchy.diff x.val y.val) (cauchy.cauchy_of_diff x.val y.val x.property y.property)
 
+
+instance pre_ecart.premetrique (X: Type*) [metric_space X]: premetric_space (cauchy_seqs X) :=
+{ d := cauchy.dist X,
+  d_pos := sorry,
+  presep := sorry,
+  sym := sorry,
+  triangle := sorry }
+
 def cauchy.cong (T: Type*) [metric_space T] (x y: cauchy_seqs T): Prop := cauchy.dist T x y = 0
 instance cauchy.setoid (X : Type*) [metric_space X] : setoid (cauchy_seqs X) :=
 {
@@ -47,17 +61,21 @@ def completion (X : Type*) [metric_space X] : Type* := quotient (cauchy.setoid X
 def completion.dist_soundness (T: Type*) [metric_space T]:
   ∀ x₁ x₂: cauchy_seqs T, ∀ y₁ y₂: cauchy_seqs T, (x₁ ≈ y₁) → (x₂ ≈ y₂) → (cauchy.dist T x₁ x₂ = cauchy.dist T y₁ y₂) := begin
   intros x y z t Hxz Hyt,
-  change (x ≈ z) with (cauchy.dist T x z = 0) at Hxz,
-  change (y ≈ t) with (cauchy.dist T y t = 0) at Hyt,
+  change (cauchy.dist T x z = 0) at Hxz,
+  change (cauchy.dist T y t = 0) at Hyt,
   apply le_antisymm,
   calc
-    cauchy.dist T x y ≤ cauchy.dist T x z + cauchy.dist T z t + cauchy.dist T t y : sorry
-    ... = cauchy.dist T z t + cauchy.dist T t y : by rw Hxz
-    ... = cauchy.dist T z t + cauchy.dist T y t : sorry -- symmetry
+    cauchy.dist T x y ≤ cauchy.dist T x z + cauchy.dist T z y : premetric_space.triangle x z y
+    ... ≤ cauchy.dist T x z + (cauchy.dist T z t + cauchy.dist T t y) : add_le_add_left (premetric_space.triangle z t y) _
+    ... = cauchy.dist T z t + cauchy.dist T y t : by rw [Hxz, zero_add, premetric_space.sym t y]
     ... = cauchy.dist T z t : by rw Hyt,
   calc
-    cauchy.dist T x 
+    cauchy.dist T z t ≤ cauchy.dist T z x + cauchy.dist T x t : premetric_space.triangle z x t
+    ... ≤ cauchy.dist T z x + (cauchy.dist T x y + cauchy.dist T y t) : add_le_add_left (premetric_space.triangle x y t) _
+    ... = cauchy.dist T x z + cauchy.dist T x y : by rw [Hyt, add_zero, premetric_space.sym z x]
+    ... = cauchy.dist T x y : by rw Hxz,
 end
+
 def completion.dist (T: Type*) [metric_space T] (x y: completion T): ℝ :=
   quotient.lift₂ (cauchy.dist T) (completion.dist_soundness T) x y
 
