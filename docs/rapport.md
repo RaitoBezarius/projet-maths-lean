@@ -100,6 +100,10 @@ Puis, on munit $(\Sigma^{*}, \cdot)$ d'une structure de monoïde usuelle où $\c
 
 # Excursion dans le formalisme des espaces métriques
 
+## Avant-propos
+
+Cette partie du projet réalise plus de 1370 lignes de Lean, il est préférable d'aller à l'URL suivante: <https://github.com/RaitoBezarius/projet-maths-lean/tree/master/src/espaces-metriques> afin de pouvoir apprécier les preuves correctement coloriés, plutôt que dans ce rapport, dont les contraintes d'espaces nous ont forcé à présenter un nombre réduit de preuves et de détails.
+
 \input{chapitres/metric_tactics.tex}
 \input{chapitres/Cauchy_est_bornee.tex}
 \input{chapitres/Cauchy_admet_une_va.tex}
@@ -189,6 +193,8 @@ Donnons la feuille de route pour le théorème final (Bolzano-Weierstrass versio
 
 ## Interlude: Continuité séquentielle
 
+\input{chapitres/seq_continuity.tex}
+
 ## Complété d'un espace métrique
 
 Soit $(X, d)$ un espace métrique.
@@ -236,6 +242,47 @@ Il reste à prouver que la complétion induit bien un espace métrique, pour cel
 Pour aller plus loin, il faudrait continuer à transporter toutes les lois compatibles dans le complété, rajouter un lemme de cœrcion afin de pouvoir injecter tout élément de $X$ dans $\overline{X}$, le complété.
 
 Une fois ceci fait, on aura un structure d'espace métrique complété élémentaire mais utilisable.
+
+### Détails du fichier `custom/cauchy.lean`
+
+On y retrouve les lemmes suivants:
+
+- `cauchy_est_bornee`: déjà expliqué.
+- `dist_lt_of_ne`: on prouve que si la distance est non nulle, elle est strictement positive.
+- `eq_of_dist_lt`: on prouve que si la distance entre deux éléments est aussi petite qu'on veut, alors ces éléments sont égaux.
+- `cauchy_admet_une_va`: déjà expliqué.
+- `converge_of_va_for_cauchy`: si une suite de Cauchy a une valeur d'adhérence, elle converge vers celle ci.
+- `converge_of_unicite_va`: sous réserve de complétude, existence et unicité de la valeur d'adhérence entraîne convergence (**non terminé**).
+- `unicite_limite`: prouve l'unicité de la limite dans un espace métrique.
+- `R_is_complete`: prouve la complétude de $\R$.
+- `dist_ineg_utile`: prouve un lemme utile pour prouver que le pré-écart est de Cauchy à base d'inégalité triangulaires.
+- `pre_ecart_cauchy`: prouve que le pré-écart est de Cauchy.
+- `pre_ecart.triangle`: prouve que le pré-écart satisfait l'inégalité triangulaire.
+- `cauchy.limit`: renvoie **une**^[L'unicité provient de `unicite_limite`.] limite d'une suite de Cauchy.
+- `cauchy.converge_of_limit`: prouve que toute suite de Cauchy $x$ converge vers `cauchy.limit x`
+- `cauchy.limit_ge_of_seq_ge`: passage à la limite à gauche dans une inégalité $\geq$ avec une constante (**non terminé**).
+- `cauchy.limit_le_of_seq_le`: passage à la limite à gauche dans une inégalité $\leq$ avec une constante (**non terminé**).
+- `cauchy.le_of_limit_le`: passage à la limite à droite dans une inégalité $\leq$ avec une suite (**non terminé**).
+- `cauchy.limit_le_of_add_seq_le`: passage à la limite dans une inégalité du type: $\forall n, x_n \leq y_n + z_n$ dans toutes les suites (**non terminé**).
+- `cauchy.cauchy_of_constant_real_seq`: une suite constante est de Cauchy.
+- `cauchy.converge_of_constant`: une suite constante converge vers sa constante.
+- `cauchy.constant_limit`: une limite de Cauchy d'une suite constante est sa constante.
+- `cauchy.pre_ecart_sym`: symétrie du pré-écart.
+
+### Détails du fichier `metric.lean`
+
+- `cauchy.dist`: la définition de la distance de Cauchy en tant que limite de Cauchy du pré-écart.
+- `cauchy.d_pos`: positivité de la distance de Cauchy.
+- `cauchy.pre_ecart_self_eq_zero_seq`: le pré-écart est nul pour la même suite, i.e. $(d(x_n, x_n))_n = 0$.
+- `cauchy.cong`: le prédicat: être de distance de Cauchy nul.
+- `cauchy.cong_xxx`: la preuve de réflexivité, symétrie, transitivité et d'équivalence de `cauchy.cong`.
+- `pre_ecart.setoid`: l'instance de la relation d'équivalence précédente.
+- `completion.dist_soundness`: la propriété de compatibilité de la distance de Cauchy sous la relation d'équivalence^[Contient un bug bizarre ou difficile à comprendre sur les typeclasses et `espace_pre_metrique` au niveau de la réécriture symétrique. En cours de résolution…]
+- `completion`: définition de la complétion en tant que quotient.
+- `completion.dist`: distance de Cauchy sous la complétion, qui devient une vraie distance pour le (futur) espace métrique.
+- `completion.dist_self_eq_zero`: annulation de la distance pour les mêmes arguments.
+- `completion.d_pos`: positivité de la distance complétée.
+- `completion.metric_space`: l'instance de l'espace métrique pour le complété (**non terminé**).
 
 \bibliographystyle{plain}
 \bibliography{references}
