@@ -1,10 +1,10 @@
-\section{Lemma Cauchy\_est\_bornee}
-\subsection{Définition}
+\subsection{Lemma Cauchy\_est\_bornee}
+\subsubsection{Définition}
 Soit $(X,d)$ un espace métrique. On dit qu'une suite des éléments de $X$, $(u_n)_{n\in \mathbb{N}}$ est de Cauchy si est seulement si: $$\forall \varepsilon \in \mathbb{R_+^*}, \exists n_0 \in \mathbb{N}, \forall n,m \in \mathbb{N}, n,m \geq n_0 \Rightarrow d(U_n,U_m) \leq \varepsilon$$ 
-\subsection{\'Enoncé du lemme}
+\subsubsection{\'Enoncé du lemme}
 Dans un espace métrique, toute suite de Cauchy est bornée.
 
-\subsection{L'idée principale de la preuve}
+\subsubsection{L'idée principale de la preuve}
 On veut montrer que toute suite de Cauchy est bornée. Une suite bornée dans un espace métrique $(W_n)_{n\in\mathbb{N}}$ est une suite qui vérifie la condition suivante:$$ \forall m \in \mathbb{N}, \exists M , \forall n \in \mathbb{N}, d(W_n,W_m)\leq M $$
 Soit $(U_n)_{n\in\mathbb{N}}$ une suite de Cauchy.
 D'après la définition d'une suite de Cauchy, en prenant 1 comme valeur de $\varepsilon$, il existe un rang $n_0 \in \mathbb{N}$ tel que pour tout $n,m \geq n_0$, $d(U_n,U_m)\leq 1$.\\ Donc on peut diviser les termes de la suite en 2 ensembles: \\ $E_1=\big\{U_n\mid n\leq n_0 \big\}$ et $E_2=\big\{U_n\mid n > n_0 \big\}$. \\
