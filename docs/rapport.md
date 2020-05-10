@@ -181,9 +181,9 @@ Donnons la feuille de route pour le théorème final (Bolzano-Weierstrass versio
 - Ensuite, on prouve `bolzano_weierstrass_v2` en utilisant la nouvelle définition de l'infinitude, par l'absurde, en supposant que l'ensemble n'a pas de point limite, puis en montrant que l'ensemble est fini, puisqu'il n'a pas de point limite, son sup/inf qui en seraient sont nécessairement des max/min, d'où, ceci étant vrai pour toutes les parties, on en tire la finitude, donc l'absurdité.
 - Ensuite, on prouve la version 1: `bolzano_weierstrass`, en commençant par une distinction sur la cardinalité des valeurs prises par la suite, si c'est fini, on se contente d'utiliser le principe des tiroirs, sinon, on recourt à la version 2, on s'en tire en démontrant qu'on a une adhérence séquentielle en utilisant la tactique `choose`.
 
+## Interlude: Continuité séquentielle
+
 ## Complété d'un espace métrique
-
-
 
 \bibliographystyle{plain}
 \bibliography{references}
