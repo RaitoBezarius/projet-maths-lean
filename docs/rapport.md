@@ -35,7 +35,9 @@ Peu après, les projets Mizar \cite{Mizar}, HOL-Isabelle \cite{IsabelleHOL} et C
 
 Ces projets mettent à disposition un ensemble d'outil afin d'aider le mathématicien à formaliser sa preuve dans une théorie mathématiques de son choix: ZFC\footnote{Théorie de Zermelo-Fraenkel avec l'axiome du choix.}, la théorie des types dépendants \cite{bertot2013interactive}, la théorie des types homotopiques \cite{hottbook} par exemple.
 
-Certains assistants de preuve ne se contentent pas de vérifier la formalisation d'une preuve mais peuvent aussi effectuer de la décision (dans l'arithmétique de Presburger par exemple).
+Certains assistants de preuve ne se contentent pas de vérifier la formalisation d'une preuve mais peuvent aussi effectuer de la décision (dans l'arithmétique de Presburger par exemple. ^[L'arithmétique de Presburger est connu pour être intégralement décidable.]) \cite{akbarpour2010metitarski}
+
+À noter, que Lean implémente **partiellement** la procédure de décision `omega` tiré de l'arithmétique de Presburger. \cite{baek2019reflected}, \cite{pugh1991omega}
 
 ## Enjeu d'un assistant de preuves et exemples d'usages
 
@@ -57,7 +59,11 @@ Dans ce cas, afin de pouvoir vérifier une preuve, il faut l'écrire dans un lan
 
 Ainsi, rentre en jeu les notions de mots, de langages, de confluences et de systèmes de réécritures et d'avoir des algorithmes de bonne complexité temporelle et mémoire afin de pouvoir manipuler les représentations internes d'une preuve et décider s'ils sont des preuves du résultat désiré.
 
-Au dessus de cela, on a besoin de se donner des théories axiomatiques dans lequel on travaille, par exemple ZFC, Peano, la théorie des catégories, la théorie des types dépendants, la théorie des types homotopiques. Dans notre cas, Lean utilise la théorie des types dépendants par défaut mais propose la version homotopique aussi, qui est plus délicate à manipuler. De cela, on peut construire des notions d'ensembles, d'entiers naturels, de catégories aussi.
+Au dessus de cela, on a besoin de se donner des théories axiomatiques dans lequel on travaille, par exemple ZFC, Peano, la théorie des catégories, la théorie des types dépendants, la théorie des types homotopiques. Dans notre cas, Lean utilise la théorie des types dépendants par défaut.
+
+On mentionne aussi un intérêt pour la version homotopique aussi, qui est plus délicate à manipuler, mais un groupe de travail interne à Lean est intéressé en raison de la puissance du principe d'univalence qu'on peut vulgariser en $(x \equiv y) \equiv (x = y)$, autrement dit, « l'équivalence est l'égalité », cela permet de simplifier énormément beaucoup de preuves qui travaillent « à isomorphisme (unique) près » où il convient de manipuler certains objets formellement et de les remplacer par un de leurs isomorphismes, citons par exemple: $R[1/fg] \equiv R[1/f][1/g]$, en théorie des anneaux. Lean avait autrefois dans sa version 2, le support pour la théorie des types homotopiques, mais depuis Lean 3, celui-ci a été retiré. Ajoutons que Coq possède aussi une librairie de théorie des types homotopiques \cite{bauer2017hott}.
+
+De cela, on peut construire des notions d'ensembles, d'entiers naturels, de catégories aussi.
 
 Ceci est pour la partie vérification et fondations théoriques du modèle.
 
@@ -75,7 +81,7 @@ Nous fournissons en \ref{number_games_solution}, des solutions détaillées et e
 
 Ensuite, nous nous dirigerons vers les espaces métriques et construirons leur formalisme dans un cadre usuel, alors que la bibliothèque mathlib \cite{mathlib} construit les espaces topologiques, uniformes, métriques avec des notions de suites généralisées et de filtres.
 
-Enfin, ambitieux mais si le temps le permet, nous attaquerons une démonstration formalisée du théorème d'Ostrowski\footnote{Dont le livre d'Artin fournit une démonstration} en posant la théorie des valuations d'Artin \cite{artin2005algebraic}.
+Enfin, un projet plus ambitieux mais si le temps le permet est de donner une démonstration formalisée du théorème d'Ostrowski\footnote{Dont le livre d'Artin fournit une démonstration} en posant la théorie des valuations d'Artin \cite{artin2005algebraic}.
 
 # Détail des exercices du « Number Games » de Kevin Buzzard {#number_games_solution}
 

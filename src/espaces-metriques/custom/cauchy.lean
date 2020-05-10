@@ -182,4 +182,79 @@ calc
   ... ≤ ε : by simp
 end
 
+def cauchy.limit (x: ℕ → ℝ) (H: cauchy x): ℝ := classical.some (R_is_complete x H)
+def cauchy.converge_of_limit (x: ℕ → ℝ) (H: cauchy x): converge x (cauchy.limit x H) := 
+  classical.some_spec (R_is_complete x H)
+
+def cauchy.limit_ge_of_seq_ge (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≥ a) → (cauchy.limit x H) ≥ a :=
+begin
+intro Hineq,
+set l := cauchy.limit x H,
+by_contra,
+push_neg at a_1,
+-- idée: a = l - eps, par définition avec eps > 0.
+-- on prend converge x l avec eps/2
+-- donc abs (x_n - l) < eps/2 et x_n - a = x_n - l ≥ eps
+-- absurde, by linarith.
+sorry,
+end
+
+def cauchy.limit_le_of_seq_le (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≤ a) → (cauchy.limit x H) ≤ a :=
+begin
+intro Hineq,
+set l := cauchy.limit x H,
+by_contra,
+push_neg at a_1,
+-- idée: a = l - eps, par définition avec eps > 0.
+-- on prend converge x l avec eps/2
+-- donc abs (x_n - l) < eps/2 et x_n - a = x_n - l ≥ eps
+-- absurde, by linarith.
+sorry,
+end
+
+def cauchy.le_of_limit_le {x y: ℕ → ℝ} (Hy: cauchy y):
+  (∀ n, x n ≤ y n) → ∀ n, x n ≤ (cauchy.limit y Hy) := begin
+  intros Hc n,
+  set l := cauchy.limit y Hy,
+  by_contra,
+  push_neg at a,
+  -- idée: l = x_n + eps
+  sorry
+end
+
+def cauchy.limit_le_of_add_seq_le {x y z: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y) (Hz: cauchy z):
+  (∀ n: ℕ, x n ≤ y n + z n) → (cauchy.limit x Hx) ≤ (cauchy.limit y Hy) + (cauchy.limit z Hz) := begin
+  intro Hc,
+  apply cauchy.limit_le_of_seq_le,
+  intro n,
+  -- appliquer les lemmes précédent à la suite somme: y + z, qui est aussi de Cauchy.
+  sorry
+end
+
+def cauchy.cauchy_of_constant_real_seq (c: ℝ): cauchy (λ n, c) := begin
+intros ε hε,
+simp,
+use 0,
+intros p hq q hp,
+rw espace_metrique.presep,
+exact hε,
+refl,
+end
+
+def cauchy.converge_of_constant (c: ℝ): converge (λ x, c) c := begin
+intros ε hε,
+use 0,
+intros n hn,
+simp,
+rw espace_metrique.presep,
+exact hε,
+refl,
+end
+
+def cauchy.constant_limit (c: ℝ): cauchy.limit (λ x, c) (cauchy.cauchy_of_constant_real_seq c) = c := begin
+apply unicite_limite (λ x, c),
+exact cauchy.converge_of_limit _ _,
+exact cauchy.converge_of_constant _,
+end
+
 end suites
