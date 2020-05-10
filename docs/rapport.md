@@ -94,7 +94,8 @@ Puis, on munit $(\Sigma^{*}, \cdot)$ d'une structure de monoïde usuelle où $\c
 
 # Excursion dans le formalisme des espaces métriques
 
-Cette partie est en cours de développement.
+\input{chapitres/metric_tactics.tex}
+\input{chapitres/Cauchy_est_bornee.tex}
 
 \bibliographystyle{plain}
 \bibliography{references}

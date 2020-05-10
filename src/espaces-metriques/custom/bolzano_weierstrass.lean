@@ -30,6 +30,9 @@ lemma strictly_increasing_sequence_has_no_max (S: set X)
   sorry
 end
 
+lemma generalized_extractor_of_seq_in_range (x: ℕ → X) (y: ℕ → X) (S: set X):
+  S ⊆ (range x) → ∀ n, y n ∈ S → ∃ φ : ℕ → ℕ, y = sous_suite x φ := sorry
+
 lemma smallest_element (S: set ℕ): S.nonempty → ∃ n : ℕ, ∀ m < n, m ∉ S := begin
   intro H,
   use (nat.find H),
@@ -50,9 +53,8 @@ rw a,
 exact set.finite_empty,
 end
 
-/-- Fin du FIXME -/
-
-/-- Il faut comprendre ce lemme comme:
+/-- Fin du FIXME
+-- Il faut comprendre ce lemme comme:
 -- Dès lors que toutes parties de S ont des max et des min, alors S est finie.
 -- Ce lemme est fondamental dans la mesure où il entraîne directement l'existence des points limites
 -- dans le cas de parties infinies.
@@ -166,24 +168,10 @@ by_cases (set.finite (range x)),
   -- Donc, en tirer qu'on a bien une VA.
   obtain ⟨ l ⟩ := bolzano_weierstrass_v2 (range x) h bdd_above_and_below_of_image,
   use l,
-  obtain ⟨ y, ⟨ hssuite, hcv ⟩ ⟩ := h_1,
-  intros ε hε N,
-  obtain ⟨ N₀, hcv ⟩ := hcv ε hε,
-  suffices hX: ∃ n₀ ≥ N, ∃ p₀ ≥ N₀, x n₀ = y p₀, begin
-    obtain ⟨ n₀, Hn0, p₀, Hpn0, Hxy ⟩ := hX,
-    use n₀,
-    split,
-    exact Hn0,
-    have := hcv p₀ Hpn0,
-    rw ← Hxy at this,
-    rw espace_metrique.sym at this,
-    exact this,
-  end,
-  -- il suffit de prouver qu'on peut trouver n0 assez grand et p0 assez grand tel que x n0 = y p0
-  -- c'est suffisant de prouver que par infinitude, on peut trouver p0 assez grand tel que y p0 possède un rang assez grand.
-  -- niveau: moyen.
-  -- preuve: prouver que la préimage de x par { y(p) | p ≥ N0} est infinie, c'est vrai car son complémentaire est finie (immédiatement).
-  -- donc, on prend un n0 plus grand que N dedans, possible par définition de l'infinitude.
+  rw point_limite at h_1,
+  rw adhere_ens at h_1,
+  apply adhere_of_seq_adhere,
+  obtain ⟨ x, hrange, hcv ⟩ := h_1,
   sorry,
 }
 end
