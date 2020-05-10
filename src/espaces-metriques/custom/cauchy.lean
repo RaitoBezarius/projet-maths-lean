@@ -131,14 +131,17 @@ have hε3 : ε/3 > 0 := by linarith,
 obtain ⟨ n₀, h_cauchy ⟩ := cauch (ε/3) hε3,
 obtain ⟨ p₁ , ⟨ hp₁, hl₁ ⟩ ⟩ := h.1 (ε/3) hε3 (n₀),
 obtain ⟨ p₂ , ⟨ hp₂ , hl₂ ⟩ ⟩ := h.2 (ε/3) hε3 (n₀),
+rw espace_metrique.sym l2 (x p₂) at hl₂,
+have Tr := espace_metrique.triangle (x p₁) (x p₂) l2,
+have Hc:= h_cauchy p₁ hp₁ p₂ hp₂,
 calc
   d l1 l2 ≤ d l1 (x p₁) + d (x p₁) l2 : espace_metrique.triangle _ _ _
-    ... = d l1 (x p₁) + d (x p₁) l2 : by rw espace_metrique.sym l1 (x p₁)
-    ... < ε/3 + d (x p₁) l2 : add_lt_add_right hl₁ (d (x p₁) l2)
-    ... ≤ ε/3 + d (x p₁) (x p₂) + d (x p₂) l2 : begin have := espace_metrique.triangle (x p₁) (x p₂ ) l2, rw add_assoc (ε/3)  (d (x p₁) (x p₂)) (d (x p₂) l2), exact add_le_add_left this (ε/3), end 
-    ... < ε/3 + ε/3 + d (x p₂) l2 : begin have := h_cauchy p₁ hp₁ p₂ hp₂, rw add_comm (ε/3) (d (x p₁) (x p₂)), rw add_assoc, rw add_assoc, exact add_lt_add_right this (ε / 3 + d (x p₂) l2), end 
-    ... = ε/3 + ε/3 + d l2 (x p₂) : by rw espace_metrique.sym _ _
-    ... < ε/3 + ε/3 + ε/3 : add_lt_add_left hl₂ (ε/3 + ε/3)
+    ... < ε/3 + d (x p₁) l2 :  add_lt_add_right hl₁ (d (x p₁) l2)
+    ... ≤ ε/3 + (d (x p₁) (x p₂) + d (x p₂) l2) : add_le_add_left Tr (ε/3)
+    ... = d (x p₁) (x p₂) + (ε / 3 + d (x p₂) l2) : by ring 
+    ... < ε/3 + (ε/3 + d (x p₂) l2) : add_lt_add_right Hc (ε / 3 + d (x p₂) l2)
+    ... = ε/3 + ε/3 + d (x p₂) l2 : by ring
+    ... < ε/3 + ε/3 + ε/3 :  add_lt_add_left hl₂ (ε/3 + ε/3)
     ... = ε : by ring,
 end
 

@@ -12,18 +12,19 @@ begin
   intros |$\varepsilon$| h|$\varepsilon$|,
   have h|$\varepsilon$|3 : |$\varepsilon/3$| > 0 := by linarith,
   obtain ⟨ n₀, h_cauchy ⟩ := cauch (|$\varepsilon/3$|) h|$\varepsilon$|3,
-  obtain ⟨ p_1, ⟨ hp_1, hl₁ ⟩ ⟩ := h.1 (|$\varepsilon/3$|) h|$\varepsilon$|3 (n₀),
-  obtain ⟨ p_2, ⟨ hp_2, hl₂ ⟩ ⟩ := h.2 (|$\varepsilon/3$|) h|$\varepsilon$|3 (n₀),
-  have Hd := espace_metrique.triangle (x p₁) (x p₂ ) l2,
-  have Hc:= h_cauchy p₁ hp₁ p₂ hp₂,
+  obtain ⟨ |$p_1$|, ⟨ |$hp_1$|, |$hl_1$| ⟩ ⟩ := h.1 (|$\varepsilon/3$|) h|$\varepsilon$|3 (n₀),
+  obtain ⟨ |$p_2$|, ⟨ |$hp_2$|, |$hl_2$| ⟩ ⟩ := h.2 (|$\varepsilon/3$|) h|$\varepsilon$|3 (n₀),
+  rw espace_metrique.sym l2 (x |$p_2$|) at |$hl_2$|,
+  have Tr := espace_metrique.triangle (x |$p_1$|) (x |$p_2$| ) l2,
+  have Hc:= h_cauchy |$p_1$| |$hp_1$| |$p_2$| |$hp_2$|,
   calc
-    d l1 l2 |$\leq$| d l1 (x p₁) + d (x p₁) l2 : espace_metrique.triangle _ _ _
-      ... |$<$| |$\varepsilon/3$| + d (x p₁) l2 :  add_lt_add_right hl₁ (d (x p₁) l2)
-      ... |$\leq$| |$\varepsilon/3$| + (d (x p₁) (x p₂) + d (x p₂) l2) : add_le_add_left Hd (|$\varepsilon/3$|)
-      ... = d (x p₁) (x p₂) + (|$\varepsilon$| / 3 + d (x p₂) l2) : by ring 
-      ... |$<$| |$\varepsilon/3$| + (|$\varepsilon/3$| + d (x p₂) l2) : add_lt_add_right Hc (|$\varepsilon/3$| + d (x p₂) l2)
-      ... = |$\varepsilon/3$| + |$\varepsilon/3$| + d (x p₂) l2 : by ring
-      ... |$<$| |$\varepsilon/3$| + |$\varepsilon/3$| + |$\varepsilon/3$| :  add_lt_add_left hl₂ (|$\varepsilon/3$| + |$\varepsilon/3$|)
+    d l1 l2 |$\leq$| d l1 (x |$p_1$|) + d (x |$p_1$|) l2 : espace_metrique.triangle _ _ _
+      ... |$<$| |$\varepsilon/3$| + d (x |$p_1$|) l2 :  add_lt_add_right |$hl_1$| (d (x |$p_1$|) l2)
+      ... |$\leq$| |$\varepsilon/3$| + (d (x |$p_1$|) (x |$p_2$|) + d (x |$p_2$|) l2) : add_le_add_left Tr (|$\varepsilon/3$|)
+      ... = d (x |$p_1$|) (x |$p_2$|) + (|$\varepsilon$| / 3 + d (x |$p_2$|) l2) : by ring 
+      ... |$<$| |$\varepsilon/3$| + (|$\varepsilon/3$| + d (x |$p_2$|) l2) : add_lt_add_right Hc (|$\varepsilon/3$| + d (x |$p_2$|) l2)
+      ... = |$\varepsilon/3$| + |$\varepsilon/3$| + d (x |$p_2$|) l2 : by ring
+      ... |$<$| |$\varepsilon/3$| + |$\varepsilon/3$| + |$\varepsilon/3$| :  add_lt_add_left |$hl_2$| (|$\varepsilon/3$| + |$\varepsilon/3$|)
       ... = |$\varepsilon$| : by ring,
 end
 \end{minted}
