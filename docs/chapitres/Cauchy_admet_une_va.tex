@@ -1,0 +1,28 @@
+\subsection{cauchy\_admet\_une\_va}
+Ici nous allons détailler la preuve de l'unicité de la valeur d'adhérence de toute suite de Cauchy, qui, en Lean, s'énonce comme ceci : 
+\mint{lean}|lemma cauchy\_admet\_une\_va (x : \mathbb{N} \to \mathbb{R}) : cauchy x \to \forall l_1 l_2: X, adhere x l_1 ∧ adhere x l_2 \to l_1 = l_2|
+Pour cela, on a besoin d'une autre preuve, à savoir : 
+\mint{lean}|lemma eq\_of\_dist\_lt: (x y : X) : (\forall \epsilon > 0, d x y < \epsilon) \to x = y |
+Nous l'admettrons ici (la preuve est dans le code) pour nous focaliser sur cauchy\_admet\_une\_va, dont nous exposerons le principe de la preuve ci- dessous. 
+\begin{minted}[mathescape,linenos,numbersep=5pt,frame=lines,framesep=2mm,breaklines,escapeinside=||]{lean}
+lemma cauchy\_admet\_une\_va (x : \mathbb{N} \to \mathbb{R}) : cauchy x \to \forall l_1 l_2: X, adhere x l_1 ∧ adhere x l_2 \to l_1 = l_2 :=
+begin
+  intros cauch l1 l2 h,
+  apply eq_of_dist_lt,
+  intros \epsilon h\epsilon,
+  have h\epsilon3 : \epsilon/3 > 0 := by linarith,
+  obtain ⟨ n₀, h_cauchy ⟩ := cauch (\epsilon/3) h\epsilon3,
+  obtain ⟨ p_1, ⟨ hp_1, hl₁ ⟩ ⟩ := h.1 (\epsilon/3) h\epsilon3 (n₀),
+  obtain ⟨ p_2, ⟨ hp_2, hl₂ ⟩ ⟩ := h.2 (\epsilon/3) h\epsilon3 (n₀),
+  calc
+    d l1 l2 ≤ d l1 (x p_1) + d (x p_1) l2 : espace_metrique.triangle _ _ _
+      ... < \epsilon/3 + d (x p_1) l2 : begin rw espace_metrique.sym l1 (x p_1), exact add_lt_add_right hl₁ (d (x p_1) l2), end 
+      ... ≤ \epsilon/3 + d (x p_1) (x p_2) + d (x p_2) l2 : begin have := espace_metrique.triangle (x p_1) (x p_2) l2, rw add_assoc (\epsilon/3)  (d (x p_1) (x p_2)) (d (x p_2) l2), exact add_le_add_left this (\epsilon/3), end 
+      ... < \epsilon/3 + \epsilon/3 + d (x p_2) l2 : begin have := h_cauchy p_1 hp_1 p_2 hp_2, rw add_comm (\epsilon/3) (d (x p_1) (x p_2)), rw add_assoc, rw add_assoc, exact add_lt_add_right this (\epsilon / 3 + d (x p_2) l2), end 
+      ... < \epsilon/3 + \epsilon/3 + \epsilon/3 :  add_lt_add_left hl₂ (\epsilon/3 + \epsilon/3)
+      ... = \epsilon : by ring,
+end
+\end{minted}
+Après avoir introduit les différentes variables, on utilise eq\_of\_dist\_lt pour dire qu'il suffit de montrer que $\forall (\epsilon : \mathbb{R}), \epsilon > 0 \to d$ $x$ $y < \epsilon$. On introduit les variables, utilisons la tactique $\mathit{linarith}$ qui résoud les inégalités triviales pour la propriété qui nous intéresse. \\
+Ensuite, à l'aide de la tactique $\mathit{obtain}$, on dispose d'abord de $n_0$ tel que $\forall p,q \geq n_0, d$ $(x$ $p)$ $(x$ $q) < \epsilon /3$, ce qui est possible car x est de cauchy, puis $p_1$ et $p_2$ tels que $p_1 , p_2 \geq n_0$ et $d$ $(x$ $p_i)$ $l_i < \epsilon /3$, ce qui est garantit par le fait que $l_1$ et $l_2$ sont des valeurs d'adhérence de $x$.\\
+Ensuite il ne reste que du calcul numérique à effectuer, que l'on fait grâce à la méthode $\mathit{calc}$, qui permet de partir d'un côté du résultat, et par suite d'égalités ou d'inégalités strictes ou larges - toujours par rapport à l'étape précédente - pour arriver à l'autre côté du résultat, en accolant la preuve de chaque (in)égalité à droite de celle-ci. Ici on a donc utilisé l'inégalité triangulaire, la symétrie de la distance et quelques lemmes triviaux d'inégalité, ainsi que la tactique $\mathit{ring}$ qui résoud des égalités simples dans un anneau.\\

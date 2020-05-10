@@ -138,7 +138,7 @@ lemma eq_of_dist_lt {x: X} {y: X} : (∀ ε > 0, d x y < ε) → x = y := begin
   exact espace_metrique.sep x y,
 end
 
-#check gt_iff_lt.2 
+
 -- niveau: moyen
 lemma cauchy_admet_une_va {x: ℕ → X} : cauchy x → ∀ l₁ : X, ∀ l₂ : X, adhere x l₁ ∧ adhere x l₂ → l₁ = l₂ := 
 begin 
@@ -147,13 +147,13 @@ apply eq_of_dist_lt,
 intros ε hε,
 have hε3 : ε/3 > 0 := by linarith,
 obtain ⟨ n₀, h_cauchy ⟩ := cauch (ε/3) hε3,
-obtain ⟨ p₀, ⟨ hp₀, hl₁ ⟩ ⟩ := h.1 (ε/3) hε3 (n₀),
-obtain ⟨ p₁, ⟨ hp₁, hl₂ ⟩ ⟩ := h.2 (ε/3) hε3 (n₀),
+obtain ⟨ p₁ , ⟨ hp₁, hl₁ ⟩ ⟩ := h.1 (ε/3) hε3 (n₀),
+obtain ⟨ p₂ , ⟨ hp₂ , hl₂ ⟩ ⟩ := h.2 (ε/3) hε3 (n₀),
 calc
-  d l1 l2 ≤ d l1 (x p₀) + d (x p₀) l2 : espace_metrique.triangle _ _ _
-    ... < ε/3 + d (x p₀) l2 : begin rw espace_metrique.sym l1 (x p₀), exact add_lt_add_right hl₁ (d (x p₀) l2), end 
-    ... ≤ ε/3 + d (x p₀) (x p₁) + d (x p₁) l2 : begin have := espace_metrique.triangle (x p₀) (x p₁) l2, rw add_assoc (ε/3)  (d (x p₀) (x p₁)) (d (x p₁) l2), exact add_le_add_left this (ε/3), end 
-    ... < ε/3 + ε/3 + d (x p₁) l2 : begin have := h_cauchy p₀ hp₀ p₁ hp₁, rw add_comm (ε/3) (d (x p₀) (x p₁)), rw add_assoc, rw add_assoc, exact add_lt_add_right this (ε / 3 + d (x p₁) l2), end 
+  d l1 l2 ≤ d l1 (x p₁) + d (x p₁) l2 : espace_metrique.triangle _ _ _
+    ... < ε/3 + d (x p₁) l2 : begin rw espace_metrique.sym l1 (x p₁), exact add_lt_add_right hl₁ (d (x p₁) l2), end 
+    ... ≤ ε/3 + d (x p₁) (x p₂) + d (x p₂) l2 : begin have := espace_metrique.triangle (x p₁) (x p₂ ) l2, rw add_assoc (ε/3)  (d (x p₁) (x p₂)) (d (x p₂) l2), exact add_le_add_left this (ε/3), end 
+    ... < ε/3 + ε/3 + d (x p₂) l2 : begin have := h_cauchy p₁ hp₁ p₂ hp₂, rw add_comm (ε/3) (d (x p₁) (x p₂)), rw add_assoc, rw add_assoc, exact add_lt_add_right this (ε / 3 + d (x p₂) l2), end 
     ... < ε/3 + ε/3 + ε/3 :  add_lt_add_left hl₂ (ε/3 + ε/3)
     ... = ε : by ring,
 end
