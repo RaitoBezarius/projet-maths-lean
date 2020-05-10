@@ -1,3 +1,4 @@
+
 \section{Lemma Cauchy\_est\_bornee}
 \subsection{Définition}
 Soit $(X,d)$ un espace métrique. On dit qu'une suite des éléments de $X$, $(u_n)_{n\in \mathbb{N}}$ est de Cauchy si est seulement si: $$\forall \varepsilon \in \mathbb{R_+^*}, \exists n_0 \in \mathbb{N}, \forall n,m \in \mathbb{N}, n,m \geq n_0 \Rightarrow d(U_n,U_m) \leq \varepsilon$$ 
@@ -7,51 +8,52 @@ Dans un espace métrique, toute suite de Cauchy est bornée.
 \subsection{L'idée principale de la preuve}
 On veut montrer que toute suite de Cauchy est bornée. Une suite bornée dans un espace métrique $(W_n)_{n\in\mathbb{N}}$ est une suite qui vérifie la condition suivante:$$ \forall m \in \mathbb{N}, \exists M , \forall n \in \mathbb{N}, d(W_n,W_m)\leq M $$
 Soit $(U_n)_{n\in\mathbb{N}}$ une suite de Cauchy.
-D'après la définition d'une suite de Cauchy, en prenant 1 comme valeur de $\varepsilon$, il existe un rang $n_0 \in \mathbb{N}$ tel que pour tout $n,m \geq n_0$, $d(U_n,U_m)\leq 1$. Donc on peut diviser les termes de la suite en 2 ensembles: $E_1=\big\{U_n|n\leq n_0 \big\}$ et $E_2=\big\{U_n|n > n_0 \big\}$.
+D'après la définition d'une suite de Cauchy, en prenant 1 comme valeur de $\varepsilon$, il existe un rang $n_0 \in \mathbb{N}$ tel que pour tout $n,m \geq n_0$, $d(U_n,U_m)\leq 1$.\\ Donc on peut diviser les termes de la suite en 2 ensembles: \\ $E_1=\big\{U_n\mid n\leq n_0 \big\}$ et $E_2=\big\{U_n\mid n > n_0 \big\}$. \\
 Soit $Y$ un élément quelconque de la suite $(U_n)$.
 \begin{itemize}
-    \item $\big\{U_n|n\leq n_0 \big\}$ est un ensemble fini dénombrable, donc pareil pour l'ensemble $D_1=\big\{d(U_n,Y), \forall U_n\in E_1\big\}$ qui est également dénombrable et fini. Alors l'ensemble $D_1$ admet un maximum $M_1$.
-    \item Soit $D_2=\big\{d(U_n,Y)|n> n_0 \big\}$. D'après l'inégalité triangulaire, $d(U_n,Y)\leq d(U_n,U_{n_0})+d(U_{n_0},Y)$. Or d'après le caractère Cauchy de la suite, $d(U_n,U_{n_0})\leq 1$ pour tout $n\geq n_0$, on en déduit que $D_2$ est majoré par $d(U_{n_0},Y)+1$. 
+    \item $\big\{U_n\mid n\leq n_0 \big\}$ est un ensemble fini dénombrable, donc pareil pour l'ensemble $D_1=\big\{d(U_n,Y), \forall U_n\in E_1\big\}$ qui est également dénombrable et fini.\\ Alors l'ensemble $D_1$ admet un maximum $M_1$.
+    \item Soit $D_2=\big\{d(U_n,Y)\mid n> n_0 \big\}$. D'après l'inégalité triangulaire, $d(U_n,Y)\leq d(U_n,U_{n_0})+d(U_{n_0},Y)$.\\ Or d'après le caractère Cauchy de la suite, $d(U_n,U_{n_0})\leq 1$ pour tout $n\geq n_0$.\\ On en déduit que $D_2$ est majoré par $d(U_{n_0},Y)+1$. 
 \end{itemize}
-On en déduit que la suite $(U_n)$ est majorée par $max(M_1,d(U_{n_0},Y)+1)$. Elle est donc bornée.\\
+On en déduit que la suite $(U_n)$ est majorée par $\max(M_1,d(U_{n_0},Y)+1)$. Elle est donc bornée.\\
 
 
 Dans la partie ci-dessous, nous allons expliquer l'utilisation de certaines tactiques dans la démonstration de ce théorème sur Lean.\\
 \begin{itemize}
-    \item obtain \textless $N, H$ \textgreater : $\exists N, \forall p \geq N, \forall q \geq N,$ ((d (x p) (x q)) $< 1$)
+    \item \texttt{obtain $\langle N, H \rangle $}: $\exists N, \forall p \geq N, \forall q \geq N, (d (x_p) (x_q)) < 1$
     
-    on utilise cette tactique pour stocker dans $H$ une formule mathématique (hypothèse) qui dépend d'un entier $N$, et dans $N$ l'entier en question. Suite à l'utilisation de \texttt{obtain}, on doit démontrer l'existence d'un entier $N$ qui vérifie $H$. Pour ce faire, on utilise l'hypothèse \texttt{cauch: cauchy x} et le fait que 1 soit un entier strictement positive.\\
-    \'A ce niveau, le \textbf{goal} est: $\exists (M:\mathbb{R}), M > 0 \wedge \forall (n : \mathbb{N})$ $d$ $(x n)$ $y \leq M$
-    \item set Limage:= $\big\{ M: \mathbb{R}, \exists n\leq N,$ M = d (x n) y $\big\}$
-    
-    
-    Cet ensemble contient toutes les valeurs possibles de la distance entre un terme de la suite d'indice inférieur ou égal à $N$ et $y$ (qui est un terme fixe quelconque de la suite). On cherche à majorer cet ensemble. Une méthode pour le faire sera de démontrer qu'il est non vide et fini.
-    \item have limage\_finiteness: Limage.finite
+    On utilise cette tactique pour stocker dans $H$ une formule mathématique (hypothèse) qui dépend d'un entier $N$, et dans $N$ l'entier en question. \\ Suite à l'utilisation de \texttt{obtain}, on doit démontrer l'existence d'un entier $N$ qui vérifie $H$.\\ Pour ce faire, on utilise l'hypothèse de Cauchy sur $x$ et le fait que 1 soit un entier strictement positive.\\
+    \'A ce niveau, le \textbf{goal} est: $\exists (M:\mathbb{R}), M > 0 \wedge \forall (n : \mathbb{N})$ $d$ $(x_n)$ $y \leq M$.
+    \item \texttt{set Limage:= $\big\{ M: \mathbb{R} \mid \exists n\leq N, M = d(x_n)y \big\}$}
     
     
-     Cette tactique permet d'ajouter une hypothèse nommée \texttt{limage\_finiteness} qui dit que l'ensemble \texttt{Limage} est fini. Elle est suivie par une démonstration dont la démarche est la suivante:
+    Cet ensemble contient toutes les valeurs possibles de la distance entre un terme de la suite d'indice inférieur ou égal à $N$ et $y$ (qui est un terme fixe quelconque).\\ Afin de majorer cet ensemble, on peut démontrer qu'il est non vide et fini.
+    \item \texttt{have limage\_finiteness: Limage.finite}
+    
+    
+     Cette tactique permet d'ajouter une hypothèse nommée \texttt{limage\_finiteness} qui dit que l'ensemble \texttt{Limage} est fini.\\ Elle est suivie par une démonstration dont la démarche est la suivante:
     \begin{itemize}
-         \item On a défini la fonction \texttt{fonction\_distance} qui prend comme paramètres une suite $X$, un indice $n$ et un terme $Y$ de la suite et retourne la distance entre $Y$ et $X_n$. On montre que l'ensemble \texttt{Limage} est l'image de l'ensemble $\big\{i:\mathbb{N}, i\leq \mathbb{N}\big\}$ par \texttt{fonction\_distance}.
-        \item On utilise \texttt{apply set.finite\_image}, pour appliquer le résultat suivant: l'image d'un ensemble fini est finie. Le \texttt{goal} devient de démontrer que l'ensemble $\big\{i:\mathbb{N}, i\leq \mathbb{N}\big\}$ est fini.
+         \item On a défini la fonction \texttt{fonction\_distance} qui prend comme paramètres une suite $x$, un indice $n$ et un terme $y$ et retourne la distance entre $y$ et $x_n$. \\ On montre que l'ensemble \texttt{Limage} est l'image de l'ensemble $\big\{i:\mathbb{N}\mid i\leq \mathbb{N}\big\}$ par \texttt{fonction\_distance}.
+        \item On utilise \texttt{apply set.finite\_image}, pour appliquer le résultat suivant: l'image d'un ensemble fini est finie. \\ Le \texttt{goal} devient de démontrer que l'ensemble $\big\{i:\mathbb{N}\mid i\leq \mathbb{N}\big\}$ est fini.
         \item On utilise \texttt{exact set.finite\_le\_nat $N$} pour ce faire.
     \end{itemize}
-    \item have limage\_nonempty: Limage.nonempty 
+    \item \texttt{have limage\_nonempty: Limage.nonempty} 
     
     
-    Cette tactique permet d'ajouter une hypothèse nommée \texttt{limage\_nonempty} qui dit que l'ensemble Limage est non vide. Afin de démontrer ce résultat, on utilise le fait que $d$ $(x 0)$ $y$ appartient à l'ensemble, puisque $0 \leq N$.
-    \item have sup\_est\_atteint: Sup Limage ∈ Limage
+    Cette tactique permet d'ajouter une hypothèse nommée \texttt{limage\_nonempty} qui dit que l'ensemble Limage est non vide.\\ Afin de démontrer ce résultat, on utilise le fait que $d (x_0) y  \in \textrm{Limage}$ puisque $0 \leq N$.
+    \item \texttt{have sup\_est\_atteint: Sup Limage $\in$ Limage}
     
     
-    Pour démontrer \texttt{sup\_est\_atteint} (c'est à dire que \texttt{Limage} admet un maximum), on utilise \texttt{set.finite.has\_a\_reached\_sup} avec les hypothèses \texttt{limage\_finiteness} et \texttt{limage\_nonempty}. On note ce maximum  $d (x n) y$.
-    \item use $(max (d (x n) y) (1 + d (x N) y))$
+    Pour démontrer \texttt{sup\_est\_atteint} (c'est à dire que \texttt{Limage} admet un maximum), on utilise \texttt{set.finite.has\_a\_reached\_sup} avec les hypothèses \texttt{limage\_finiteness} et \texttt{limage\_nonempty}.\\ Donc, il existe un entier $n\leq N$ tel que $d (x_n) y= \max$(\textrm{Limage}).
+    \item \texttt{use $(\max (d(x_n)y , 1+d(x_N)y))$}
     
     
-    De cette façon le \texttt{goal} devient de démontrer que $max (d (x n) y) (1 + d (x N) y)$ est un majorant de la suite de Cauchy $X$ en question. C'est à dire il faut montrer que $max (d (x n) y) (1 + d (x N) y)$ $>$ $0$ (ce qui est trivial) et que $\forall n_1 : \mathbb{N}, d (xn_1) y \leq max (d (x n) y) (1 + d (x N) y)$
-    \item intro p, by\_cases (p ≥ N)
+    De cette façon le \texttt{goal} devient de démontrer que $\max(d(x_n)y , 1+d(x_N)y)$ est un majorant de la suite de Cauchy $x$ en question. \newline C'est à dire qu'il faut montrer que $\max(d(x_n)y , 1+d(x_N)y)$ $>$ $0$ (ce qui est immédiat), \\ et que $\forall n_1 : \mathbb{N}, d (x_{n_1}) y \leq \max (d(x_n)y , 1+ d(x_N) y)$
+    \item \texttt{intro p, by\_cases (p \geq N)}
     
     
     C'est à dire qu'on prend un entier $p$ et on montre la propriété dans 2 cas: pour $p \geq N$ et pour $p < N$. \\
-    Dans le cas où $p \geq N$, d'après l'hypothèse $H$, puisque $p \geq N$ et $N \geq N$, $d (x p) (x N) < 1$. \\ Alors $d (x p) (x N) + d (x N) y \leq 1 + d (x N) y$ \\ Donc à fortiori $d (x p) (x N) + d (x N) y \leq max (d (x n) y) (1 + d (x N) y)$. Or d'après l'inégalité triangulaire $d (x p) y \leq d (x p) (x N) + d (x N) y$, donc $d (x p) y \leq max (d (x n) y) (1 + d (x N) y)$\\
-    Dans le cas où $p < N$, on applique l'hypothèse \texttt{sup\_atteint} pour majorer $d (x p) y$ par $d (x n) y$ puisque $d (x n) y$ est la borne supérieure de l'ensemble \texttt{Limage} et $d (x p) y$ appartient à \texttt{Limage}.\\
-    Donc $d (x p) y \leq max (d (x n) y) (1 + d (x N) y)$.
+    Dans le cas où $p \geq N$: \\ D'après l'hypothèse $H$, puisque $p \geq N$ et $N \geq N$, $d (x_p) (x_N) < 1$. \\ Alors $d (x_p) (x_N) + d (x_N) y \leq 1 + d (x_N) y$. \\ Donc à fortiori $d (x_p) (x_N) + d (x_N) y \leq \max (d (x_n) y , 1 + d (x_N) y)$. 
+    \\ Or d'après l'inégalité triangulaire $d (x_p) y \leq d (x_p) (x_N) + d (x_N) y$. \\ Donc $d (x_p) y \leq \max (d (x_n) y , 1 + d (x_N) y)$.\\
+    Dans le cas où $p < N$: \newline On applique l'hypothèse \texttt{sup\_atteint} pour majorer $d (x_p) y$ par $d (x_n) y$, puisque $d (x_n) y$ est la borne supérieure de l'ensemble \texttt{Limage} et $d (x_p) y \in$ \texttt{Limage}.\\
+    Donc $d (x_p) y \leq \max (d (x_n) y , 1 + d (x_N) y)$.
 \end{itemize}
