@@ -9,7 +9,7 @@ noncomputable theory
 open_locale classical
 
 section suites
-variables {X: Type} [espace_metrique X] [conditionally_complete_linear_order X]
+variables {X: Type} [conditionally_complete_linear_order X]
 def suite_st_croissante {S: set X}
   (Hinf: set.infinite S)
   (Hset: (∀ M ⊆ S, M.nonempty → is_least M (Inf M))) : ℕ → X := 
