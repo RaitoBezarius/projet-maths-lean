@@ -102,7 +102,7 @@ Puis, on munit $(\Sigma^{*}, \cdot)$ d'une structure de monoïde usuelle où $\c
 
 ## Avant-propos
 
-Cette partie du projet réalise plus de 1370 lignes de Lean, il est préférable d'aller à l'URL suivante: <https://github.com/RaitoBezarius/projet-maths-lean/tree/master/src/espaces-metriques> afin de pouvoir apprécier les preuves correctement coloriés, plutôt que dans ce rapport, dont les contraintes d'espaces nous ont forcé à présenter un nombre réduit de preuves et de détails.
+Cette partie du projet réalise plus de 1370 lignes de Lean, il est préférable d'aller à l'URL suivante: <https://github.com/RaitoBezarius/projet-maths-lean/tree/master/src/espaces-metriques>^[<https://frama.link/RRVkaExT>] afin de pouvoir apprécier les preuves correctement coloriés, plutôt que dans ce rapport, dont les contraintes d'espaces nous ont forcé à présenter un nombre réduit de preuves et de détails.
 
 \input{chapitres/metric_tactics.tex}
 \input{chapitres/Cauchy_est_bornee.tex}

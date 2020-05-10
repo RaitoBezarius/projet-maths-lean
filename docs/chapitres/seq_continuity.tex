@@ -12,6 +12,6 @@ On définit ensuite la continuité séquentielle en un point de la composée :
 
 \mintinline[escapeinside=||,mathescape, breaklines]{lean}{theorem comp_seq_continue_ponctuel |$(f : X \to Y) \,(l : X) :$|seq_continue_en_l|$\, f \, l \, \land \, $|seq_continue_en_l|$ \, g \, (f \, l) \to \,$|seq_continue_en_l|$ \, (g \circ f) \, l$|} \\
 
-Pour cette preuve, après introduction des variables, on crée une variable, on prouve que la suite image par $g$ de la suite image par $f$ de $x$ converge vers $g(f(l))$, ce qu'on modifie grâce à la tactique $\texttt{conv}$ en \og{}la suite image par $g \circ f$ de $x$ converge vers $g(f(l))$ \fg{}, ce qui correspond exactement au but.\\
+Pour cette preuve, après introduction des variables, on crée une variable, on prouve que la suite image par $g$ de la suite image par $f$ de $x$ converge vers $g(f(l))$, ce qu'on modifie grâce à la tactique $\texttt{conv}$ en « la suite image par $g \circ f$ de $x$ converge vers $g(f(l))$ », ce qui correspond exactement au but.\\
 
 Finalement, pour prouver la continuité séquentielle en tous points de la composée, il suffit d'introduire les variables, appliquer la tactique $\texttt{apply}$ au théorème précédent, puis montrer grâce aux hypothèses que pour tout point $l:X$, $f$ est continue en $l$ et $g$ en $f(l)$.\\
