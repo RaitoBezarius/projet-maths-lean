@@ -338,12 +338,4 @@ ext,
 exact espace_metrique.sym _ _,
 end
 
-def cauchy.pre_ecart_self_eq_zero_seq (T: Type*) [espace_metrique T] (x: cauchy_seqs T):
-  pre_ecart x.val x.val = ((λ n, 0): ℕ → ℝ) := begin
-  rw pre_ecart,
-  ext,
-  apply espace_metrique.presep,
-  refl,
-end
-
 end suites

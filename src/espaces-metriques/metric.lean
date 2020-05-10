@@ -44,13 +44,6 @@ simp,
 exact espace_metrique.d_pos _ _,
 end
 
-def cauchy.pre_ecart_sym (x y: ℕ → X): pre_ecart x y = pre_ecart y x := begin
-rw pre_ecart,
-rw pre_ecart,
-ext,
-exact espace_metrique.sym _ _,
-end
-
 def cauchy.pre_ecart_self_eq_zero_seq (T: Type*) [espace_metrique T] (x: cauchy_seqs T):
   pre_ecart x.val x.val = ((λ n, 0): ℕ → ℝ) := begin
   rw pre_ecart,
@@ -134,21 +127,21 @@ instance pre_ecart.setoid (T: Type*) [espace_metrique T] : setoid (cauchy_seqs T
 
 local attribute [instance] pre_ecart.premetrique
 def completion.dist_soundness (T: Type*) [espace_metrique T]:
-  ∀ x₁ x₂: cauchy_seqs T, ∀ y₁ y₂: cauchy_seqs T, (x₁ ≈ y₁) → (x₂ ≈ y₂) → (cauchy.dist T x₁ x₂ = cauchy.dist T y₁ y₂) := begin
+  ∀ x₁ x₂: cauchy_seqs T, ∀ y₁ y₂: cauchy_seqs T, (x₁ ≈ y₁) → (x₂ ≈ y₂) → (espace_pre_metrique.d x₁ x₂ = espace_pre_metrique.d y₁ y₂) := begin
   intros x y z t Hxz Hyt,
-  change (cauchy.dist T x z = 0) at Hxz,
-  change (cauchy.dist T y t = 0) at Hyt,
+  change (espace_pre_metrique.d x z = 0) at Hxz,
+  change (espace_pre_metrique.d y t = 0) at Hyt,
   apply le_antisymm,
   calc
-    cauchy.dist T x y ≤ cauchy.dist T x z + cauchy.dist T z y : espace_pre_metrique.triangle x z y
-    ... ≤ cauchy.dist T x z + (cauchy.dist T z t + cauchy.dist T t y) : add_le_add_left (espace_pre_metrique.triangle z t y) _
-    ... = cauchy.dist T z t + cauchy.dist T y t : by rw [Hxz, zero_add, espace_pre_metrique.sym t y]
-    ... = cauchy.dist T z t : by rw Hyt,
+    espace_pre_metrique.d x y ≤ espace_pre_metrique.d x z + espace_pre_metrique.d z y : espace_pre_metrique.triangle x z y
+    ... ≤ espace_pre_metrique.d x z + (espace_pre_metrique.d z t + espace_pre_metrique.d t y) : add_le_add_left (espace_pre_metrique.triangle z t y) _
+    ... = espace_pre_metrique.d z t + espace_pre_metrique.d y t : by rw [Hxz, zero_add, espace_pre_metrique.sym t y]
+    ... = espace_pre_metrique.d z t : by rw Hyt; simp,
   calc
-    cauchy.dist T z t ≤ cauchy.dist T z x + cauchy.dist T x t : espace_pre_metrique.triangle z x t
-    ... ≤ cauchy.dist T z x + (cauchy.dist T x y + cauchy.dist T y t) : add_le_add_left (espace_pre_metrique.triangle x y t) _
-    ... = cauchy.dist T x z + cauchy.dist T x y : by rw [Hyt, add_zero, espace_pre_metrique.sym z x]
-    ... = cauchy.dist T x y : by rw Hxz,
+    espace_pre_metrique.d z t ≤ espace_pre_metrique.d z x + espace_pre_metrique.d x t : espace_pre_metrique.triangle z x t
+    ... ≤ espace_pre_metrique.d z x + (espace_pre_metrique.d x y + espace_pre_metrique.d y t) : add_le_add_left (espace_pre_metrique.triangle x y t) _
+    ... = espace_pre_metrique.d x z + espace_pre_metrique.d x y : by rw [Hyt, add_zero, espace_pre_metrique.sym z x]
+    ... = espace_pre_metrique.d x y : by rw Hxz; simp,
 end
 
 end suites
@@ -161,27 +154,17 @@ local attribute [instance] pre_ecart.setoid
 def completion.dist (T: Type*) [espace_metrique T] (x y: completion T): ℝ :=
   quotient.lift₂ (cauchy.dist T) (completion.dist_soundness T) x y
 
-def completion.dist_self_eq_zero (T: Type*) [espace_metrique T] (x: completion T): completion.dist T x x = 0 := sorry
-def completion.d_pos (T: Type*) [espace_metrique T] (x y: completion T): completion.dist T x y ≥ 0 := sorry
-
 instance completion.metric_space (T: Type*) [espace_metrique T]: espace_metrique (completion T) :=
 {
   d := completion.dist T,
-  d_pos := completion.d_pos T,
-  presep := begin
-    intros x y h,
-    rw h,
-    exact completion.dist_self_eq_zero T y,
-  end,
-  sep := begin
-    intros x y h,
-    sorry,
-  end,
-  sym := begin
-    intros x y,
-    sorry
-  end,
-  triangle := sorry }
-
+  d_pos := λ x y,
+    quotient.induction_on₂ x y $ λ X Y, show cauchy.dist T X Y ≥ 0, from cauchy.d_pos T X Y,
+  presep := λ x y, quotient.induction_on₂ x y $ λ X Y H, show cauchy.dist T X Y = 0, from quotient.eq.1 H,
+  sep := λ x y, quotient.induction_on₂ x y $ λ X Y H, show ⟦ X ⟧ = ⟦ Y ⟧, from quotient.sound H,
+  sym := λ x y, quotient.induction_on₂ x y $ λ X Y, show cauchy.dist T X Y = cauchy.dist T Y X,
+    from espace_pre_metrique.sym X Y,
+  triangle := λ x y z, quotient.induction_on₃ x y z $ λ X Y Z, show cauchy.dist T X Z ≤ cauchy.dist T X Y + cauchy.dist T Y Z,
+    from espace_pre_metrique.triangle X Y Z
 }
+
 end completion
