@@ -256,7 +256,6 @@ lemma pre_ecart_cauchy (x y : ℕ →  X) (h1 : cauchy x) (h2 : cauchy y):
   exact espace_metrique.triangle _ _ _,
 end
 
-
 def cauchy.limit (x: ℕ → ℝ) (H: cauchy x): ℝ := classical.some (R_is_complete x H)
 lemma cauchy.converge_of_limit (x: ℕ → ℝ) (H: cauchy x): converge x (cauchy.limit x H) := 
   classical.some_spec (R_is_complete x H)
@@ -289,7 +288,7 @@ push_neg at hla,
 set ε := l - a with hε,
 obtain ⟨ N, hcv ⟩ := cauchy.converge_of_limit x H (ε/2) (by linarith),
 rw ← hl at hcv,
-have hcv_N: l - (x N) <  ε/2 := by calc
+have hcv_N: l - (x N) < ε/2 := by calc
     l - (x N) ≤ abs (l - (x N)) : le_abs_self _
     ... < ε/2 : hcv N (by simp),
 have Hineq_N: (x N) ≤ l - ε := by calc
@@ -298,29 +297,92 @@ have Hineq_N: (x N) ≤ l - ε := by calc
   linarith,
 end
 
+lemma cauchy.cauchy_of_add {x y: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y): cauchy (x + y) := begin
+  intros ε hε,
+  obtain ⟨ N, hX ⟩ := Hx (ε/2) (by linarith),
+  obtain ⟨ M, hY ⟩ := Hy (ε/2) (by linarith),
+  use (max N M),
+  intros p hNMp q hNMq,
+  rw real.dist_eq,
+  calc
+    abs ((x + y) p - (x + y) q) = abs ((x p + y p) - (x q + y q)) : by simp
+    ... = abs (x p - x q + (y p - y q)) : by rw add_sub_comm _ _ _ _
+    ... ≤ abs (x p - x q) + abs (y p - y q) : abs_add _ _
+    ... = d (x p) (x q) + d (y p) (y q) : by rw [← real.dist_eq (x p) (x q), ← real.dist_eq (y p) (y q)]
+    ... < ε/2 + ε/2 : 
+      add_lt_add (hX p (le_of_max_le_left hNMp) q (le_of_max_le_left hNMq)) (hY p (le_of_max_le_right hNMp) q (le_of_max_le_right hNMq))
+    ... = ε : by simp,
+end
 
--- pour tout x_n ≤ y_n, or (y_n)_n converge, donc est bornée, donc inf y_n existe, donc pour tout n, x_n ≤ inf y_n, or inf y_n ≤ y_n pour tout n, donc inf y_n ≤ lim y_n
--- d'où, pour tout n, x_n ≤ l
-lemma cauchy.le_of_limit_le {x y: ℕ → ℝ} (Hy: cauchy y):
-  (∀ n, x n ≤ y n) → ∀ n, x n ≤ (cauchy.limit y Hy) := begin
-  intros Hc,
-  set l := cauchy.limit y Hy with hl,
-  by_contra,
-  push_neg at a,
-  obtain ⟨ n₀, ha ⟩ := a,
-  set ε := (x n₀) - l with hε,
-  obtain ⟨ N, hcv ⟩ := cauchy.converge_of_limit y Hy (ε/2) (by linarith),
-  rw ← hl at hcv,
-  sorry
+lemma cauchy.cauchy_of_neg {x: ℕ → ℝ} (Hx: cauchy x):
+  cauchy (-x) := begin
+  intros ε hε,
+  obtain ⟨ N, hN ⟩ := Hx ε hε,
+  use N,
+  intros p hp q hq,
+  rw real.dist_eq,
+  simp,
+  rw ← real.dist_eq,
+  rw espace_metrique.sym _ _,
+  exact hN p hp q hq,
+end
+
+lemma cauchy.cauchy_of_sub {x y: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y): cauchy (x - y) := begin
+  rw sub_eq_add_neg,
+  apply cauchy.cauchy_of_add,
+  exact Hx,
+  exact cauchy.cauchy_of_neg Hy,
+end
+
+@[simp]
+lemma cauchy.limit_add_eq_add_limit {x y: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y):
+  cauchy.limit (x + y) (cauchy.cauchy_of_add Hx Hy) = cauchy.limit x Hx + cauchy.limit y Hy := begin
+  apply unicite_limite (x + y),
+  exact cauchy.converge_of_limit _ _,
+  apply add_converge_add,
+  split,
+  repeat {exact cauchy.converge_of_limit _ _},
+end
+
+@[simp]
+lemma cauchy.limit_neg_eq_neg_limit {x: ℕ → ℝ} (Hx: cauchy x): cauchy.limit (-x) (cauchy.cauchy_of_neg Hx) = - cauchy.limit x Hx :=
+begin
+  apply unicite_limite (-x),
+  exact cauchy.converge_of_limit _ _,
+  apply neg_converge,
+  exact cauchy.converge_of_limit _ _,
+end
+
+lemma cauchy.limit_sub_eq_sub_limit (x y: ℕ → ℝ) (Hx: cauchy x) (Hy: cauchy y):
+  cauchy.limit (x - y) (cauchy.cauchy_of_sub Hx Hy) = cauchy.limit x Hx - cauchy.limit y Hy := begin
+  conv {
+    congr,
+    congr,
+    rw sub_eq_add_neg x y,
+    skip,
+    skip,
+  },
+  rw cauchy.limit_add_eq_add_limit Hx (cauchy.cauchy_of_neg Hy),
+  rw cauchy.limit_neg_eq_neg_limit Hy,
+  rw sub_eq_add_neg,
+end
+
+lemma cauchy.limit_le_of_limit_le {x y: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y):
+  (∀ n: ℕ, x n ≤ y n) → (cauchy.limit x Hx) ≤ (cauchy.limit y Hy) := begin
+  intro Hc,
+  rw ← sub_nonpos,
+  rw ← cauchy.limit_sub_eq_sub_limit,
+  apply cauchy.limit_le_of_seq_le,
+  simp,
+  exact Hc,
 end
 
 lemma cauchy.limit_le_of_add_seq_le {x y z: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y) (Hz: cauchy z):
   (∀ n: ℕ, x n ≤ y n + z n) → (cauchy.limit x Hx) ≤ (cauchy.limit y Hy) + (cauchy.limit z Hz) := begin
   intro Hc,
-  apply cauchy.limit_le_of_seq_le,
-  intro n,
-  -- appliquer les lemmes précédent à la suite somme: y + z, qui est aussi de Cauchy.
-  sorry
+  rw ← cauchy.limit_add_eq_add_limit Hy Hz,
+  apply cauchy.limit_le_of_limit_le,
+  exact Hc,
 end
 
 lemma cauchy.cauchy_of_constant_real_seq (c: ℝ): cauchy (λ n, c) := begin

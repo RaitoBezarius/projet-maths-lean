@@ -53,6 +53,25 @@ lemma neg_converge {x: ℕ → ℝ} {l: ℝ}:
   exact hN n hn,
 end
 
+lemma add_converge_add {x y: ℕ → ℝ} {a b: ℝ}:
+  converge x a ∧ converge y b → converge (x + y) (a + b) := begin
+  intro H,
+  intros ε hε,
+  obtain ⟨ N, hX ⟩ := H.1 (ε/2) (by linarith),
+  obtain ⟨ M, hY ⟩ := H.2 (ε/2) (by linarith),
+  use (max N M),
+  intros n hn,
+  rw real.dist_eq,
+  calc
+  abs (a + b - (x + y) n) = abs (a + b - (x n + y n)) : by simp
+  ... = abs (a - x n + (b - y n)) : by rw add_sub_comm _ _ _ _
+  ... ≤ abs (a - x n) + abs (b - y n) : abs_add _ _
+  ... = d a (x n) + d b (y n) : by rw [← real.dist_eq a (x n), ← real.dist_eq b (y n)]
+  ... < ε/2 + ε/2 :
+   add_lt_add (hX n (le_of_max_le_left hn)) (hY n (le_of_max_le_right hn))
+  ... = ε : by simp,
+end
+
 lemma converge_of_dist_lt_one_div_succ {x: ℕ → X} {l: X}: (∀ n, d l (x n) ≤ 1 / (n + 1)) → converge x l := begin
 intro H,
 intros ε hε,
@@ -75,23 +94,63 @@ lemma countable_adhere_of_adhere {x: ℕ → X} {l: X}:
   exact hclose,
 end
 
+lemma st_croissante_of_succ {x: ℕ → T}:
+  (∀ n, x (n + 1) > x n) → strictement_croissante x := begin
+  intro H,
+  intros p q hpq,
+  induction q with q hq,
+  linarith,
+  by_cases (q > p),
+  calc
+    x p < x q : hq h
+    ... < x (q + 1) : H q,
+  push_neg at h,
+  rw le_antisymm h (nat.le_of_lt_succ hpq), -- q = p.
+  exact H p,
+end
+
 lemma seq_adhere_of_adhere {x: ℕ → X} {l: X}:
   adhere x l → seq_adhere x l := begin
   intro adh,
   choose Y hpos hdist using (countable_adhere_of_adhere adh),
+  -- TODO: extraire R et démontrer un lemme type spec dessus.
   have R: ℕ → ℕ := well_founded.fix nat.lt_wf
     (λ n r,
-    Y n 
-    (r (n - 1) (sorry)
-    )),
-  have Req: ∀ n, R n = Y n (R (n - 1)) := sorry, -- ~satisfies fixpoint equation. (R 0 = Y 0 (R -1), which makes no sense.)
+    if n > 0 then (
+      Y n 
+      (nat.find (
+        let t := { k | Y n k > r (n - 1) (sorry)}
+        in adh (1/(n + 1)) (sorry) (r (n - 1) (sorry) + 1)
+      )))
+      --(1 + r (n - 1) (sorry))) -- plutôt que de prendre 1 + r (n - 1), il faudrait prendre min { k | Y n k > r (n - 1)}
+      -- il existe forcément, puisque c'est une partie de N non vide
+      -- en effet, adh fournit un N ≥ r (n - 1) + 1 tel que d l (x N) < 1 / (r(n - 1) + 2) < 1 / (N + 1)
+      -- un tel N est dans l'ensemble en question, puisque Y n N < 1 / (n + 1)
+    else (
+        Y 0 0
+      )
+    ),
+  have Req: ∀ n ≥ 1, (∃ k: ℕ, R n = Y n k) ∧ R n > R (n - 1) := sorry,
+  have R0: R 0 = Y 0 0 := sorry,
   use R,
   split,
-  sorry, -- by fixpoint equation
+  apply st_croissante_of_succ,
+  intros p,
+  cases p,
+  simp,
+  exact (Req 1 (by simp)).2,
+  exact (Req (nat.succ p + 1) (by simp)).2,
   apply converge_of_dist_lt_one_div_succ,
   intro n,
-  rw [sous_suite, Req],
   apply le_of_lt,
+  cases n,
+  simp,
+  rw [sous_suite, R0],
+  have := hdist 0 0,
+  simp at this,
+  exact this,
+  obtain ⟨ k, Req ⟩ := (Req (nat.succ n) (sorry)).1,
+  rw [sous_suite, Req],
   exact hdist _ _,
 end
 
