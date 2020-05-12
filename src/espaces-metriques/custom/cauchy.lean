@@ -4,6 +4,7 @@ import .bolzano_weierstrass
 
 open espace_metrique
 open_locale classical
+noncomputable theory
 
 section suites
 
@@ -257,46 +258,63 @@ end
 
 
 def cauchy.limit (x: ℕ → ℝ) (H: cauchy x): ℝ := classical.some (R_is_complete x H)
-def cauchy.converge_of_limit (x: ℕ → ℝ) (H: cauchy x): converge x (cauchy.limit x H) := 
+lemma cauchy.converge_of_limit (x: ℕ → ℝ) (H: cauchy x): converge x (cauchy.limit x H) := 
   classical.some_spec (R_is_complete x H)
 
-def cauchy.limit_ge_of_seq_ge (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≥ a) → (cauchy.limit x H) ≥ a :=
+lemma cauchy.limit_ge_of_seq_ge (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≥ a) → (cauchy.limit x H) ≥ a :=
 begin
 intro Hineq,
-set l := cauchy.limit x H,
-by_contra,
-push_neg at a_1,
--- idée: a = l - eps, par définition avec eps > 0.
--- on prend converge x l avec eps/2
--- donc abs (x_n - l) < eps/2 et x_n - a = x_n - l ≥ eps
--- absurde, by linarith.
-sorry,
+set l := cauchy.limit x H with hl,
+by_contra hla,
+push_neg at hla,
+set ε := a - l with hε,
+obtain ⟨ N, hcv ⟩ := cauchy.converge_of_limit x H (ε/2) (by linarith),
+rw ← hl at hcv,
+have hcv_N: (x N) - l < ε/2 := by calc
+    (x N) - l ≤ abs ((x N) - l) : le_abs_self _
+    ... = abs (l - (x N)) : abs_sub _ _
+    ... < ε/2 : hcv N (by simp),
+have Hineq_N: (x N) ≥ l + ε := by calc
+    (x N) ≥ a : Hineq _
+    ... = l + ε : by linarith,
+  linarith,
 end
 
-def cauchy.limit_le_of_seq_le (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≤ a) → (cauchy.limit x H) ≤ a :=
+lemma cauchy.limit_le_of_seq_le (x: ℕ → ℝ) (H: cauchy x) (a: ℝ): (∀ n, x n ≤ a) → (cauchy.limit x H) ≤ a :=
 begin
 intro Hineq,
-set l := cauchy.limit x H,
-by_contra,
-push_neg at a_1,
--- idée: a = l - eps, par définition avec eps > 0.
--- on prend converge x l avec eps/2
--- donc abs (x_n - l) < eps/2 et x_n - a = x_n - l ≥ eps
--- absurde, by linarith.
-sorry,
+set l := cauchy.limit x H with hl,
+by_contra hla,
+push_neg at hla,
+set ε := l - a with hε,
+obtain ⟨ N, hcv ⟩ := cauchy.converge_of_limit x H (ε/2) (by linarith),
+rw ← hl at hcv,
+have hcv_N: l - (x N) <  ε/2 := by calc
+    l - (x N) ≤ abs (l - (x N)) : le_abs_self _
+    ... < ε/2 : hcv N (by simp),
+have Hineq_N: (x N) ≤ l - ε := by calc
+  (x N) ≤ a : Hineq _
+  ... = l - ε: by linarith,
+  linarith,
 end
 
-def cauchy.le_of_limit_le {x y: ℕ → ℝ} (Hy: cauchy y):
+
+-- pour tout x_n ≤ y_n, or (y_n)_n converge, donc est bornée, donc inf y_n existe, donc pour tout n, x_n ≤ inf y_n, or inf y_n ≤ y_n pour tout n, donc inf y_n ≤ lim y_n
+-- d'où, pour tout n, x_n ≤ l
+lemma cauchy.le_of_limit_le {x y: ℕ → ℝ} (Hy: cauchy y):
   (∀ n, x n ≤ y n) → ∀ n, x n ≤ (cauchy.limit y Hy) := begin
-  intros Hc n,
-  set l := cauchy.limit y Hy,
+  intros Hc,
+  set l := cauchy.limit y Hy with hl,
   by_contra,
   push_neg at a,
-  -- idée: l = x_n + eps
+  obtain ⟨ n₀, ha ⟩ := a,
+  set ε := (x n₀) - l with hε,
+  obtain ⟨ N, hcv ⟩ := cauchy.converge_of_limit y Hy (ε/2) (by linarith),
+  rw ← hl at hcv,
   sorry
 end
 
-def cauchy.limit_le_of_add_seq_le {x y z: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y) (Hz: cauchy z):
+lemma cauchy.limit_le_of_add_seq_le {x y z: ℕ → ℝ} (Hx: cauchy x) (Hy: cauchy y) (Hz: cauchy z):
   (∀ n: ℕ, x n ≤ y n + z n) → (cauchy.limit x Hx) ≤ (cauchy.limit y Hy) + (cauchy.limit z Hz) := begin
   intro Hc,
   apply cauchy.limit_le_of_seq_le,
@@ -305,7 +323,7 @@ def cauchy.limit_le_of_add_seq_le {x y z: ℕ → ℝ} (Hx: cauchy x) (Hy: cauch
   sorry
 end
 
-def cauchy.cauchy_of_constant_real_seq (c: ℝ): cauchy (λ n, c) := begin
+lemma cauchy.cauchy_of_constant_real_seq (c: ℝ): cauchy (λ n, c) := begin
 intros ε hε,
 simp,
 use 0,
@@ -315,7 +333,7 @@ exact hε,
 refl,
 end
 
-def cauchy.converge_of_constant (c: ℝ): converge (λ x, c) c := begin
+lemma cauchy.converge_of_constant (c: ℝ): converge (λ x, c) c := begin
 intros ε hε,
 use 0,
 intros n hn,
@@ -325,13 +343,13 @@ exact hε,
 refl,
 end
 
-def cauchy.constant_limit (c: ℝ): cauchy.limit (λ x, c) (cauchy.cauchy_of_constant_real_seq c) = c := begin
+lemma cauchy.constant_limit (c: ℝ): cauchy.limit (λ x, c) (cauchy.cauchy_of_constant_real_seq c) = c := begin
 apply unicite_limite (λ x, c),
 exact cauchy.converge_of_limit _ _,
 exact cauchy.converge_of_constant _,
 end
 
-def cauchy.pre_ecart_sym (x y: ℕ → X): pre_ecart x y = pre_ecart y x := begin
+lemma cauchy.pre_ecart_sym (x y: ℕ → X): pre_ecart x y = pre_ecart y x := begin
 rw pre_ecart,
 rw pre_ecart,
 ext,
