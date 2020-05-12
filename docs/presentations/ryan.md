@@ -181,7 +181,7 @@ Après quelques échanges avec des logiciens et M. Paugam, je suis parvenu à la
 
 Cependant, on m'avait pointé vers la skolémisation comme solution **partielle**, qui consiste à prendre une formule logique de la forme: $\forall x, \exists y, P(x, y)$ et la transformer en $\exists f, \forall x, P(x, f(x))$.
 
-Ce qui est exactement ce qui se passe plus ou moins lorsqu'on passe d'une forme $\epsilon/\delta$ à une forme séquentielle, à la différence qu'ici, le $\forall x$ porte sur le même ensemble, autrement dit.
+Ce qui est exactement ce qui se passe plus ou moins lorsqu'on passe d'une forme $\varepsilon/\delta$ à une forme séquentielle, à la différence qu'ici, le $\forall x$ porte sur le même ensemble, autrement dit.
 
 ## Skolémisation (suite)
 
